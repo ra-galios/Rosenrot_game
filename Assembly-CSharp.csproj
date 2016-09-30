@@ -45,23 +45,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\AlternativePushersSorting.cs" />
-     <Compile Include="Assets\Scripts\BackgroundMover.cs" />
-     <Compile Include="Assets\Scripts\Bonus.cs" />
-     <Compile Include="Assets\Scripts\BonusCollector.cs" />
-     <Compile Include="Assets\Scripts\Bonus_Diamond.cs" />
-     <Compile Include="Assets\Scripts\Bonus_Lifes.cs" />
-     <Compile Include="Assets\Scripts\Bonus_Ruby.cs" />
-     <Compile Include="Assets\Scripts\Bonus_Seeds.cs" />
-     <Compile Include="Assets\Scripts\Calculator.cs" />
-     <Compile Include="Assets\Scripts\GameController.cs" />
-     <Compile Include="Assets\Scripts\LevelGenerator2d.cs" />
-     <Compile Include="Assets\Scripts\LevelObjectsMover2d.cs" />
-     <Compile Include="Assets\Scripts\Menu.cs" />
-     <Compile Include="Assets\Scripts\PlayerBehavior2d.cs" />
-     <Compile Include="Assets\Scripts\PushgenBlock.cs" />
-     <Compile Include="Assets\Scripts\anima.cs" />
-     <Compile Include="Assets\Scripts\timer.cs" />
+     <Compile Include="Assets\Scripts\Core\DateManager.cs" />
+     <Compile Include="Assets\Scripts\Legacy\AlternativePushersSorting.cs" />
+     <Compile Include="Assets\Scripts\Legacy\BackgroundMover.cs" />
+     <Compile Include="Assets\Scripts\Legacy\Bonus.cs" />
+     <Compile Include="Assets\Scripts\Legacy\BonusCollector.cs" />
+     <Compile Include="Assets\Scripts\Legacy\Bonus_Diamond.cs" />
+     <Compile Include="Assets\Scripts\Legacy\Bonus_Lifes.cs" />
+     <Compile Include="Assets\Scripts\Legacy\Bonus_Ruby.cs" />
+     <Compile Include="Assets\Scripts\Legacy\Bonus_Seeds.cs" />
+     <Compile Include="Assets\Scripts\Legacy\Calculator.cs" />
+     <Compile Include="Assets\Scripts\Legacy\GameController.cs" />
+     <Compile Include="Assets\Scripts\Legacy\LevelGenerator2d.cs" />
+     <Compile Include="Assets\Scripts\Legacy\LevelObjectsMover2d.cs" />
+     <Compile Include="Assets\Scripts\Legacy\Menu.cs" />
+     <Compile Include="Assets\Scripts\Legacy\PlayerBehavior2d.cs" />
+     <Compile Include="Assets\Scripts\Legacy\PushgenBlock.cs" />
+     <Compile Include="Assets\Scripts\Legacy\anima.cs" />
+     <Compile Include="Assets\Scripts\Legacy\timer.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
