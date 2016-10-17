@@ -37,7 +37,7 @@ public  class PlayerBehavior2d : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        text.text = PlayerLifes.ToString();
+        //text.text = PlayerLifes.ToString();
         if (Input.GetMouseButtonDown(0) && PlayerLifes > 0)
         {
             //if (!GameController.inGame)

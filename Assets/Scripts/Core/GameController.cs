@@ -10,20 +10,22 @@ public class GameController : MonoBehaviour {
     public static string DiamondKey = "Diamonds";
     public static bool inGame;
     
+    public static GameController Instance;
 
+    void Awake(){
+        if (Instance == null)
+        {
+          Instance = this;  
+        }
+    }
 
 	// Use this for initialization
 	void Start () {
         DiamondsCount = PlayerPrefs.GetInt(DiamondKey);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-        
-	}
-
-    public static void SaveBonus(string key, int value)
+    public static void SaveBonus(string key, int _value)
     {
-        PlayerPrefs.SetInt(key, value);
+        PlayerPrefs.SetInt(key, _value);
     }
 }
