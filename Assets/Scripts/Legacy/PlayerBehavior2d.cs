@@ -98,7 +98,7 @@ public  class PlayerBehavior2d : MonoBehaviour {
         if (!isFalling)
         {
             Vector2 newPosition = TargetTransform.position;
-            transform.position = Vector2.Lerp(transform.position, newPosition, Time.deltaTime * 5f);
+            transform.position = Vector2.Lerp(transform.position, newPosition, Time.deltaTime * 5f); // лерпаем на JumpPoint
         }
 
     }
@@ -121,6 +121,7 @@ public  class PlayerBehavior2d : MonoBehaviour {
 
         JumpToNext(type);
         isWaitInput = false;
+        print(type);
     }
 
 
@@ -150,9 +151,10 @@ public  class PlayerBehavior2d : MonoBehaviour {
                         break;
                     default:
                         break;
+                        
                 }
                 
-                if(inAction)
+                if (inAction)
                 {
                     TargetTransform = hitObject.transform;
                     nextPusher++;
@@ -162,7 +164,8 @@ public  class PlayerBehavior2d : MonoBehaviour {
                     SetFalling();
                 }
 
-            }else if(hitObject.tag == "Respawn")
+            }
+            else if(hitObject.tag == "Respawn")
             {
                 SetFalling();
             }
@@ -177,11 +180,13 @@ public  class PlayerBehavior2d : MonoBehaviour {
 
         if (hit.transform != null)
         {
+            print("vozvratTransform");
             return hit.transform.gameObject;
         }
         else
         {
-           return null;
+            print("vozvratNULL");
+            return null;
         }
     }
 
