@@ -175,7 +175,6 @@ public  class PlayerBehavior2d : MonoBehaviour {
     GameObject SetHitObject()
     {
        
-
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
         if (hit.transform != null)

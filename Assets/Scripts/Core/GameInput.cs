@@ -10,13 +10,13 @@ public class GameInput : CreateSingletonGameObject<GameInput> {
     float secondClickTime = 0;
 
     Coroutine InputCoroutine;  //переменная корутины
-
+   
 
 	// Update is called once per frame
 	void Update () {
         if (Input.GetMouseButtonDown(0))
         {
-
+            
             if (InputCoroutine == null)  //если корутина не запущена, то запускаем и зпоминаем время первого клика для использования в корутине
             {
                 firstClickTime = Time.time;
@@ -50,7 +50,7 @@ public class GameInput : CreateSingletonGameObject<GameInput> {
             }
         }
         else
-        if (Vector2.Distance(StartMousePosition, Input.mousePosition) >= 50f && secondClickTime == 0) // если мы свайпнули и второго клика не было(число - минимальная длинна свайпа)
+        if (Vector2.Distance(StartMousePosition, Input.mousePosition) >= 20f && secondClickTime == 0) // если мы свайпнули и второго клика не было(число - минимальная длинна свайпа)
         {
             if (PlayerInputAction != null)           
             {                                        // то записываем doubleJump(дальний прыжок)
