@@ -48,9 +48,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Core\CreateSingletonGameObject.cs" />
      <Compile Include="Assets\Scripts\Core\DateManager.cs" />
      <Compile Include="Assets\Scripts\Core\GameController.cs" />
+     <Compile Include="Assets\Scripts\Core\GameInput.cs" />
+     <Compile Include="Assets\Scripts\Core\JumpPoint.cs" />
      <Compile Include="Assets\Scripts\Core\LevelGenerator.cs" />
+     <Compile Include="Assets\Scripts\Core\PlayerBehaviour.cs" />
      <Compile Include="Assets\Scripts\Legacy\AlternativePushersSorting.cs" />
      <Compile Include="Assets\Scripts\Legacy\BackgroundMover.cs" />
      <Compile Include="Assets\Scripts\Legacy\Bonus.cs" />

@@ -116,7 +116,7 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         TargetTransform = hitObject.transform;
         Vector2 newPosition = TargetTransform.position;
-        transform.position = Vector2.Lerp(transform.position, newPosition, Time.deltaTime * 10f);
+        transform.position = Vector2.Lerp(transform.position, newPosition, 1);
     }
     //int SetNormal(Transform parent)
     //{
