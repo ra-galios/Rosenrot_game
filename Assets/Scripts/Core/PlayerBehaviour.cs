@@ -2,13 +2,13 @@
 using System.Collections;
 
 public class PlayerBehaviour : MonoBehaviour {
-    bool isWaitInput;
-    Transform TargetTransform;
     public static bool isFalling;
+
+    bool isWaitInput;//не используется, походу
     int nextPusher;
+
+    Transform TargetTransform;
     GameObject hitObject;
-
-
 
     void Start()
     {
@@ -16,100 +16,57 @@ public class PlayerBehaviour : MonoBehaviour {
         TargetTransform = transform;
         nextPusher = 0;
         hitObject = null;
-
     }
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            
             hitObject = null;
             hitObject = SetHitObject();
         }
     }
-        void OnEnable () {
-        GameInput.Instance.PlayerInputAction += PlayerMove; 
+
+    void OnEnable () {
+        GameInput.Instance.PlayerInputAction += JumpToNext; 
 	}
 	
 
 	void OnDisable () {
-        GameInput.Instance.PlayerInputAction -= PlayerMove;
+        GameInput.Instance.PlayerInputAction -= JumpToNext;
     }
 
-    void PlayerMove(GameInput.PlayerAction action)
-    {
-        JumpToNext(action);
-       
-        
-}
     void JumpToNext(GameInput.PlayerAction action)
     {
-
         if (hitObject)
         {
-
-            
             float dist = Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a
-            print(dist);                                                                               //bool inAction = false;
+            print(dist);                                                                   //bool inAction = false;
 
-
-            switch (action)
-            {
-                case GameInput.PlayerAction.climb:
-                    if (dist < 0.3f)
-                    {
-                        Lerp();
-                    }
-                    
-                    break;
-                case GameInput.PlayerAction.jump:
-                    if (dist <= 1.8f  && dist >= 0.3f)
-                    {
-                        Lerp();
-                    }
-                    break;
-
-                case GameInput.PlayerAction.doubleJump:
-                    if (dist > 2.5f)
-                    {
-                        Lerp();
-                    }
-
-
-                    break;
-                default:
-                    break;
-
+            if (dist < 0.3f && action == GameInput.PlayerAction.climb){
+                Lerp();
             }
 
+            if (dist <= 1.8f && dist >= 0.3f && action == GameInput.PlayerAction.jump){
+                Lerp();
+            }
 
-
-
-            //TargetTransform = hitObject.transform;
-            //              Vector2 newPosition = TargetTransform.position;
-            //              transform.position = Vector2.Lerp(transform.position, newPosition, Time.deltaTime * 100f);
-
-
-
+            if (dist > 2.5f && action == GameInput.PlayerAction.doubleJump){
+                Lerp();
+            }
         }
     }
 
-    GameObject SetHitObject()
-    {
+    GameObject SetHitObject(){
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-
-
-        if (hit.transform != null)
-        {
+        if (hit.transform != null){
             print("vozvratTransform");
             return hit.transform.gameObject;
         }
-        else
-        {
+        else{
             print("vozvratNULL");
             return null;
         }
-
     }
 
     void Lerp()
@@ -118,6 +75,7 @@ public class PlayerBehaviour : MonoBehaviour {
         Vector2 newPosition = TargetTransform.position;
         transform.position = Vector2.Lerp(transform.position, newPosition, 1);
     }
+
     //int SetNormal(Transform parent)
     //{
     //    isFalling = false;
@@ -125,7 +83,7 @@ public class PlayerBehaviour : MonoBehaviour {
     //    //transform.parent = parent;
     //    TargetTransform = parent;
     //    print(parent);
-    //    //нужно проюежать по всем пушерам и найти номер parent.gameobject
+    //    //нужно пробежать по всем пушерам и найти номер parent.gameobject
 
     //    GameObject obj = parent.gameObject;
     //    int i = 0;
