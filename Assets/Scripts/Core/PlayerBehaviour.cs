@@ -2,96 +2,62 @@
 using System.Collections;
 
 public class PlayerBehaviour : MonoBehaviour {
-    public static bool isFalling;
-
-    bool isWaitInput;//не используется, походу
-    int nextPusher;
-
-    Transform TargetTransform;
-    GameObject hitObject;
-
-    void Start()
-    {
-        isFalling = false;
-        TargetTransform = transform;
-        nextPusher = 0;
-        hitObject = null;
-    }
+    public int nextPusher { get; set; }
+    public Transform TargetTransform { get; set; }
+    public GameObject hitObject { get; set; }
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            hitObject = null;
-            hitObject = SetHitObject();
+            SetHitObject();//устанавливаем в какой объект нажали и записываем в hitObject, если таковый был, иначе null
         }
     }
 
-    void OnEnable () {
-        GameInput.Instance.PlayerInputAction += JumpToNext; 
+    void OnEnable () {//когда сцена запустилась
+        GameInput.Instance.PlayerInputAction += JumpToNext; //подписываемся на эфир PlayerInputAction и ждём когда он скажет чё нам делать
 	}
-	
 
-	void OnDisable () {
-        GameInput.Instance.PlayerInputAction -= JumpToNext;
+	void OnDisable () {//когда всё потухло
+        GameInput.Instance.PlayerInputAction -= JumpToNext; //отписываемся от эфира
     }
 
-    void JumpToNext(GameInput.PlayerAction action)
+    void JumpToNext(GameInput.PlayerAction action) //Когда в эфире PlayerInputAction что-то "прозвучит", запускается JumpToNext
     {
-        if (hitObject)
+        if (hitObject)//если есть объект на который нажали мышкой
         {
             float dist = Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a
-            print(dist);                                                                   //bool inAction = false;
+            print(dist);                                                                   
 
-            if (dist < 0.3f && action == GameInput.PlayerAction.climb){
+            if (dist < 0.3f && action == GameInput.PlayerAction.climb){ //подтягивание
                 Lerp();
             }
 
-            if (dist <= 1.8f && dist >= 0.3f && action == GameInput.PlayerAction.jump){
+            if (dist <= 1.8f && dist >= 0.3f && action == GameInput.PlayerAction.jump){ //прыжок
                 Lerp();
             }
 
-            if (dist > 2.5f && action == GameInput.PlayerAction.doubleJump){
+            if (dist > 2.5f && action == GameInput.PlayerAction.doubleJump){ //двойной прыжок
                 Lerp();
             }
         }
     }
 
-    GameObject SetHitObject(){
+    void SetHitObject(){
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         if (hit.transform != null){
             print("vozvratTransform");
-            return hit.transform.gameObject;
+            this.hitObject = hit.transform.gameObject; //объект на который нажали
         }
         else{
             print("vozvratNULL");
-            return null;
+            this.hitObject = null;
         }
     }
 
-    void Lerp()
+    void Lerp()//нужно передеать в карутину для плавного передвижения главного хероя
     {
-        TargetTransform = hitObject.transform;
-        Vector2 newPosition = TargetTransform.position;
-        transform.position = Vector2.Lerp(transform.position, newPosition, 1);
+        Vector2 newPosition = hitObject.transform.position;
+        transform.position = Vector2.Lerp(transform.position, newPosition, 1); //перемещаем тело в позицию объекта, на который нажали
     }
-
-    //int SetNormal(Transform parent)
-    //{
-    //    isFalling = false;
-    //    GetComponent<Rigidbody2D>().isKinematic = true;
-    //    //transform.parent = parent;
-    //    TargetTransform = parent;
-    //    print(parent);
-    //    //нужно пробежать по всем пушерам и найти номер parent.gameobject
-
-    //    GameObject obj = parent.gameObject;
-    //    int i = 0;
-    //    if (obj)
-    //    {
-    //        i = LevelGenerator2d.PushersInScene.IndexOf(obj);
-    //        i++;
-    //    }
-    //    return i;
-    //}
 }

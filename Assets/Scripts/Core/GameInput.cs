@@ -9,8 +9,12 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 
     Vector2 StartMousePosition;
     float firstClickTime = 0;
+    Vector3 firstClickPosition;
+
     float secondClickTime = 0;
-    Coroutine InputCoroutine;  //переменная корутины
+    Vector3 secondClickPosition;
+
+    Coroutine CorutineIsEnable;  //переменная корутины
 
     // Update is called once per frame
     void Update()
@@ -18,11 +22,12 @@ public class GameInput : CreateSingletonGameObject<GameInput>
         //первый клик мышкой
         if (Input.GetMouseButtonDown(0))
         {
-            if (InputCoroutine == null)  //если корутина не запущена, то запускаем и зпоминаем время первого клика для использования в корутине
+            if (CorutineIsEnable == null)  //если корутина не запущена, то запускаем и зпоминаем время первого клика для использования в корутине
             {
                 firstClickTime = Time.time;
-                StartMousePosition = Input.mousePosition;
-                InputCoroutine = StartCoroutine(WaitInput());
+                firstClickPosition = Input.mousePosition; //узнаём позицию первого клика
+                StartMousePosition = firstClickPosition;
+                CorutineIsEnable = StartCoroutine(WaitInput());
             }
             else
             {
@@ -30,6 +35,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                 if (secondClickTime == 0)   //если равно нулю, то зпоминаем время второго клика для использования в корутине                       
                 {                               
                     secondClickTime = Time.time;
+                    secondClickPosition = Input.mousePosition; //позиция второго клика
                 }
                 else
                 {
@@ -43,8 +49,8 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     {
         yield return new WaitForSeconds(0.35f); // ждем 0.35 сек и продолжаем
         var action = PlayerAction.climb; // предполагаем что climb(малый прыжок)
-        if (secondClickTime > 0)            //если был второй клик то записываем jump(средний прыжок)
-        {
+        if (secondClickTime > 0 && Vector2.Distance(firstClickPosition,secondClickPosition) < 3f)            //если был второй клик то записываем jump(средний прыжок)
+        {                                                                           //узнаём дистанцию между кликами, чтобы пофиксить баг
             if (PlayerInputAction != null)
             {
                 action = PlayerAction.jump;
@@ -60,6 +66,6 @@ public class GameInput : CreateSingletonGameObject<GameInput>
         }
         PlayerInputAction.Invoke(action);   // отправляем в эфир(принимать будем в PlayerBehaviour скрипте)
         secondClickTime = 0;         // обнуляем время второго клика
-        InputCoroutine = null; // выключам корутину
+        CorutineIsEnable = null; // выключам корутину
     }
 }
