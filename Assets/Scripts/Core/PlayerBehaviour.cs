@@ -7,6 +7,8 @@ public class PlayerBehaviour : MonoBehaviour {
     public Transform TargetTransform { get; set; }
     public GameObject hitObject { get; set; }
 
+    Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -15,7 +17,7 @@ public class PlayerBehaviour : MonoBehaviour {
         }
     }
 
-    void OnEnable () {//когда сцена запустилась
+    void OnEnable () {//когда объект активирован
         GameInput.Instance.PlayerInputAction += JumpToNext; //подписываемся на эфир PlayerInputAction и ждём когда он скажет чё нам делать
 	}
 
@@ -27,19 +29,24 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         if (hitObject)//если есть объект на который нажали мышкой
         {
-            float dist = Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a
-            print(dist);                                                                   
+            float dist = Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a                                                                       
 
-            if (dist < 0.3f && action == GameInput.PlayerAction.climb){ //подтягивание
-                Lerp();
+            if (dist < 0.3f && action == GameInput.PlayerAction.climb)
+            { //подтягивание
+                if(LerpCoroutine == null) 
+                    StartCoroutine(Lerp()); 
             }
 
-            if (dist <= 1.8f && dist >= 0.3f && action == GameInput.PlayerAction.jump){ //прыжок
-                Lerp();
+            if (dist <= 1.8f && dist >= 0.3f && action == GameInput.PlayerAction.jump)
+            { //прыжок
+                if (LerpCoroutine == null)
+                    StartCoroutine(Lerp());
             }
 
-            if (dist > 2.5f && action == GameInput.PlayerAction.doubleJump){ //двойной прыжок
-                Lerp();
+            if (dist > 2.5f && action == GameInput.PlayerAction.doubleJump)
+            { //двойной прыжок
+                if (LerpCoroutine == null)
+                    StartCoroutine(Lerp());
             }
         }
     }
@@ -47,18 +54,24 @@ public class PlayerBehaviour : MonoBehaviour {
     void SetHitObject(){
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         if (hit.transform != null){
-            print("vozvratTransform");
             this.hitObject = hit.transform.gameObject; //объект на который нажали
         }
         else{
-            print("vozvratNULL");
             this.hitObject = null;
         }
     }
 
-    void Lerp()//нужно передеать в карутину для плавного передвижения главного хероя
-    {
-        Vector2 newPosition = hitObject.transform.position;
-        transform.position = Vector2.Lerp(transform.position, newPosition, 1); //перемещаем тело в позицию объекта, на который нажали
+    IEnumerator Lerp()
+    {   
+        Vector2 _from = transform.position;
+        Vector2 _to = hitObject.transform.position;
+        float _t = 0f;
+        while (_t < 1){
+            _t += 0.05f;
+            transform.position = Vector2.Lerp(_from, _to, _t); //перемещаем тело в позицию объекта, на который нажали
+            yield return null;
+        }    
+       
+        LerpCoroutine = null;
     }
 }
