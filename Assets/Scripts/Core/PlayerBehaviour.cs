@@ -7,13 +7,24 @@ public class PlayerBehaviour : MonoBehaviour {
     public Transform TargetTransform { get; set; }
     public GameObject hitObject { get; set; }
 
+    private Rigidbody2D rig2D;
+
     Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
+    
+    void Start()
+    {
+        rig2D = GetComponent<Rigidbody2D>();
+    }
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             SetHitObject();//устанавливаем в какой объект нажали и записываем в hitObject, если таковый был, иначе null
+            // if(hitObject!=null)
+            // {
+            //     PlayerFall();
+            // }
         }
     }
 
@@ -30,10 +41,39 @@ public class PlayerBehaviour : MonoBehaviour {
         if (hitObject)//если есть объект на который нажали мышкой
         {
             float dist = Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a                                                                       
+            
+            // switch (action) //не трогать - доделаю!
+            // {
+            //     case GameInput.PlayerAction.climb:
+            //         if (dist < 0.3f)
+            //         { //подтягивание
+            //             if(LerpCoroutine == null)
+            //                 StartCoroutine(Lerp()); 
+            //         }
+            //         break;
+            //     case GameInput.PlayerAction.jump:
+            //         if (dist <= 1.8f)
+            //         { //прыжок
+            //             if (LerpCoroutine == null)
+            //                 StartCoroutine(Lerp());
+            //         }
+            //         break;
 
+            //     case GameInput.PlayerAction.doubleJump:
+            //         if (dist > 2.5f)
+            //         { //двойной прыжок
+            //             if (LerpCoroutine == null)
+            //                 StartCoroutine(Lerp());
+            //         }
+            //         break;
+            //     default: 
+            //         PlayerFall();
+            //         break;
+            // }
+            
             if (dist < 0.3f && action == GameInput.PlayerAction.climb)
             { //подтягивание
-                if(LerpCoroutine == null) 
+                if(LerpCoroutine == null)
                     StartCoroutine(Lerp()); 
             }
 
@@ -53,12 +93,17 @@ public class PlayerBehaviour : MonoBehaviour {
 
     void SetHitObject(){
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-        if (hit.transform != null){
+        if (hit.transform != null && hit.transform.gameObject.tag == "Pusher"){
             this.hitObject = hit.transform.gameObject; //объект на который нажали
         }
         else{
             this.hitObject = null;
         }
+    }
+
+    void PlayerFall()
+    {//падение игрока
+        rig2D.isKinematic = false;
     }
 
     IEnumerator Lerp()
