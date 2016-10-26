@@ -21,10 +21,6 @@ public class PlayerBehaviour : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             SetHitObject();//устанавливаем в какой объект нажали и записываем в hitObject, если таковый был, иначе null
-            // if(hitObject!=null)
-            // {
-            //     PlayerFall();
-            // }
         }
     }
 
@@ -41,52 +37,48 @@ public class PlayerBehaviour : MonoBehaviour {
         if (hitObject)//если есть объект на который нажали мышкой
         {
             float dist = Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a                                                                       
-            
-            // switch (action) //не трогать - доделаю!
-            // {
-            //     case GameInput.PlayerAction.climb:
-            //         if (dist < 0.3f)
-            //         { //подтягивание
-            //             if(LerpCoroutine == null)
-            //                 StartCoroutine(Lerp()); 
-            //         }
-            //         break;
-            //     case GameInput.PlayerAction.jump:
-            //         if (dist <= 1.8f)
-            //         { //прыжок
-            //             if (LerpCoroutine == null)
-            //                 StartCoroutine(Lerp());
-            //         }
-            //         break;
 
-            //     case GameInput.PlayerAction.doubleJump:
-            //         if (dist > 2.5f)
-            //         { //двойной прыжок
-            //             if (LerpCoroutine == null)
-            //                 StartCoroutine(Lerp());
-            //         }
-            //         break;
-            //     default: 
-            //         PlayerFall();
-            //         break;
-            // }
-            
-            if (dist < 0.3f && action == GameInput.PlayerAction.climb)
-            { //подтягивание
-                if(LerpCoroutine == null)
-                    StartCoroutine(Lerp()); 
-            }
-
-            if (dist <= 1.8f && dist >= 0.3f && action == GameInput.PlayerAction.jump)
-            { //прыжок
-                if (LerpCoroutine == null)
-                    StartCoroutine(Lerp());
-            }
-
-            if (dist > 2.5f && action == GameInput.PlayerAction.doubleJump)
-            { //двойной прыжок
-                if (LerpCoroutine == null)
-                    StartCoroutine(Lerp());
+            switch (action)
+            {
+                case GameInput.PlayerAction.climb:
+                    {
+                        if (dist < 0.3f)
+                        { //подтягивание
+                            if (LerpCoroutine == null)
+                                StartCoroutine(Lerp());
+                        }
+                        else
+                        {//Падение при неверном нажатии на пушер
+                            PlayerFall();
+                        }
+                        break;
+                    }
+                case GameInput.PlayerAction.jump:
+                    {
+                        if (dist <= 1.8f)
+                        { //прыжок
+                            if (LerpCoroutine == null)
+                                StartCoroutine(Lerp());
+                        }
+                        else
+                        {//Падение при неверном нажатии на пушер
+                            PlayerFall();
+                        }
+                        break;
+                    }
+                case GameInput.PlayerAction.doubleJump:
+                    { 
+                        if (dist > 2.5f)
+                        { //двойной прыжок
+                            if (LerpCoroutine == null)
+                                StartCoroutine(Lerp());
+                        }
+                        else
+                        {//Падение при неверном нажатии на пушер
+                            PlayerFall(); 
+                        }
+                        break;
+                    }
             }
         }
     }
@@ -104,6 +96,11 @@ public class PlayerBehaviour : MonoBehaviour {
     void PlayerFall()
     {//падение игрока
         rig2D.isKinematic = false;
+    }
+
+    void SetLine()
+    {//При падении попали на линию //будет дополнено
+
     }
 
     IEnumerator Lerp()

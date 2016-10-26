@@ -1,15 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class JumpPoint : MonoBehaviour {
+[System.Serializable]
+[ExecuteInEditMode]
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+public class JumpPoint
+{
+    public GameObject pusher;//собсно пушер
+    public float TimeCreated_s;//время его создания (0 - в порядке очереди) - пока не задействовано
 }
