@@ -4,54 +4,82 @@ using System.Collections.Generic;
 
 public class LevelGenerator : MonoBehaviour {
     public int maxLines=25; //кол-во генерируемых линий
-    public int itemsInLine=3; //кол-во пушеров на линии
-    public List<JumpPoint> Pushers = new List<JumpPoint>(); //варианты пушеров
+    public int maxItemsInLine=3; //максимальное кол-во пушеров на линии
+    public List<JumpPoint> pushers = new List<JumpPoint>(); //варианты пушеров
+    public List<JumpPoint> alternatePushers = new List<JumpPoint>();
+    public Transform[] startPositions;
+    public float speedGenerationLines=1f;
+    public List<GameObject> lines = new List<GameObject>();
 
-    private List<Line> Lines = new List<Line>(); //лист созданных линий
-    private int CurrentLinesCount; //текущее кол-во созданных линий
-
+    private int currentLinesCount; //текущее кол-во созданных линий
+    private List<GameObject> Turn = new List<GameObject>();
 
 	// Use this for initialization
 	void Awake () {
         StartCoroutine(GeneratorLines());//запускаем генератор линий
-	}
+    }
 
-    IEnumerator GeneratorLines() 
+    void Update()
+    {
+        for(int i=0; i < lines.Count; i++)
+        {
+            lines[i].transform.Translate(Vector3.down*0.03f);
+        }
+    }
+
+    IEnumerator GeneratorLines()
     {//генератор линий и объектов на них
-        Line _line = new Line();//линия
         GameObject _obj = null;//здесь будет наш новый пушер
-        int idLine=0;//часть имени для родителя пушера
-        while (this.CurrentLinesCount < this.maxLines)
-        {//пока не создадим нужное кол-во линий
-            JumpPoint _newPush = Pushers[Random.Range(0, Pushers.Count)];//новый пушер
+        int _idLine=0;//id родителя пушера
+        Transform _randomPos; //рандомная позиция
+        List<Transform> _curPos = new List<Transform>();//список возможных позиций
+        JumpPoint _newPush;//пушер
+        GameObject _go;//линия для пушеров
+        int _idCurPos = 0;
 
-            if (_newPush.TimeCreated_s == 0)
-            {//если время для пушера не указано
-                _obj = Instantiate(_newPush.pusher, _newPush.pusher.transform.position, _newPush.pusher.transform.rotation) as GameObject;//добавляем на сцену
+        while (this.currentLinesCount < this.maxLines)//пока не создадим нужное кол-во линий
+        {
+            var _pusherCountInLine = Random.Range(1, maxItemsInLine + 1); //кол-во пушеров на линии
+            _go = new GameObject();//новая линия, будет родителем пушера/ов
+            _go.name = _idLine.ToString(); //даём ему имя
+            _idLine++;//прикидываем имя для следующего родителя
+
+            foreach (var element in startPositions)
+            {//формируем список возможных позиций для удобства
+                _curPos.Add(element);
             }
-            else
-            {//если время указано
-                if (_newPush.TimeCreated_s == Time.time)
-                {//и если оно совпадает с текущим после старта сцены
-                    _obj = Instantiate(_newPush.pusher, _newPush.pusher.transform.position, _newPush.pusher.transform.rotation) as GameObject;//добавляем на сцену
+
+            for (int _pushId = 0; _pushId < _pusherCountInLine; _pushId++)
+            {
+                _newPush = pushers[Random.Range(0, pushers.Count)];//новый рандомный пушер
+
+                for (int i = 0; i < alternatePushers.Count; i++)//смотрим все альтернативные пушеры, может какой-то сейчас должен быть создан
+                {
+                    if ((int)alternatePushers[i].TimeCreated_s == (int)Time.time)//проверяем параметры пушера и время
+                    {
+                        _newPush = alternatePushers[i];//Пушер, который нужно создать вовремя
+                        _newPush.isRandomPos = false; //будет стоять в своей позоции
+                        _newPush.Pusher.transform.position = _curPos[_idCurPos].position;//ставим в стартовую позицию.
+                        _pushId = _pusherCountInLine;
+                    }
                 }
+
+                if (_newPush.isRandomPos)//поставить ли пушер в рандомную позицию
+                {
+                    _idCurPos = Random.Range(0, _curPos.Count);
+                    _randomPos = _curPos[_idCurPos];//получаем рандомную позицию из списка возможных
+                    _newPush.Pusher.transform.position = _randomPos.position;//ставим в позицию
+                }
+
+                _obj = Instantiate(_newPush.Pusher, _newPush.Pusher.transform.position, _newPush.Pusher.transform.rotation) as GameObject;//добавляем на сцену
+                _obj.transform.parent = _go.transform;//делаем новый пушер "ребёнком" нового родителя
+                _curPos.RemoveAt(_idCurPos);//удаляем из списка позиций, чтобы не создавать два объекта в одном месте
+                _newPush = null;
             }
-
-            if (_obj)
-            {//если пушер создан
-                _line.Pushers.Add(_obj);//закидываем его в линию
-                GameObject GO = new GameObject();//создаём пустой ГО, будет родителем пушера/ов
-                GO.name = "Line" + idLine; //даём ему имя
-                _obj.transform.parent = GO.transform; //делаем новый пушер "ребёнком" нового родителя
-                _line.ParentGO = GO; //запоминаем "родителя"
-                Lines.Add(_line); //запоминаем всю новую "семью" (родитель GO и его ребёнок _obj)
-                _line = new Line();//создаём новую линию
-
-                this.CurrentLinesCount++;//+1 в кол-во созданных линий
-                idLine++;//прикидываем имя для следующего родителя
-            }
-
-            yield return new WaitForSeconds(2f);//ждём пару сек
+            
+            _curPos.Clear();//очщаем список возможных позиций
+            lines.Add(_go);//добавляем в список линий (дижутся в апдейте)
+            yield return new WaitForSeconds(speedGenerationLines);//ждём сек. тут регулируем скорость создания линий
         }
     }
 }
