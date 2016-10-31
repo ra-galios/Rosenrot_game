@@ -9,7 +9,9 @@ public class GameController : MonoBehaviour {
     public static int DiamondsCount;
     public static string DiamondKey = "Diamonds";
     public static bool inGame;
-    
+
+    public static float SpeedPusher = 2f;//скорость движения пушера
+
     public static GameController Instance;
 
     void Awake(){

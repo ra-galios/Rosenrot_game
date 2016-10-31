@@ -95,7 +95,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
     void PlayerFall()
     {//падение игрока
-        rig2D.isKinematic = false;
+        //rig2D.isKinematic = false;
     }
 
     void SetLine()
