@@ -1,55 +1,60 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-[ExecuteInEditMode]
 
 public class JumpPoint : MonoBehaviour
 {
-    public enum actionPlayer { climb, jump, doubleJump };
-    private float speed = GameController.SpeedPusher;
-    private GameObject target;
-    private actionPlayer action;
+    [SerializeField]
+    private float timeCreate=0;
+    [SerializeField]
+    private bool repeat;
+	[SerializeField]
+	public float timeLastCreate=0;
     private int line;
+    private float speed;
 
-    void isEnable()
-    {
-        this.target = GameObject.FindGameObjectWithTag("Player");
-    }
-    void MovePusher()
-    {
-        this.transform.Translate(Vector2.down * this.speed * Time.deltaTime);
-    }
+	void isEnable()
+	{
+		TimeLastCreate = 0f;
+	}
 
     void Update()
     {
         MovePusher();
     }
 
+    //пользовательские методы
+    void MovePusher()
+    {
+        this.transform.Translate(Vector2.down * this.speed * Time.deltaTime);
+    }
+
     //свойства
+    
     public int Line
     {
-        get
-        {
-            return this.line;
-        }
-        set
-        {
-            this.line = value;
-        }
+        get{ return this.line; }
+        set{ this.line = value; }
     }
-    public actionPlayer Action
-    {
-        get
-        {
-            //какое действие нужно произвести, чтобы попасть на этот пушер
-            //если текущая линия следующая после линии, на которой находится игрок
-            //и насколько игрок далеко от пушера
 
-            return this.action;
-        }
-        set
-        {
-            this.action = value;
-        }
+    public float Speed
+    {
+        get { return this.speed; }
+        set { this.speed = value; }
+    }
+    public float TimeCreate
+    {
+        get { return this.timeCreate; }
+        set { this.timeCreate = value; }
+    }
+    public bool Repeat
+    {
+        get { return this.repeat; }
+        set { this.repeat = value; }
+    }
+    public float TimeLastCreate
+    {
+        get { return this.timeLastCreate; }
+        set { this.timeLastCreate = value; }
     }
 }
