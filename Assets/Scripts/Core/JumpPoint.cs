@@ -6,7 +6,13 @@
 public class JumpPoint : MonoBehaviour
 {
     public enum actionPlayer { climb, jump, doubleJump };
-    private float speed = GameController.SpeedPusher;
+    private float speed;
+
+    public float Speed{
+        get{return speed;}
+        set{speed = value;}
+    }
+
     private GameObject target;
     private actionPlayer action;
     private int line;

@@ -12,8 +12,21 @@ public class LevelGenerator : MonoBehaviour {
 
     private int maxLines=25; //кол-во генерируемых линий
     private int maxItemsInLine=3; //максимальное кол-во пушеров на линии
-    private float speedGenerationLines=1f;
+
+    [SerializeField]
+    private float speedGenerationLines = 5f;
+
+    [SerializeField]
+    private float speedGenerationCorrector = 0.01f;
+
     private int currentLinesCount; //текущее кол-во созданных линий
+
+    [SerializeField]
+    private float StartSpeed = 1f;
+    private float currentSpeed;
+
+    [SerializeField]
+    private float SpeedCorrector = 0.05f;
 
     //свойства
     public List<GameObject> Pushers
@@ -39,7 +52,8 @@ public class LevelGenerator : MonoBehaviour {
 
     void Awake ()
     {
-        StartCoroutine(GeneratorLines());//запускаем генератор линий
+        currentSpeed = StartSpeed;
+        StartCoroutine(GeneratorLines());//запускаем генератор линий        
     }
 
     IEnumerator GeneratorLines()
@@ -75,7 +89,10 @@ public class LevelGenerator : MonoBehaviour {
                 _newPush.transform.position = _randomPos.position;//ставим в позицию
 
                 _obj = Instantiate(_newPush, _newPush.transform.position, _newPush.transform.rotation) as GameObject;//добавляем на сцену
-                _obj.GetComponent<JumpPoint>().Line = _idLine; //задаём пушеру линию, на которой он находится
+                var _jumpPt = _obj.GetComponent<JumpPoint>();
+                _jumpPt.Line = _idLine; //задаём пушеру линию, на которой он находится
+                _jumpPt.Speed = currentSpeed;//задаем пушеру его скорость
+                currentSpeed += SpeedCorrector;//после генерации каждого пушера увеличиваем скорость
                 _obj.transform.parent = _go.transform;//делаем новый пушер "ребёнком" нового родителя
                 _curPos.RemoveAt(_idCurPos);//удаляем из списка позиций, чтобы не создавать два объекта в одном месте
                 _newPush = null;
@@ -85,6 +102,7 @@ public class LevelGenerator : MonoBehaviour {
             currentLinesCount++;
             _idLine++;//прикидываем имя для следующего родителя
             _curPos.Clear();//очщаем список возможных позиций
+            SpeedGeneration -= speedGenerationCorrector;
             yield return new WaitForSeconds(SpeedGeneration);//ждём сек. тут регулируем скорость создания линий
         }
     }
