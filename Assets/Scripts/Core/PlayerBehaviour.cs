@@ -110,10 +110,11 @@ public class PlayerBehaviour : MonoBehaviour {
         float _t = 0f;
         while (_t < 1){
             _t += 0.05f;
+            _to = hitObject.transform.position;
             transform.position = Vector2.Lerp(_from, _to, _t); //перемещаем тело в позицию объекта, на который нажали
             yield return null;
         }    
-       
+       transform.parent = hitObject.transform;
         LerpCoroutine = null;
     }
 }

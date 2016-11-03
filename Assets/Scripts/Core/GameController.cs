@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameController : MonoBehaviour {
+public class GameController : CreateSingletonGameObject<GameController> {
     public static int RubyCount;
     public static string RubyKey = "Rubies";
     public static int SeedsCount;
