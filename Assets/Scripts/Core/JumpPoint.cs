@@ -6,8 +6,6 @@ public class JumpPoint : MonoBehaviour
 {
     [SerializeField]
     private float timeCreate=0;
-    [SerializeField]
-    private bool repeat;
 	[SerializeField]
 	public float timeLastCreate=0;
     private int line;
@@ -46,11 +44,6 @@ public class JumpPoint : MonoBehaviour
     {
         get { return this.timeCreate; }
         set { this.timeCreate = value; }
-    }
-    public bool Repeat
-    {
-        get { return this.repeat; }
-        set { this.repeat = value; }
     }
     public float TimeLastCreate
     {

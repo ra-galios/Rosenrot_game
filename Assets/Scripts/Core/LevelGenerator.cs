@@ -61,21 +61,13 @@ public class LevelGenerator : MonoBehaviour
 
                 foreach (JumpPoint push in AltPushers)
                 {
-                    if (push!=null)
+                    if (!push)
                     {
-                        if (Time.time >= (push.TimeLastCreate + push.TimeCreate)) //при первом обращении к timeLastCreate его значение равно примерно 20.1002... 
+                        if (Time.time >= push.TimeCreate)
                         {
                             _newPush = push;
-
-                            if (push.Repeat)
-                            {
-                                push.TimeLastCreate = (int)Time.time;
-                            }
-                            else
-                            {
-                                AltPushers.RemoveAt(AltPushers.LastIndexOf(push));
-                                break;
-                            }
+                            AltPushers.RemoveAt(AltPushers.LastIndexOf(push));
+                            break;
                         }
                     }
                     
