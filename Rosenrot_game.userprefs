@@ -1,16 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Core\LevelGenerator.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Core\PlayerBehaviour.cs">
     <Files>
-      <File FileName="Assets\Scripts\Core\LevelGenerator.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Core\JumpPoint.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Core\LevelGenerator.cs" Line="20" Column="78" />
+      <File FileName="Assets\Scripts\Core\PlayerBehaviour.cs" Line="98" Column="38" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="D:\Polygon\Rosenrot_game\Rosenrot_game\Assets\Scripts\Core\JumpPoint.cs" line="56" column="1" />
-      <Breakpoint file="D:\Polygon\Rosenrot_game\Rosenrot_game\Assets\Scripts\Core\LevelGenerator.cs" line="67" column="1" />
-      <Breakpoint file="D:\Polygon\Rosenrot_game\Rosenrot_game\Assets\Scripts\Core\LevelGenerator.cs" line="66" column="34" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

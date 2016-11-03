@@ -6,15 +6,10 @@ public class JumpPoint : MonoBehaviour
 {
     [SerializeField]
     private float timeCreate=0;
-	[SerializeField]
-	public float timeLastCreate=0;
-    private int line;
-    private float speed;
 
-	void isEnable()
-	{
-		TimeLastCreate = 0f;
-	}
+    private int line;
+    private int collumn;
+    private float speed=0;
 
     void Update()
     {
@@ -28,13 +23,16 @@ public class JumpPoint : MonoBehaviour
     }
 
     //свойства
-    
     public int Line
     {
         get{ return this.line; }
         set{ this.line = value; }
     }
-
+    public int Collumn
+    {
+        get { return this.collumn; }
+        set { this.collumn = value; }
+    }
     public float Speed
     {
         get { return this.speed; }
@@ -44,10 +42,5 @@ public class JumpPoint : MonoBehaviour
     {
         get { return this.timeCreate; }
         set { this.timeCreate = value; }
-    }
-    public float TimeLastCreate
-    {
-        get { return this.timeLastCreate; }
-        set { this.timeLastCreate = value; }
     }
 }

@@ -1,5 +1,6 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
 Project("{DA666CE3-3F7D-3202-F372-88D61C1E86BD}") = "Rosenrot_game", "Assembly-CSharp.csproj", "{30028573-6E32-D862-3495-BB08D8EFEA9A}"
 EndProject
 Project("{DA666CE3-3F7D-3202-F372-88D61C1E86BD}") = "Rosenrot_game", "Assembly-CSharp-Editor.csproj", "{102C7212-3EDF-AA4B-0BCA-CC527D383773}"
@@ -18,6 +19,9 @@ Global
 		{102C7212-3EDF-AA4B-0BCA-CC527D383773}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{102C7212-3EDF-AA4B-0BCA-CC527D383773}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{102C7212-3EDF-AA4B-0BCA-CC527D383773}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj

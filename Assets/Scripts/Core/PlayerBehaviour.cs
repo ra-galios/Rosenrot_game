@@ -3,24 +3,30 @@ using System.Collections;
 using UnityEngine.EventSystems;
 
 public class PlayerBehaviour : MonoBehaviour {
-    public int nextPusher { get; set; }
-    public Transform TargetTransform { get; set; }
-    public GameObject hitObject { get; set; }
-
+    private GameObject hitObject;
+    private JumpPoint hitJumpPoint;
     private Rigidbody2D rig2D;
+    private int idLine;
+    private int idCollumn=2;
+    private Camera cam;
+    private bool isPlayerFall=false;
 
     Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
     
     void Start()
     {
         rig2D = GetComponent<Rigidbody2D>();
+        cam = Camera.main;
     }
 
     void Update()
     {
+        cam.transform.position = new Vector3(cam.transform.position.x,transform.position.y,cam.transform.position.z);
         if (Input.GetMouseButtonDown(0))
         {
             SetHitObject();//устанавливаем в какой объект нажали и записываем в hitObject, если таковый был, иначе null
+            if(!LevelGenerator.Instance.IsRunLevel)
+                LevelGenerator.Instance.StartLevel();
         }
     }
 
@@ -36,49 +42,52 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         if (hitObject)//если есть объект на который нажали мышкой
         {
-            float dist = Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a                                                                       
-
-            switch (action)
+			float dist = Vector2.Distance(transform.position, hitObject.transform.position);//Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a       
+			//print("action: " + action + " dist: " + dist);
+            if (!isPlayerFall)
             {
-                case GameInput.PlayerAction.climb:
-                    {
-                        if (dist < 0.3f)
-                        { //подтягивание
-                            if (LerpCoroutine == null)
-                                StartCoroutine(Lerp());
+                switch (action)
+                {
+                    case GameInput.PlayerAction.climb:
+                        {
+                            if (dist <= 2.3f) //пока такой вариант, но работает...
+                            { //подтягивание
+                                if (LerpCoroutine == null)
+                                    StartCoroutine(Lerp());
+                            }
+                            else
+                            {//Падение при неверном нажатии на пушер
+                                PlayerFall();
+                            }
+                            break;
                         }
-                        else
-                        {//Падение при неверном нажатии на пушер
-                            PlayerFall();
+                    case GameInput.PlayerAction.jump:
+                        {
+                            if ((dist > 2.3f && dist < 3f) || dist == 1.5f)
+                            { //прыжок
+                                if (LerpCoroutine == null)
+                                    StartCoroutine(Lerp());
+                            }
+                            else
+                            {//Падение при неверном нажатии на пушер
+                                PlayerFall();
+                            }
+                            break;
                         }
-                        break;
-                    }
-                case GameInput.PlayerAction.jump:
-                    {
-                        if (dist <= 1.8f)
-                        { //прыжок
-                            if (LerpCoroutine == null)
-                                StartCoroutine(Lerp());
+                    case GameInput.PlayerAction.doubleJump:
+                        { 
+                            if (dist > 3f)
+                            { //двойной прыжок
+                                if (LerpCoroutine == null)
+                                    StartCoroutine(Lerp());
+                            }
+                            else
+                            {//Падение при неверном нажатии на пушер
+                                PlayerFall(); 
+                            }
+                            break;
                         }
-                        else
-                        {//Падение при неверном нажатии на пушер
-                            PlayerFall();
-                        }
-                        break;
-                    }
-                case GameInput.PlayerAction.doubleJump:
-                    { 
-                        if (dist > 2.5f)
-                        { //двойной прыжок
-                            if (LerpCoroutine == null)
-                                StartCoroutine(Lerp());
-                        }
-                        else
-                        {//Падение при неверном нажатии на пушер
-                            PlayerFall(); 
-                        }
-                        break;
-                    }
+                }
             }
         }
     }
@@ -86,7 +95,10 @@ public class PlayerBehaviour : MonoBehaviour {
     void SetHitObject(){
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         if (hit.transform != null && hit.transform.gameObject.tag == "Pusher"){
+            rig2D.isKinematic = true;
+            isPlayerFall = false; //уже не падаем
             this.hitObject = hit.transform.gameObject; //объект на который нажали
+            hitJumpPoint = hitObject.GetComponent<JumpPoint>();
         }
         else{
             this.hitObject = null;
@@ -95,12 +107,9 @@ public class PlayerBehaviour : MonoBehaviour {
 
     void PlayerFall()
     {//падение игрока
-        //rig2D.isKinematic = false;
-    }
-
-    void SetLine()
-    {//При падении попали на линию //будет дополнено
-
+        isPlayerFall = true;
+        rig2D.isKinematic = false;
+        StartCoroutine(Fall());
     }
 
     IEnumerator Lerp()
@@ -114,7 +123,35 @@ public class PlayerBehaviour : MonoBehaviour {
             transform.position = Vector2.Lerp(_from, _to, _t); //перемещаем тело в позицию объекта, на который нажали
             yield return null;
         }    
-       transform.parent = hitObject.transform;
+        transform.parent = hitObject.transform;
+        idLine = hitJumpPoint.Line;
+        idCollumn = hitJumpPoint.Collumn;
         LerpCoroutine = null;
+    }
+
+    IEnumerator Fall()//пока падаем, отслеживаем нажатие на кнопку мыши и целимся в ближайший пушер
+    {
+        GameObject[] _pushers = GameObject.FindGameObjectsWithTag("Pusher"); //берём все созданные на данный момент пушеры
+        float _minDist=100f; //немного чисел с неба
+        float _dist;//дистанция до ближайшего пушера
+        while(isPlayerFall) //пока мы падаем
+       {
+            if (Input.GetMouseButtonDown(0)) //нажали кнопку мыши
+            {
+                foreach (GameObject _push in _pushers) //какой пушер ближе всех?
+                {
+                    _dist = Vector2.Distance(_push.transform.position, transform.position); //дистанция от игрока до пушера
+                    if (_dist < _minDist)
+                    {
+                        _minDist = _dist; //минимальная
+                        hitObject = _push; //а вот и он, наш спаситель
+                    }
+                }
+                rig2D.isKinematic = true;
+                isPlayerFall = false; //уже не падаем
+                StartCoroutine(Lerp()); //перемещаемся к спасительному пушеру
+            }
+            yield return null;
+       }
     }
 }

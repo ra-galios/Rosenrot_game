@@ -52,7 +52,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     {
         yield return new WaitForSeconds(0.35f); // ждем 0.35 сек и продолжаем
         var action = PlayerAction.climb; // предполагаем что climb(малый прыжок)
-        if (secondClickTime > 0 && Vector2.Distance(firstClickPosition,secondClickPosition) < 3f)            //если был второй клик то записываем jump(средний прыжок)
+        if (secondClickTime > 0 && Vector2.Distance(firstClickPosition,secondClickPosition) < 6f)            //если был второй клик то записываем jump(средний прыжок)
         {                                                                           //узнаём дистанцию между кликами, чтобы пофиксить баг
             if (PlayerInputAction != null)
             {
