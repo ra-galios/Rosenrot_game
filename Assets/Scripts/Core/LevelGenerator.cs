@@ -13,13 +13,20 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField]
     private List<JumpPoint> altPushers = new List<JumpPoint>();   //варианты пушеров
 
-    private static int maxLines=25;                 //кол-во генерируемых линий
-    private static int maxItemsInLine=3;            //максимальное кол-во пушеров на линии
-    private static float speedGenerationLines=1f;   //скорость создания линий
-    private static int currentLinesCount;           //текущее кол-во созданных линий
-    private static float speedPusher=2f;            //скорость пушера
-    private static bool isCoroutineRun=false;       //флаг работы корутины
-    private static float timeCreateAltPusher=0;     //время создания последнего алтернативного пушера
+    [SerializeField]
+    private int maxLines=25;                 //кол-во генерируемых линий
+
+    [SerializeField]
+    private  int maxItemsInLine=3;            //максимальное кол-во пушеров на линии
+
+    [SerializeField]
+    private  float speedGenerationLines=1f;   //скорость создания линий
+    private  int currentLinesCount;           //текущее кол-во созданных линий
+
+    [SerializeField]
+    private  float speedPusher = 1f;            //скорость пушера
+    private  bool isCoroutineRun=false;       //флаг работы корутины
+    private  float timeCreateAltPusher=0;     //время создания последнего алтернативного пушера
 
     public static LevelGenerator Instance;
 
