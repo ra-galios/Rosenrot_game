@@ -9,16 +9,20 @@ public class JumpPoint : MonoBehaviour
 
     private int line;
     private int collumn;
-    private float speed=0;
+    private float speed;
 
     void Update()
     {
-        MovePusher();
+        if (LevelGenerator.Instance.IsRunLevel)
+        {
+            MovePusher();
+        }
     }
 
     //пользовательские методы
     void MovePusher()
     {
+        this.speed = LevelGenerator.Instance.SpeedPusher;
         this.transform.Translate(Vector2.down * this.speed * Time.deltaTime);
     }
 

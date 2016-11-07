@@ -8,38 +8,36 @@ public class LevelGenerator : MonoBehaviour
 {
     [SerializeField]
     private List<JumpPoint> pushers = new List<JumpPoint>();        //варианты пушеров. (!) Добавляются из префабов
+
     [SerializeField]
     private Transform[] startPositions;                             //позиции в которых создавать новые пушеры
+
     [SerializeField]
     private List<JumpPoint> altPushers = new List<JumpPoint>();     //альтернативные пушеры. (!) Добавляются со сцены
+
     [SerializeField]
     private List<JumpPoint> staticPushers = new List<JumpPoint>();  //начальные пушеры, которые должны быть при старте игры
 
-<<<<<<< HEAD
-    private static int maxLines=25;                 //кол-во генерируемых линий
-    private static int maxItemsInLine=3;            //максимальное кол-во пушеров на линии
-    private static float speedGenerationLines=2f;   //скорость создания линий
-    private static int currentLinesCount;           //текущее кол-во созданных линий
-    private static float speedPusher=1f;            //скорость пушера
-    private static bool typePush;                   //тип пушера: рандомный или альтернативный
-    private static float timeStartLevel;            //время запуска левела
-    private static bool isRunLevel = false;
-=======
     [SerializeField]
-    private int maxLines=25;                 //кол-во генерируемых линий
+    private int maxLines = 25;                 //кол-во генерируемых линий
 
     [SerializeField]
-    private  int maxItemsInLine=3;            //максимальное кол-во пушеров на линии
+    private int maxItemsInLine = 3;            //максимальное кол-во пушеров на линии
 
     [SerializeField]
-    private  float speedGenerationLines=1f;   //скорость создания линий
-    private  int currentLinesCount;           //текущее кол-во созданных линий
+    private float timeGenerationLines = 2f;   //скорость создания линий
 
     [SerializeField]
-    private  float speedPusher = 1f;            //скорость пушера
-    private  bool isCoroutineRun=false;       //флаг работы корутины
-    private  float timeCreateAltPusher=0;     //время создания последнего алтернативного пушера
->>>>>>> origin/master
+    private float speedPusher = 1f;            //скорость пушера
+
+    private float baseTimeGenerationLines=2f;
+    private float baseSpeedPusher=1f;
+
+    private int currentLinesCount;           //текущее кол-во созданных линий
+    private bool _typePush;                   //тип пушера: рандомный или альтернативный
+    private float _timeStartLevel;            //время запуска левела
+    private bool _isRunLevel = false;
+    private float timeAcceleration=5f;
 
     public static LevelGenerator Instance;
 
@@ -62,25 +60,27 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        if (IsRunLevel)
+        {
+            SpeedPusher = Mathf.Clamp(SpeedPusher + baseSpeedPusher * (0.2f / 60), 0, 6);
+            TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - baseTimeGenerationLines * (0.1f / 60), 0.5f, 6);
+        }
+    }
+
     public void StartLevel()
     {
-        timeStartLevel = Time.time;
-        foreach (JumpPoint push in staticPushers)
-        {
-            push.Speed = speedPusher;
-        }
+        _timeStartLevel = Time.time;
         StartCoroutine(GeneratorLines());//запускаем генератор линий
-        isRunLevel = true;
+        IsRunLevel = true;
     }
 
     public void StopLevel()
     {
-        foreach (JumpPoint push in staticPushers)
-        {
-            push.Speed = 0;
-        }
+        _timeStartLevel = 0;
         StopCoroutine(GeneratorLines());//останавливаем
-        isRunLevel = false;
+        IsRunLevel = false;
     }
 
     IEnumerator GeneratorLines()
@@ -108,7 +108,7 @@ public class LevelGenerator : MonoBehaviour
             for (int _pushId = 0; _pushId < _countPushersInLine; _pushId++)  //создаем необходимое кол-во пушеров на линию
             {
                 _newPush = Pushers[Random.Range(0, Pushers.Count)];         //новый рандомный пушер
-                typePush = false;
+                _typePush = false;
 
                 if (AltPushers.Count > 0)
                 {
@@ -116,11 +116,11 @@ public class LevelGenerator : MonoBehaviour
                     {
                         if (push != null)
                         {
-                            if ((Time.time - timeStartLevel) >= push.TimeCreate)   //пора ставить пушер с установленным временем
+                            if ((Time.time - _timeStartLevel) >= push.TimeCreate)   //пора ставить пушер с установленным временем
                             {
                                 _newPush = push;
                                 AltPushers.RemoveAt(AltPushers.LastIndexOf(push));
-                                typePush = true;                //указываем что это альтернативный пушер
+                                _typePush = true;                //указываем что это альтернативный пушер
                                 break;
                             }
                         }
@@ -131,7 +131,7 @@ public class LevelGenerator : MonoBehaviour
                 _randomPos = _curPos[_idCurPos];    
                 _newPush.transform.position = _randomPos.position;          //ставим в позицию
 
-                if (typePush)//если это альтернативный пушер, то просто становится в нужную позицию, иначе - инстантируется на сцену
+                if (_typePush)//если это альтернативный пушер, то просто становится в нужную позицию, иначе - инстантируется на сцену
                     _obj = _newPush.gameObject; //альтернативный
                 else
                     _obj = Instantiate(_newPush.gameObject, _newPush.transform.position, _newPush.transform.rotation) as GameObject; //рандомный
@@ -154,7 +154,7 @@ public class LevelGenerator : MonoBehaviour
             currentLinesCount++;
             _idLine++;              //прикидываем имя для следующего родителя
             _curPos.Clear();        //очщаем список возможных позиций
-            yield return new WaitForSeconds(SpeedGeneration);           //ждём сек. тут регулируем скорость создания линий
+            yield return new WaitForSeconds(TimeGenerationLine);           //ждём сек. тут регулируем скорость создания линий
         }
     }
 
@@ -179,10 +179,10 @@ public class LevelGenerator : MonoBehaviour
         get { return maxItemsInLine; }
         set { maxItemsInLine = value; }
     }
-    public float SpeedGeneration
+    public float TimeGenerationLine
     {
-        get { return speedGenerationLines; }
-        set { speedGenerationLines = value; }
+        get { return timeGenerationLines; }
+        set { timeGenerationLines = value; }
     }
     public int CurrentLinesCount
     {
@@ -191,7 +191,12 @@ public class LevelGenerator : MonoBehaviour
     }
     public bool IsRunLevel
     {
-        get { return isRunLevel; }
-        set { isRunLevel = value; }
+        get { return _isRunLevel; }
+        set { _isRunLevel = value; }
+    }
+    public float SpeedPusher
+    {
+        get { return this.speedPusher; }
+        set { this.speedPusher = value; }
     }
 }
