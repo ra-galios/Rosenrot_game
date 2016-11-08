@@ -8,7 +8,7 @@ public class PlayerBehaviour : MonoBehaviour {
     private Rigidbody2D rig2D;
     private int idLine;
     private int idCollumn=2;
-    private Camera cam;
+    //private Camera cam;
     private bool isPlayerFall=false;
 
     Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
@@ -16,12 +16,12 @@ public class PlayerBehaviour : MonoBehaviour {
     void Start()
     {
         rig2D = GetComponent<Rigidbody2D>();
-        cam = Camera.main;
+        //cam = Camera.main;
     }
 
     void Update()
     {
-        cam.transform.position = new Vector3(cam.transform.position.x,transform.position.y,cam.transform.position.z);
+        //cam.transform.position = new Vector3(cam.transform.position.x,transform.position.y,cam.transform.position.z);
         if (Input.GetMouseButtonDown(0))
         {
             SetHitObject();//устанавливаем в какой объект нажали и записываем в hitObject, если таковый был, иначе null

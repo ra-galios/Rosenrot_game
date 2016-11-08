@@ -64,8 +64,10 @@ public class LevelGenerator : MonoBehaviour
     {
         if (IsRunLevel)
         {
-            SpeedPusher = Mathf.Clamp(SpeedPusher + baseSpeedPusher * (0.2f / 60), 0, 6);
-            TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - baseTimeGenerationLines * (0.1f / 60), 0.5f, 6);
+            //if(SpeedPusher < 6f && TimeGenerationLine > 0.5f)
+
+            SpeedPusher = Mathf.Clamp(SpeedPusher + baseSpeedPusher * (0.2f / 60) * Time.deltaTime, 0, 6);
+            TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - baseTimeGenerationLines * (0.1f / 60) * Time.deltaTime, 0.5f, 6);
         }
     }
 
