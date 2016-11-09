@@ -15,8 +15,8 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField]
     private List<JumpPoint> altPushers = new List<JumpPoint>();     //альтернативные пушеры. (!) Добавляются со сцены
 
-    [SerializeField]
-    private List<JumpPoint> staticPushers = new List<JumpPoint>();  //начальные пушеры, которые должны быть при старте игры
+    //[SerializeField]
+    //private List<JumpPoint> staticPushers = new List<JumpPoint>();  //начальные пушеры, которые должны быть при старте игры
 
     [SerializeField]
     private int maxLines = 25;                 //кол-во генерируемых линий
@@ -28,12 +28,12 @@ public class LevelGenerator : MonoBehaviour
     private float timeGenerationLines = 2f;   //скорость создания линий
 
     [SerializeField]
-    private float speedPusher = 1f;            //скорость пушера
+    private float speedPusher = 1f;            //скорость пушера. Пушеры узнают текущую скорость
 
-    private float baseTimeGenerationLines=2f;
-    private float baseSpeedPusher=1f;
+    private float baseTimeGenerationLines=2f; //начальная время генерации линий
+    private float baseSpeedPusher=1f;         //начальная скорость пушеров
 
-    private int currentLinesCount;           //текущее кол-во созданных линий
+    private int currentLinesCount;            //текущее кол-во созданных линий
     private bool _typePush;                   //тип пушера: рандомный или альтернативный
     private float _timeStartLevel;            //время запуска левела
     private bool _isRunLevel = false;
@@ -49,23 +49,10 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        foreach (JumpPoint push in staticPushers)
-        {
-            if (push.transform.position.x == -1.5f) push.Collumn = 1;
-            if (push.transform.position.x == 0) push.Collumn = 2;
-            if (push.transform.position.x == 1.5f) push.Collumn = 3;
-			push.Line = int.Parse(push.gameObject.transform.parent.name);
-        }
-    }
-
     void FixedUpdate()
     {
         if (IsRunLevel)
         {
-            //if(SpeedPusher < 6f && TimeGenerationLine > 0.5f)
-
             SpeedPusher = Mathf.Clamp(SpeedPusher + baseSpeedPusher * (0.2f / 60) * Time.deltaTime, 0, 6);
             TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - baseTimeGenerationLines * (0.1f / 60) * Time.deltaTime, 0.5f, 6);
         }
@@ -98,6 +85,8 @@ public class LevelGenerator : MonoBehaviour
 
         while (CurrentLinesCount < MaxLines)        //пока не создадим нужное кол-во линий
         {
+            List<int> _colUsedInLines = new List<int>();
+
             var _countPushersInLine = Random.Range(1, MaxItemsInLine + 1);   //кол-во пушеров на линии
             _go = new GameObject();                 //новая линия, будет родителем пушера/ов
             _go.name = _idLine.ToString();          //даём ему имя
@@ -129,8 +118,18 @@ public class LevelGenerator : MonoBehaviour
                     }
                 }
 
-                _idCurPos = Random.Range(0, _curPos.Count);     //получаем рандомную позицию из списка возможных
-                _randomPos = _curPos[_idCurPos];    
+                _idCurPos = Random.Range(0, startPositions.Length);     //получаем рандомную позицию из списка возможных
+
+               foreach(int col in _colUsedInLines) //новая позиция не должна совпасть с предыдущей, чтобы два пушера не создались друг в друге
+                {
+                    while (col == _idCurPos)
+                    {
+                        _idCurPos = Random.Range(0, startPositions.Length);//тут затык
+                    }
+                }
+                _colUsedInLines.Add(_idCurPos);
+
+                _randomPos = startPositions[_idCurPos];
                 _newPush.transform.position = _randomPos.position;          //ставим в позицию
 
                 if (_typePush)//если это альтернативный пушер, то просто становится в нужную позицию, иначе - инстантируется на сцену
@@ -142,16 +141,17 @@ public class LevelGenerator : MonoBehaviour
 
                 _jp = _obj.GetComponent<JumpPoint>();
                 _jp.Line = _idLine;              //задаём пушеру линию, на которой он находится
-                _jp.Collumn = _idCurPos;             //задаём пушеру колонку
+                _jp.Collumn = _idCurPos;         //задаём пушеру колонку в которой он находится
                 _jp.Speed = speedPusher;         //задаём скорость пушера
                 _obj.transform.parent = _go.transform;                      //делаем новый пушер "ребёнком" нового родителя
-                _curPos.RemoveAt(_idCurPos);                                //удаляем из списка позиций, чтобы не создавать два объекта в одном месте
+                //_curPos.RemoveAt(_idCurPos);                                //удаляем из списка позиций, чтобы не создавать два объекта в одном месте
 
                 _obj = null;
                 _newPush = null;
                 _jp = null;
             }
 
+            _colUsedInLines = null;
             _go = null;
             currentLinesCount++;
             _idLine++;              //прикидываем имя для следующего родителя

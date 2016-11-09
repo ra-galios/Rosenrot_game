@@ -7,8 +7,12 @@ public class JumpPoint : MonoBehaviour
     [SerializeField]
     private float timeCreate=0;
 
+    [SerializeField]
     private int line;
+
+    [SerializeField]
     private int collumn;
+
     private float speed;
 
     void Update()

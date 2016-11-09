@@ -6,8 +6,8 @@ public class PlayerBehaviour : MonoBehaviour {
     private GameObject hitObject;
     private JumpPoint hitJumpPoint;
     private Rigidbody2D rig2D;
-    private int idLine;
-    private int idCollumn=2;
+    private int idLine = 0;
+    private int idCollumn = 2;
     //private Camera cam;
     private bool isPlayerFall=false;
 
@@ -43,47 +43,56 @@ public class PlayerBehaviour : MonoBehaviour {
         if (hitObject)//если есть объект на который нажали мышкой
         {
 			float dist = Vector2.Distance(transform.position, hitObject.transform.position);//Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a       
-			//print("action: " + action + " dist: " + dist);
+
+            var diffV = Mathf.Abs(hitJumpPoint.Collumn - idCollumn);
+            var diffH = Mathf.Abs(hitJumpPoint.Line - idLine);
+
             if (!isPlayerFall)
             {
                 switch (action)
                 {
                     case GameInput.PlayerAction.climb:
                         {
-                            if (dist <= 2.3f) //пока такой вариант, но работает...
+                            //if (dist <= 2.3f) //пока такой вариант, но работает...
+                            if(diffV == 0 && diffH == 1)
                             { //подтягивание
                                 if (LerpCoroutine == null)
                                     StartCoroutine(Lerp());
                             }
                             else
                             {//Падение при неверном нажатии на пушер
-                                PlayerFall();
+                                if(hitObject.layer != 10) //10 - это StaticPushers, со статического пушера упасть нельзя
+                                    PlayerFall();
                             }
                             break;
                         }
                     case GameInput.PlayerAction.jump:
                         {
-                            if ((dist > 2.3f && dist < 3f) || dist == 1.5f)
+                            //if ((dist > 2.3f && dist < 3f) || dist == 1.5f)
+                            if((diffV == 1 && diffH == 1) || (diffV == 1 && diffH == 0))
                             { //прыжок
                                 if (LerpCoroutine == null)
                                     StartCoroutine(Lerp());
                             }
                             else
                             {//Падение при неверном нажатии на пушер
-                                PlayerFall();
+                                if (hitObject.layer != 10) //10 - это StaticPushers
+                                    PlayerFall();
                             }
                             break;
                         }
                     case GameInput.PlayerAction.doubleJump:
-                        { 
-                            if (dist > 3f)
+                        {
+                            //if (dist > 3f)
+                            if(diffV >= 2 || diffH >= 2)
                             { //двойной прыжок
                                 if (LerpCoroutine == null)
                                     StartCoroutine(Lerp());
                             }
                             else
                             {//Падение при неверном нажатии на пушер
-                                PlayerFall(); 
+                                if (hitObject.layer != 10) //10 - это StaticPushers
+                                    PlayerFall(); 
                             }
                             break;
                         }
