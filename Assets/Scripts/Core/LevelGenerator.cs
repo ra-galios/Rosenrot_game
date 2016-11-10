@@ -15,7 +15,7 @@ public class LevelGenerator : MonoBehaviour
     private Transform[] startPositions;                             //позиции в которых создавать новые пушеры
 
     [SerializeField]
-    private List<JumpPoint> altPushers = new List<JumpPoint>();     //альтернативные пушеры. (!) Добавляются со сцены
+    private List<JumpPoint> altPushers = new List<JumpPoint>();     //альтернативные пушеры. (!) Добавляются со сцены. Рекомендация: добавить пуш на сцену, указать ему время, line и collumn не указывать
 
     [SerializeField]
     private int maxLines = 25;                 //кол-во генерируемых линий

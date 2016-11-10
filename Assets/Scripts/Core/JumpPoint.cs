@@ -15,6 +15,15 @@ public class JumpPoint : MonoBehaviour
 
     private float speed;
 
+    void Start()
+    {
+        if (timeCreate != 0)
+        {
+            LevelGenerator.Instance.AltPushers.Add(this);
+            this.gameObject.SetActive(false);
+        }
+    }
+
     void Update()
     {
         if (LevelGenerator.Instance.IsRunLevel)
