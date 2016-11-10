@@ -9,6 +9,7 @@ public class PlayerBehaviour : MonoBehaviour {
     private int idLine = 0;
     private int idCollumn = 1;
     private bool isPlayerFall=false;
+    private bool playerStaticPush = true;
 
     Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
     
@@ -57,7 +58,7 @@ public class PlayerBehaviour : MonoBehaviour {
                             }
                             else
                             {//Падение при неверном нажатии на пушер
-                                if(hitObject.layer != 10) //10 - это StaticPushers, со статического пушера упасть нельзя
+                                if(!playerStaticPush)
                                     PlayerFall();
                             }
                             break;
@@ -71,7 +72,7 @@ public class PlayerBehaviour : MonoBehaviour {
                             }
                             else
                             {//Падение при неверном нажатии на пушер
-                                if (hitObject.layer != 10) //10 - это StaticPushers
+                                if (!playerStaticPush)
                                     PlayerFall();
                             }
                             break;
@@ -85,8 +86,8 @@ public class PlayerBehaviour : MonoBehaviour {
                             }
                             else
                             {//Падение при неверном нажатии на пушер
-                                if (hitObject.layer != 10) //10 - это StaticPushers
-                                    PlayerFall(); 
+                                if (!playerStaticPush)
+                                        PlayerFall(); 
                             }
                             break;
                         }
@@ -129,6 +130,7 @@ public class PlayerBehaviour : MonoBehaviour {
         transform.parent = hitObject.transform;
         idLine = hitJumpPoint.Line;
         idCollumn = hitJumpPoint.Collumn;
+        playerStaticPush = hitObject.layer == 10 ? true : false; // 10 - это layer StaticPushers, со статического пушера упасть нельзя
         LerpCoroutine = null;
     }
 

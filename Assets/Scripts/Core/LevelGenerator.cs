@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 public class LevelGenerator : MonoBehaviour
 {
+    public static LevelGenerator Instance;
+
     [SerializeField]
     private List<JumpPoint> pushers = new List<JumpPoint>();        //варианты пушеров. (!) Добавляются из префабов
 
@@ -27,15 +29,12 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField]
     private float speedPusher = 1f;            //скорость пушера. Пушеры узнают текущую скорость
 
-    private float baseTimeGenerationLines=2f; //начальная время генерации линий
-    private float baseSpeedPusher=1f;         //начальная скорость пушеров
+    private float _baseTimeGenerationLines=2f; //начальная время генерации линий
+    private float _baseSpeedPusher=1f;         //начальная скорость пушеров
     private int currentLinesCount;            //текущее кол-во созданных линий
     private bool _typePush;                   //тип пушера: рандомный или альтернативный
     private float _timeStartLevel;            //время запуска левела
-    private bool _isRunLevel = false;
-    private float timeAcceleration=5f;
-
-    public static LevelGenerator Instance;
+    private bool _isRunLevel = false;          //запущен ли левел        
 
     void Awake()
     {
@@ -47,10 +46,10 @@ public class LevelGenerator : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (IsRunLevel)
+        if (IsRunLevel) //ускорение уровня
         {
-            SpeedPusher = Mathf.Clamp(SpeedPusher + baseSpeedPusher * (0.2f / 5) * Time.deltaTime, 0, 6);
-            TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - baseTimeGenerationLines * (0.1f / 5) * Time.deltaTime, 0.5f, 6);
+            SpeedPusher = Mathf.Clamp(SpeedPusher + _baseSpeedPusher * (0.2f / 5) * Time.deltaTime, 0, 6);
+            TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - _baseTimeGenerationLines * (0.1f / 5) * Time.deltaTime, 0.5f, 6);
         }
     }
 
