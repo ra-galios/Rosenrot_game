@@ -7,8 +7,7 @@ public class PlayerBehaviour : MonoBehaviour {
     private JumpPoint hitJumpPoint;
     private Rigidbody2D rig2D;
     private int idLine = 0;
-    private int idCollumn = 2;
-    //private Camera cam;
+    private int idCollumn = 1;
     private bool isPlayerFall=false;
 
     Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
@@ -16,12 +15,10 @@ public class PlayerBehaviour : MonoBehaviour {
     void Start()
     {
         rig2D = GetComponent<Rigidbody2D>();
-        //cam = Camera.main;
     }
 
     void Update()
     {
-        //cam.transform.position = new Vector3(cam.transform.position.x,transform.position.y,cam.transform.position.z);
         if (Input.GetMouseButtonDown(0))
         {
             SetHitObject();//устанавливаем в какой объект нажали и записываем в hitObject, если таковый был, иначе null
@@ -53,7 +50,6 @@ public class PlayerBehaviour : MonoBehaviour {
                 {
                     case GameInput.PlayerAction.climb:
                         {
-                            //if (dist <= 2.3f) //пока такой вариант, но работает...
                             if(diffV == 0 && diffH == 1)
                             { //подтягивание
                                 if (LerpCoroutine == null)
@@ -68,7 +64,6 @@ public class PlayerBehaviour : MonoBehaviour {
                         }
                     case GameInput.PlayerAction.jump:
                         {
-                            //if ((dist > 2.3f && dist < 3f) || dist == 1.5f)
                             if((diffV == 1 && diffH == 1) || (diffV == 1 && diffH == 0))
                             { //прыжок
                                 if (LerpCoroutine == null)
@@ -83,7 +78,6 @@ public class PlayerBehaviour : MonoBehaviour {
                         }
                     case GameInput.PlayerAction.doubleJump:
                         {
-                            //if (dist > 3f)
                             if(diffV >= 2 || diffH >= 2)
                             { //двойной прыжок
                                 if (LerpCoroutine == null)

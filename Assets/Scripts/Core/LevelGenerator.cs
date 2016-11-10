@@ -15,9 +15,6 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField]
     private List<JumpPoint> altPushers = new List<JumpPoint>();     //альтернативные пушеры. (!) Добавляются со сцены
 
-    //[SerializeField]
-    //private List<JumpPoint> staticPushers = new List<JumpPoint>();  //начальные пушеры, которые должны быть при старте игры
-
     [SerializeField]
     private int maxLines = 25;                 //кол-во генерируемых линий
 
@@ -32,7 +29,6 @@ public class LevelGenerator : MonoBehaviour
 
     private float baseTimeGenerationLines=2f; //начальная время генерации линий
     private float baseSpeedPusher=1f;         //начальная скорость пушеров
-
     private int currentLinesCount;            //текущее кол-во созданных линий
     private bool _typePush;                   //тип пушера: рандомный или альтернативный
     private float _timeStartLevel;            //время запуска левела
@@ -53,8 +49,8 @@ public class LevelGenerator : MonoBehaviour
     {
         if (IsRunLevel)
         {
-            SpeedPusher = Mathf.Clamp(SpeedPusher + baseSpeedPusher * (0.2f / 60) * Time.deltaTime, 0, 6);
-            TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - baseTimeGenerationLines * (0.1f / 60) * Time.deltaTime, 0.5f, 6);
+            SpeedPusher = Mathf.Clamp(SpeedPusher + baseSpeedPusher * (0.2f / 5) * Time.deltaTime, 0, 6);
+            TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - baseTimeGenerationLines * (0.1f / 5) * Time.deltaTime, 0.5f, 6);
         }
     }
 
@@ -78,23 +74,17 @@ public class LevelGenerator : MonoBehaviour
         JumpPoint _jp = null;   //компонент JumpPoint объекта _obj
         int _idLine = 5;        //id родителя пушера
         Transform _randomPos;   //рандомная позиция
-        List<Transform> _curPos = new List<Transform>();    //список возможных позиций
         JumpPoint _newPush;    //пушер
         GameObject _go;         //линия для пушеров
         int _idCurPos = 0;      //позиция для нового пушера
 
         while (CurrentLinesCount < MaxLines)        //пока не создадим нужное кол-во линий
         {
-            List<int> _colUsedInLines = new List<int>();
+            bool[] SetCol = new bool[startPositions.Length]; ; //флаги занятых колонок, для избежания создания пушеров в одной колонке
 
             var _countPushersInLine = Random.Range(1, MaxItemsInLine + 1);   //кол-во пушеров на линии
             _go = new GameObject();                 //новая линия, будет родителем пушера/ов
             _go.name = _idLine.ToString();          //даём ему имя
-            
-            foreach (var element in startPositions)
-            {                   //формируем список возможных позиций
-                _curPos.Add(element);
-            }
 
             for (int _pushId = 0; _pushId < _countPushersInLine; _pushId++)  //создаем необходимое кол-во пушеров на линию
             {
@@ -120,14 +110,21 @@ public class LevelGenerator : MonoBehaviour
 
                 _idCurPos = Random.Range(0, startPositions.Length);     //получаем рандомную позицию из списка возможных
 
-               foreach(int col in _colUsedInLines) //новая позиция не должна совпасть с предыдущей, чтобы два пушера не создались друг в друге
+                //смотриим чтобы эта позиция не совпала с другим пушером
+                var isSetPos = false; 
+                while (!isSetPos)
                 {
-                    while (col == _idCurPos)
+                    if (!SetCol[_idCurPos])
                     {
-                        _idCurPos = Random.Range(0, startPositions.Length);//тут затык
+                        isSetPos = true;
+                        SetCol[_idCurPos] = true;
+                        break;
+                    }
+                    else
+                    {
+                        _idCurPos = Random.Range(0, startPositions.Length); //иначе берём новую
                     }
                 }
-                _colUsedInLines.Add(_idCurPos);
 
                 _randomPos = startPositions[_idCurPos];
                 _newPush.transform.position = _randomPos.position;          //ставим в позицию
@@ -144,18 +141,15 @@ public class LevelGenerator : MonoBehaviour
                 _jp.Collumn = _idCurPos;         //задаём пушеру колонку в которой он находится
                 _jp.Speed = speedPusher;         //задаём скорость пушера
                 _obj.transform.parent = _go.transform;                      //делаем новый пушер "ребёнком" нового родителя
-                //_curPos.RemoveAt(_idCurPos);                                //удаляем из списка позиций, чтобы не создавать два объекта в одном месте
 
                 _obj = null;
                 _newPush = null;
                 _jp = null;
             }
 
-            _colUsedInLines = null;
             _go = null;
             currentLinesCount++;
             _idLine++;              //прикидываем имя для следующего родителя
-            _curPos.Clear();        //очщаем список возможных позиций
             yield return new WaitForSeconds(TimeGenerationLine);           //ждём сек. тут регулируем скорость создания линий
         }
     }
