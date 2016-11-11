@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Web v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>WebPlayer:6</UnityBuildTarget>
     <UnityVersion>5.3.6p5</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -69,6 +67,7 @@
     <Compile Include="Assets\Scripts\Core\GameInput.cs" />
     <Compile Include="Assets\Scripts\Core\JumpPoint.cs" />
     <Compile Include="Assets\Scripts\Core\LevelGenerator.cs" />
+    <Compile Include="Assets\Scripts\Core\Market.cs" />
     <Compile Include="Assets\Scripts\Core\PlayerBehaviour.cs" />
     <Compile Include="Assets\Scripts\Legacy\AlternativePushersSorting.cs" />
     <Compile Include="Assets\Scripts\Legacy\BackgroundMover.cs" />
