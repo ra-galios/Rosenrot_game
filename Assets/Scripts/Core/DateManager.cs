@@ -53,6 +53,11 @@ public class DateManager : MonoBehaviour {
 	public string GetPlayerDate(string pref){
 		return PlayerPrefs.GetString(pref);
 	}
+
+    public void SetPlayerDate(string value)
+    {
+        PlayerPrefs.SetString("Date", value);
+    }
 	
 	// Update is called once per frame
 	public string GetCurrentDateString() 

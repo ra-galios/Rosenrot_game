@@ -36,6 +36,8 @@ public class LevelGenerator : MonoBehaviour
     private float _timeStartLevel;            //время запуска левела
     private bool _isRunLevel = false;          //запущен ли левел        
 
+    private float revTime;
+
     void Awake()
     {
         if (Instance == null)
@@ -46,7 +48,7 @@ public class LevelGenerator : MonoBehaviour
 
     void Start()
     {
-        Market.Instance.GetDayCount();
+        Market.Instance.SetCurrentDatePlayer();
     }
 
     void FixedUpdate()
