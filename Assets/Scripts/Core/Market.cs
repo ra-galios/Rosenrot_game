@@ -6,7 +6,7 @@ public class Market : CreateSingletonGameObject<Market>
     private DateManager m_DateManager = new DateManager();
     private int m_Health = 0;
     private int m_MaxHealth = 5;
-    private int timeSetHealth = 1;
+    private int timeSetHealth = 5;
     private string revTime;
 
     void OnEnable()
@@ -22,7 +22,7 @@ public class Market : CreateSingletonGameObject<Market>
     public void AddHealth(int count)//добавляем жизнь, если их ещё не максимум
     {
         if(m_Health < 5)
-            m_Health = Mathf.Clamp(count,0,5);
+            m_Health = Mathf.Clamp(count,0,m_MaxHealth);
         //print(m_Health);
     }
 
@@ -39,7 +39,7 @@ public class Market : CreateSingletonGameObject<Market>
         {
             revTime = m_DateManager.GetPlayerDate("Date");
             var passedTime = m_DateManager.HowTimePassed(revTime, DateManager.DateType.minutes);
-            if (passedTime >= 5)
+            if (passedTime >= timeSetHealth)
             {
                 AddHealth(passedTime / timeSetHealth); //делим прошедшие минуты на время создания одной жизни и берём целую часть от этого
                 SetCurrentDatePlayer();
