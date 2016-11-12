@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\Core\GameInput.cs" />
      <Compile Include="Assets\Scripts\Core\JumpPoint.cs" />
      <Compile Include="Assets\Scripts\Core\LevelGenerator.cs" />
+     <Compile Include="Assets\Scripts\Core\Market.cs" />
      <Compile Include="Assets\Scripts\Core\PlayerBehaviour.cs" />
      <Compile Include="Assets\Scripts\Legacy\AlternativePushersSorting.cs" />
      <Compile Include="Assets\Scripts\Legacy\BackgroundMover.cs" />

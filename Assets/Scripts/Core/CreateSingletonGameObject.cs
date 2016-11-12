@@ -2,6 +2,8 @@
 
 public class CreateSingletonGameObject<T> : MonoBehaviour where T : CreateSingletonGameObject<T>
 {
+    private static T s_instance = null;
+
     public static T Instance
     {
         get
@@ -14,6 +16,4 @@ public class CreateSingletonGameObject<T> : MonoBehaviour where T : CreateSingle
             return s_instance;
         }
     }
-
-    private static T s_instance = null;
 }

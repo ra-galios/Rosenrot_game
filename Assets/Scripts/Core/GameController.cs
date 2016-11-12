@@ -22,7 +22,7 @@ public class GameController : CreateSingletonGameObject<GameController> {
 	// Use this for initialization
 	void Start () {
         DiamondsCount = PlayerPrefs.GetInt(DiamondKey);
-	}
+    }
 	
     public static void SaveBonus(string key, int _value)
     {

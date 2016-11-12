@@ -44,6 +44,11 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        Market.Instance.GetDayCount();
+    }
+
     void FixedUpdate()
     {
         if (IsRunLevel) //ускорение уровня

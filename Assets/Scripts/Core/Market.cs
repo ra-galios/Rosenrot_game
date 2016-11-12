@@ -3,16 +3,15 @@ using System.Collections;
 
 public class Market : CreateSingletonGameObject<Market>
 {
-    static DateManager dateManager;
+    private DateManager m_DateManager = new DateManager();
+    void Update()
+    {
 
-    // Use this for initialization
-    void Start () {
-        var temp = dateManager.HowTimePassed("01.11.2016", DateManager.DateType.day);
-        print(temp);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    }
+
+    public void GetDayCount()
+    {
+        print(m_DateManager.HowTimePassed("01.11.2016", DateManager.DateType.day));
+    }
+
 }
