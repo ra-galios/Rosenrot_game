@@ -35,8 +35,8 @@ public class JumpPoint : MonoBehaviour
     //пользовательские методы
     void MovePusher()
     {
-        this.speed = LevelGenerator.Instance.SpeedPusher;
-        this.transform.Translate(Vector2.down * this.speed * Time.deltaTime);
+        Speed = LevelGenerator.Instance.SpeedPusher;
+        this.transform.Translate(Vector2.down * Speed * Time.deltaTime);
     }
 
     //свойства

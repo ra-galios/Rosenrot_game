@@ -24,7 +24,7 @@ public class LevelGenerator : MonoBehaviour
     private int maxItemsInLine = 3;            //максимальное кол-во пушеров на линии
 
     [SerializeField]
-    private float timeGenerationLines = 2f;   //скорость создания линий
+    private float timeGenerationLines = 2f;   //интервал создания линий
 
     [SerializeField]
     private float speedPusher = 1f;            //скорость пушера. Пушеры узнают текущую скорость
@@ -36,8 +36,6 @@ public class LevelGenerator : MonoBehaviour
     private float _timeStartLevel;            //время запуска левела
     private bool _isRunLevel = false;          //запущен ли левел        
 
-    private float revTime;
-
     void Awake()
     {
         if (Instance == null)
@@ -48,7 +46,7 @@ public class LevelGenerator : MonoBehaviour
 
     void Start()
     {
-        Market.Instance.SetCurrentDatePlayer();
+        Market.Instance.RunMarket();
     }
 
     void FixedUpdate()
@@ -62,9 +60,14 @@ public class LevelGenerator : MonoBehaviour
 
     public void StartLevel()
     {
-        _timeStartLevel = Time.time;
-        StartCoroutine(GeneratorLines());//запускаем генератор линий
-        IsRunLevel = true;
+        if (Market.Instance.Health > 0)
+        {
+            _timeStartLevel = Time.time;
+            StartCoroutine(GeneratorLines());//запускаем генератор линий
+            IsRunLevel = true;
+            Market.Instance.Health-=1;
+            Market.Instance.SetCurrentDatePlayer();
+        }
     }
 
     public void StopLevel()
@@ -145,7 +148,7 @@ public class LevelGenerator : MonoBehaviour
                 _jp = _obj.GetComponent<JumpPoint>();
                 _jp.Line = _idLine;              //задаём пушеру линию, на которой он находится
                 _jp.Collumn = _idCurPos;         //задаём пушеру колонку в которой он находится
-                _jp.Speed = speedPusher;         //задаём скорость пушера
+                _jp.Speed = SpeedPusher;         //задаём скорость пушера
                 _obj.transform.parent = _go.transform;                      //делаем новый пушер "ребёнком" нового родителя
 
                 _obj = null;

@@ -38,7 +38,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
     void JumpToNext(GameInput.PlayerAction action) //Когда в эфире PlayerInputAction что-то "прозвучит", запускается JumpToNext
     {
-        if (hitObject)//если есть объект на который нажали мышкой
+        if (hitObject && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
         {
 			float dist = Vector2.Distance(transform.position, hitObject.transform.position);//Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a       
 
