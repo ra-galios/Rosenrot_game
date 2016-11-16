@@ -52,7 +52,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     {
         yield return new WaitForSeconds(0.35f); // ждем 0.35 сек и продолжаем
         var action = PlayerAction.climb; // предполагаем что climb(малый прыжок)
-        if (secondClickTime > 0 && Vector2.Distance(firstClickPosition,secondClickPosition) < 6f)            //если был второй клик то записываем jump(средний прыжок)
+        if (secondClickTime > 0 && Vector2.Distance(firstClickPosition, secondClickPosition) < 6f)            //если был второй клик то записываем jump(средний прыжок)
         {                                                                           //узнаём дистанцию между кликами, чтобы пофиксить баг
             if (PlayerInputAction != null)
             {
@@ -60,9 +60,9 @@ public class GameInput : CreateSingletonGameObject<GameInput>
             }
         }
         else
-        if (Vector2.Distance(firstClickPosition, Input.mousePosition) >= 20f && secondClickTime == 0) // если мы свайпнули и второго клика не было(число - минимальная длинна свайпа)
+        if (Vector2.Distance(firstClickPosition, Input.mousePosition) >= 20f && secondClickTime == 0) // если мы свайпнули и второго клика не было(число 20 - минимальная длинна свайпа)
         {
-            if (PlayerInputAction != null)           
+            if (PlayerInputAction != null)
             {                                        // то записываем doubleJump(дальний прыжок)
                 action = PlayerAction.doubleJump;
             }
@@ -71,4 +71,17 @@ public class GameInput : CreateSingletonGameObject<GameInput>
         secondClickTime = 0;         // обнуляем время второго клика
         Coroutine = null; // выключам корутину
     }
+
+    //GameObject GetHitObject()
+    //{
+    //    RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+    //    if (hit.transform != null && hit.transform.gameObject.GetComponent<JumpPoint>())
+    //    {
+    //        return hit.transform.gameObject; //объект на который нажали
+    //    }
+    //    else
+    //    {
+    //        return null;
+    //    }
+    //}
 }
