@@ -34,7 +34,7 @@ public class LevelGenerator : MonoBehaviour
     private int currentLinesCount;            //текущее кол-во созданных линий
     private bool _typePush;                   //тип пушера: рандомный или альтернативный
     private float _timeStartLevel;            //время запуска левела
-    private bool _isRunLevel = false;          //запущен ли левел        
+    private bool _isRunLevel = false;          //запущен ли левел       
 
     void Awake()
     {
@@ -47,6 +47,7 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         Market.Instance.RunMarket();
+        backGround = GameObject.Find("Background");
     }
 
     void FixedUpdate()
@@ -60,13 +61,13 @@ public class LevelGenerator : MonoBehaviour
 
     public void StartLevel()
     {
-        if (Market.Instance.Health > 0)
+        if (Market.Instance.Health > 0)//если есть жизни, то можно играть
         {
-            _timeStartLevel = Time.time;
+            _timeStartLevel = Time.time; //время старта
             StartCoroutine(GeneratorLines());//запускаем генератор линий
             IsRunLevel = true;
-            Market.Instance.Health-=1;
-            Market.Instance.SetCurrentDatePlayer();
+            Market.Instance.Health-=1; //отнимаем одну использованную жизнь, т.к. запустили левел
+            Market.Instance.SetCurrentDatePlayer(); //записываем новую дату обновления жизней, через 5 минут будет +1
         }
     }
 

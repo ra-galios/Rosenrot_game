@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Core\CollectableGO.cs" />
     <Compile Include="Assets\Scripts\Core\CreateSingletonGameObject.cs" />
     <Compile Include="Assets\Scripts\Core\DateManager.cs" />
     <Compile Include="Assets\Scripts\Core\GameController.cs" />

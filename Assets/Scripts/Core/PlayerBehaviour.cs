@@ -23,8 +23,8 @@ public class PlayerBehaviour : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             SetHitObject();//устанавливаем в какой объект нажали и записываем в hitObject, если таковый был, иначе null
-            if(!LevelGenerator.Instance.IsRunLevel)
-                LevelGenerator.Instance.StartLevel();
+            if(!LevelGenerator.Instance.IsRunLevel)//если левел не запущен
+                LevelGenerator.Instance.StartLevel();//запускаем леввел
         }
     }
 
@@ -98,7 +98,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
     void SetHitObject(){
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-        if (hit.transform != null && hit.transform.gameObject.tag == "Pusher"){
+        if (hit.transform != null && hit.transform.gameObject.GetComponent<JumpPoint>()){
             rig2D.isKinematic = true;
             isPlayerFall = false; //уже не падаем
             this.hitObject = hit.transform.gameObject; //объект на который нажали
@@ -117,7 +117,9 @@ public class PlayerBehaviour : MonoBehaviour {
     }
 
     IEnumerator Lerp()
-    {   
+    {
+        var boxColl = GetComponent<BoxCollider2D>().enabled;
+        boxColl = false;
         Vector2 _from = transform.position;
         Vector2 _to = hitObject.transform.position;
         float _t = 0f;
@@ -132,6 +134,7 @@ public class PlayerBehaviour : MonoBehaviour {
         idCollumn = hitJumpPoint.Collumn;
         playerStaticPush = hitObject.layer == 10 ? true : false; // 10 - это layer StaticPushers, со статического пушера упасть нельзя
         LerpCoroutine = null;
+        boxColl = true;
     }
 
     IEnumerator Fall()//пока падаем, отслеживаем нажатие на кнопку мыши и целимся в ближайший пушер

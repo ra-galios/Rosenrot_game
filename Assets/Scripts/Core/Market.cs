@@ -3,12 +3,15 @@ using System.Collections;
 
 public class Market : CreateSingletonGameObject<Market>
 {
-    private DateManager m_DateManager = new DateManager();
-    private string revTime;
     [SerializeField]
     private int m_Health;
+
+    private DateManager m_DateManager = new DateManager();
+    private string revTime;
     private int m_MaxHealth = 5;
     private int timeSetHealth = 5;
+    [SerializeField]
+    private int seeds;
 
     public bool RunMarket() //нужен для инициализации сингтон-объекта на сцене
     {
@@ -44,7 +47,7 @@ public class Market : CreateSingletonGameObject<Market>
             if (passedTime >= timeSetHealth)//если прошло больше, чем время для начисления жизни
             {
                 Health = passedTime / timeSetHealth; //делим прошедшие минуты на время создания одной жизни и берём целую часть от этого
-                SetCurrentDatePlayer();
+                SetCurrentDatePlayer(); //ставим дату обновления жизней
             }
             yield return new WaitForSeconds(30f);//ждём 30 сек
         }
@@ -55,7 +58,8 @@ public class Market : CreateSingletonGameObject<Market>
         var value = m_DateManager.GetCurrentDateString();
         m_DateManager.SetPlayerDate(value);
     }
-
+    
+    //свойства
     public int Health
     {
         get
@@ -88,5 +92,10 @@ public class Market : CreateSingletonGameObject<Market>
         {
             timeSetHealth = value;
         }
+    }
+    public int Seeds
+    {
+        get { return this.seeds; }
+        set { this.seeds = value; }
     }
 }
