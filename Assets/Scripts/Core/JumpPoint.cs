@@ -15,6 +15,11 @@ public class JumpPoint : MonoBehaviour
 
     private float speed;
 
+    [SerializeField]
+    private CollectableGO prefBonus;
+    private GameObject bonus;
+    private bool isCreateBonus=false;
+
     void Start()
     {
         if (timeCreate != 0)
@@ -29,6 +34,14 @@ public class JumpPoint : MonoBehaviour
         if (LevelGenerator.Instance.IsRunLevel)
         {
             MovePusher();
+        }
+        if (gameObject.activeSelf && prefBonus && !isCreateBonus)//если пушер активировался, у него есть бонус и он ещё не инициализирован
+        {
+            Vector3 bonusPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            bonusPos.y += 0.6f;
+            Bonus = Instantiate(PrefBonus.gameObject, bonusPos, transform.rotation) as GameObject;
+            Bonus.transform.parent = transform;
+            isCreateBonus = true;
         }
     }
 
@@ -59,5 +72,15 @@ public class JumpPoint : MonoBehaviour
     {
         get { return this.timeCreate; }
         set { this.timeCreate = value; }
+    }
+    public GameObject Bonus
+    {
+        get { return this.bonus; }
+        set { this.bonus = value; }
+    }
+    public CollectableGO PrefBonus
+    {
+        get { return this.prefBonus; }
+        set { this.prefBonus = value; }
     }
 }

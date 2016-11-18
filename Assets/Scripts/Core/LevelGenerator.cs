@@ -47,7 +47,6 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         Market.Instance.RunMarket();
-        backGround = GameObject.Find("Background");
     }
 
     void FixedUpdate()
@@ -163,6 +162,7 @@ public class LevelGenerator : MonoBehaviour
             yield return new WaitForSeconds(TimeGenerationLine);           //ждём сек. тут регулируем скорость создания линий
         }
     }
+
 
     //Свойства
     public List<JumpPoint> Pushers

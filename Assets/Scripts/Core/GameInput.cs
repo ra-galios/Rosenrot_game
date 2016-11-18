@@ -13,8 +13,8 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     private Vector3 firstClickPosition { get; set; }
     private Vector3 secondClickPosition { get; set; }
     private Coroutine Coroutine { get; set; }  //переменная корутины
-    private GameObject hitObject;
-
+    private GameObject hitObject;//на что тыкнули
+    private GameObject bonusHitObject;//бонус того, на что тыкнули
 
     void Start()
     {
@@ -29,31 +29,34 @@ public class GameInput : CreateSingletonGameObject<GameInput>
         if (Input.GetMouseButtonDown(0))
         {
             hitObject = GetHitObject(); //узнаём куда ткнули
-            if (!hitObject)//если не попали в коллектблз
+            if (hitObject)//если попали в пушер
             {
-                if (Coroutine == null)  //если корутина не запущена, то запускаем и зпоминаем время первого клика для использования в корутине
+                if (bonusHitObject)//если у пушера есть бонус, собираем его
                 {
-                    firstClickTime = Time.time;
-                    firstClickPosition = Input.mousePosition; //узнаём позицию первого клика
-                    Coroutine = StartCoroutine(WaitInput());
+                    bonusHitObject.GetComponent<CollectableGO>().EnterBonus();
                 }
-                else //если карутина запущена
-                {
-                    //второй клик мышкой
-                    if (secondClickTime == 0)   //если равно нулю (второго клика небыло), то зпоминаем время второго клика для использования в корутине                       
+                else
+                {//если бонуса нет, вычисляем выполненное действие для перемещения
+                    if (Coroutine == null)  //если корутина не запущена, то запускаем и зпоминаем время первого клика для использования в корутине
                     {
-                        secondClickTime = Time.time; //время второго клика
-                        secondClickPosition = Input.mousePosition; //позиция второго клика
+                        firstClickTime = Time.time;
+                        firstClickPosition = Input.mousePosition; //узнаём позицию первого клика
+                        Coroutine = StartCoroutine(WaitInput());
                     }
-                    else //второй клик уже был, карутина не нужна
+                    else //если карутина запущена
                     {
-                        StopCoroutine(WaitInput()); // если корутина запущена и secondClickTime не равно нулю, то останавливаем ее
+                        //второй клик мышкой
+                        if (secondClickTime == 0)   //если равно нулю (второго клика небыло), то зпоминаем время второго клика для использования в корутине                       
+                        {
+                            secondClickTime = Time.time; //время второго клика
+                            secondClickPosition = Input.mousePosition; //позиция второго клика
+                        }
+                        else //второй клик уже был, карутина не нужна
+                        {
+                            StopCoroutine(WaitInput()); // если корутина запущена и secondClickTime не равно нулю, то останавливаем ее
+                        }
                     }
                 }
-            }
-            else //если попали в коллектбл
-            {
-                
             }
         }
     }
@@ -85,8 +88,9 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     GameObject GetHitObject()
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-        if (hit.transform != null && GetComponent<CollectableGO>())
+        if (hit.transform != null && hit.transform.gameObject.GetComponent<JumpPoint>())
         {
+            bonusHitObject = hit.transform.gameObject.GetComponent<JumpPoint>().Bonus;//запоминаем бонус на пушере
             return hit.transform.gameObject; //объект на который нажали
         }
         else

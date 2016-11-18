@@ -126,6 +126,7 @@ public class PlayerBehaviour : MonoBehaviour {
         while (_t < 1){
             _t += 0.05f;
             _to = hitObject.transform.position;
+            _to.y += 0.6f;
             transform.position = Vector2.Lerp(_from, _to, _t); //перемещаем тело в позицию объекта, на который нажали
             yield return null;
         }    
