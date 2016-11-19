@@ -15,29 +15,22 @@ public class Market : CreateSingletonGameObject<Market>
     private int m_Powder;//порох
     private int m_Star;//звезды
 
-    public bool RunMarket() //нужен для инициализации сингтон-объекта на сцене
-    {
-        try
-        {
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-        
-    }
-        
+       
     void OnEnable()
     {
+        if (!PlayerPrefs.HasKey("Health"))
+        {
+            PlayerPrefs.SetInt("Health", 5);
+        }
+
         Health = PlayerPrefs.GetInt("Health");//получаем сколько у нас было жизней ранее
+
         StartCoroutine(MarketCoroutine());//запускаем карутину, которая будет по таймауту отслеживать количесвто прошедшего времени
     }
 
     void OnDisable()
     {
-        PlayerPrefs.SetInt("Health", Health);//сохраняем текущее значение жизней
-        StopCoroutine(MarketCoroutine());//останавливаем
+        PlayerPrefs.SetInt("Health", Health);//сохраняем текущее значение жизней 
     }
 
     IEnumerator MarketCoroutine()

@@ -44,11 +44,6 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        Market.Instance.RunMarket();
-    }
-
     void FixedUpdate()
     {
         if (IsRunLevel) //ускорение уровня
@@ -81,7 +76,7 @@ public class LevelGenerator : MonoBehaviour
     {                                                       //Генератор линий и объектов на них
         GameObject _obj = null; //здесь будет наш новый пушер
         JumpPoint _jp = null;   //компонент JumpPoint объекта _obj
-        int _idLine = 5;        //id родителя пушера
+        int _idLine = 4;        //id родителя пушера - ИСПРАВИТЬ НА НАХОЖДЕНИЕ ПОСЛЕДНЕГО АЙДИ НА СЦЕНЕ В СТАТИЧЕСКИХ ПУШЕРАХ
         Transform _randomPos;   //рандомная позиция
         JumpPoint _newPush;    //пушер
         GameObject _go;         //линия для пушеров
