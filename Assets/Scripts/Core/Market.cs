@@ -11,7 +11,9 @@ public class Market : CreateSingletonGameObject<Market>
     private int m_MaxHealth = 5;
     private int timeSetHealth = 5;
     [SerializeField]
-    private int seeds;
+    private int m_Seeds;//семечки
+    private int m_Powder;//порох
+    private int m_Star;//звезды
 
     public bool RunMarket() //нужен для инициализации сингтон-объекта на сцене
     {
@@ -95,7 +97,17 @@ public class Market : CreateSingletonGameObject<Market>
     }
     public int Seeds
     {
-        get { return this.seeds; }
-        set { this.seeds = value; }
+        get { return this.m_Seeds; }
+        set { this.m_Seeds = value; }
+    }
+    public int Powder
+    {
+        get { return this.m_Powder; }
+        set { m_Powder = value; }
+    }
+    public int Start
+    {
+        get { return this.m_Star; }
+        set { this.m_Star = value; }
     }
 }

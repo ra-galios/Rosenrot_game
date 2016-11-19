@@ -2,9 +2,24 @@
 using System.Collections;
 
 public class CollectableGO : MonoBehaviour {
+    public enum Type { star, health,  powder}
+    public Type typeBonus;
+
     public void EnterBonus()
     {
-        Market.Instance.Health++;
+        switch (typeBonus)
+        {
+            case Type.star:
+                Market.Instance.Start++;
+                break;
+            case Type.powder:
+                Market.Instance.Powder++;
+                break;
+            case Type.health:
+                Market.Instance.Health++;
+                break;
+        }
+
         Destroy(this.gameObject);
     }
 
