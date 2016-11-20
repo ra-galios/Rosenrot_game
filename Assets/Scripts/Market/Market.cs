@@ -12,9 +12,9 @@ public class Market : CreateSingletonGameObject<Market>
     private int timeSetHealth = 5;
     [SerializeField]
     private int m_Seeds;//семечки
-    private int m_Powder;//порох
-    private int m_Star;//звезды
-
+    private int m_Powder;//порох/бомбочка
+    private int m_Dimond;//брилиант
+    private int m_Ruby;//рубин
        
     void OnEnable()
     {
@@ -35,13 +35,14 @@ public class Market : CreateSingletonGameObject<Market>
 
     IEnumerator MarketCoroutine()
     {
-        while (true)
+        while (Health < 5)
         {
             revTime = m_DateManager.GetPlayerDate("Date");
             var passedTime = m_DateManager.HowTimePassed(revTime, DateManager.DateType.minutes);//сколько прошло времени
             if (passedTime >= timeSetHealth)//если прошло больше, чем время для начисления жизни
             {
-                Health = passedTime / timeSetHealth; //делим прошедшие минуты на время создания одной жизни и берём целую часть от этого
+                Health = passedTime / timeSetHealth; //делим прошедшие минуты на время создания одной жизни и берём целую часть от этого, клампим, чтобы получить не больше 5
+                Mathf.Clamp(Health, 0, m_MaxHealth);
                 SetCurrentDatePlayer(); //ставим дату обновления жизней
             }
             yield return new WaitForSeconds(30f);//ждём 30 сек
@@ -63,7 +64,7 @@ public class Market : CreateSingletonGameObject<Market>
         }
         set
         {
-            m_Health = Mathf.Clamp(value, 0, m_MaxHealth);//добавляем жизней, но не больше m_MaxHealth
+            m_Health = value;//добавляем жизней
         }
     }
     public int MaxHealth
@@ -98,9 +99,14 @@ public class Market : CreateSingletonGameObject<Market>
         get { return this.m_Powder; }
         set { m_Powder = value; }
     }
-    public int Start
+    public int Dimond
     {
-        get { return this.m_Star; }
-        set { this.m_Star = value; }
+        get { return this.m_Dimond; }
+        set { this.m_Dimond = value; }
+    }
+    public int Ruby
+    {
+        get { return this.m_Ruby; }
+        set { this.m_Ruby = value; }
     }
 }

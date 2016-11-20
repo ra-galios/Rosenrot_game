@@ -35,6 +35,7 @@ public class LevelGenerator : MonoBehaviour
     private bool _typePush;                   //тип пушера: рандомный или альтернативный
     private float _timeStartLevel;            //время запуска левела
     private bool _isRunLevel = false;          //запущен ли левел       
+    private int idLine=0;        //id родителя пушера - ИСПРАВИТЬ НА НАХОЖДЕНИЕ ПОСЛЕДНЕГО АЙДИ НА СЦЕНЕ В СТАТИЧЕСКИХ ПУШЕРАХ
 
     void Awake()
     {
@@ -49,7 +50,7 @@ public class LevelGenerator : MonoBehaviour
         if (IsRunLevel) //ускорение уровня
         {
             SpeedPusher = Mathf.Clamp(SpeedPusher + _baseSpeedPusher * (0.2f / 5) * Time.deltaTime, 0, 6);
-            TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - _baseTimeGenerationLines * (0.1f / 5) * Time.deltaTime, 0.5f, 6);
+            TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - _baseTimeGenerationLines * (0.2f / 5) * Time.deltaTime, 0.5f, 6);
         }
     }
 
@@ -76,19 +77,20 @@ public class LevelGenerator : MonoBehaviour
     {                                                       //Генератор линий и объектов на них
         GameObject _obj = null; //здесь будет наш новый пушер
         JumpPoint _jp = null;   //компонент JumpPoint объекта _obj
-        int _idLine = 4;        //id родителя пушера - ИСПРАВИТЬ НА НАХОЖДЕНИЕ ПОСЛЕДНЕГО АЙДИ НА СЦЕНЕ В СТАТИЧЕСКИХ ПУШЕРАХ
         Transform _randomPos;   //рандомная позиция
         JumpPoint _newPush;    //пушер
         GameObject _go;         //линия для пушеров
         int _idCurPos = 0;      //позиция для нового пушера
 
-        while (CurrentLinesCount < MaxLines)        //пока не создадим нужное кол-во линий
+        idLine = CurrentLinesInScene() + 1;
+        CurrentLinesCount = idLine;
+        while (CurrentLinesCount <= MaxLines)        //пока не создадим нужное кол-во линий
         {
             bool[] SetCol = new bool[startPositions.Length]; ; //флаги занятых колонок, для избежания создания пушеров в одной колонке
 
             var _countPushersInLine = Random.Range(1, MaxItemsInLine + 1);   //кол-во пушеров на линии
             _go = new GameObject();                 //новая линия, будет родителем пушера/ов
-            _go.name = _idLine.ToString();          //даём ему имя
+            _go.name = idLine.ToString();          //даём ему имя
 
             for (int _pushId = 0; _pushId < _countPushersInLine; _pushId++)  //создаем необходимое кол-во пушеров на линию
             {
@@ -136,12 +138,16 @@ public class LevelGenerator : MonoBehaviour
                 if (_typePush)//если это альтернативный пушер, то просто становится в нужную позицию, иначе - инстантируется на сцену
                     _obj = _newPush.gameObject; //альтернативный
                 else
-                    _obj = Instantiate(_newPush.gameObject, _newPush.transform.position, _newPush.transform.rotation) as GameObject; //рандомный
+                {
+                    var randomPos = RandomPos();
+
+                    _obj = Instantiate(_newPush.gameObject, new Vector2(_newPush.transform.position.x + randomPos.x,_newPush.transform.position.y + randomPos.y) , _newPush.transform.rotation) as GameObject; //рандомный
+                }
 
                 if (!_obj.activeSelf) _obj.SetActive(true);
 
                 _jp = _obj.GetComponent<JumpPoint>();
-                _jp.Line = _idLine;              //задаём пушеру линию, на которой он находится
+                _jp.Line = idLine;              //задаём пушеру линию, на которой он находится
                 _jp.Collumn = _idCurPos;         //задаём пушеру колонку в которой он находится
                 _jp.Speed = SpeedPusher;         //задаём скорость пушера
                 _obj.transform.parent = _go.transform;                      //делаем новый пушер "ребёнком" нового родителя
@@ -153,11 +159,32 @@ public class LevelGenerator : MonoBehaviour
 
             _go = null;
             currentLinesCount++;
-            _idLine++;              //прикидываем имя для следующего родителя
+            idLine++;              //прикидываем имя для следующего родителя
             yield return new WaitForSeconds(TimeGenerationLine);           //ждём сек. тут регулируем скорость создания линий
         }
     }
 
+    private int CurrentLinesInScene()
+    {
+        int maxIdLine = 0;
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("Pusher");
+
+        foreach (GameObject item in objs)
+        {
+            var line = item.GetComponent<JumpPoint>().Line;
+            maxIdLine = maxIdLine < line ? line : maxIdLine;
+        }
+
+        return maxIdLine;
+    }
+
+    private Vector2 RandomPos()
+    {
+        float x = Random.Range(-0.20f, 0.21f);
+        float y = Random.Range(-0.20f, 0.21f);
+
+        return new Vector2(x, y);
+    }
 
     //Свойства
     public List<JumpPoint> Pushers

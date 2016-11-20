@@ -11,7 +11,7 @@ public class PlayerBehaviour : MonoBehaviour {
     private bool isPlayerFall=false;
     private bool playerStaticPush = true;
 
-    Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
+    private Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
     
     void Start()
     {
@@ -101,7 +101,7 @@ public class PlayerBehaviour : MonoBehaviour {
         if (hit.transform != null && hit.transform.gameObject.GetComponent<JumpPoint>()){
             rig2D.isKinematic = true;
             isPlayerFall = false; //уже не падаем
-            this.hitObject = hit.transform.gameObject; //объект на который нажали
+            hitObject = hit.transform.gameObject; //объект на который нажали
             hitJumpPoint = hitObject.GetComponent<JumpPoint>();
         }
         else{
@@ -126,10 +126,15 @@ public class PlayerBehaviour : MonoBehaviour {
         while (_t < 1){
             _t += 0.05f;
             _to = hitObject.transform.position;
-            _to.y += 0.6f;//чуть выше платформы
+            _to.y += 0.9f;//чуть выше платформы
             transform.position = Vector2.Lerp(_from, _to, _t); //перемещаем тело в позицию объекта, на который нажали
             yield return null;
-        }    
+        }
+
+        if (hitJumpPoint.Bonus)
+            hitJumpPoint.Bonus.GetComponent<CollectableGO>().EnterBonus();
+
+
         transform.parent = hitObject.transform;
         idLine = hitJumpPoint.Line;
         idCollumn = hitJumpPoint.Collumn;
@@ -162,5 +167,10 @@ public class PlayerBehaviour : MonoBehaviour {
             }
             yield return null;
        }
+    }
+
+    public int IdLine
+    {
+        get { return this.idLine; }
     }
 }
