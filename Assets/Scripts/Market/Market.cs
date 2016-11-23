@@ -12,7 +12,7 @@ public class Market : CreateSingletonGameObject<Market>
     private int timeSetHealth = 5;
     [SerializeField]
     private int m_Seeds;//семечки
-    private int m_Powder;//порох/бомбочка
+    private int m_Bomb;//порох/бомбочка
     private int m_Dimond;//брилиант
     private int m_Ruby;//рубин
        
@@ -94,10 +94,10 @@ public class Market : CreateSingletonGameObject<Market>
         get { return this.m_Seeds; }
         set { this.m_Seeds = value; }
     }
-    public int Powder
+    public int Bomb
     {
-        get { return this.m_Powder; }
-        set { m_Powder = value; }
+        get { return this.m_Bomb; }
+        set { m_Bomb = value; }
     }
     public int Dimond
     {

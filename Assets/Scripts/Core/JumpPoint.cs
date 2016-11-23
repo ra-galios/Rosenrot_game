@@ -5,20 +5,22 @@
 public class JumpPoint : MonoBehaviour
 {
     [SerializeField]
-    private float timeCreate=0;
+    private float timeCreate=0; //время создания
 
     [SerializeField]
-    private int line;
+    private int line; //линия в которой находится пуш
 
     [SerializeField]
-    private int collumn;
+    private int collumn; //колонка в которой находится пуш
 
-    private float speed;
+    private float speed; //скорость 
 
     [SerializeField]
-    private CollectableGO prefBonus;
-    private GameObject bonus;
-    private bool isCreateBonus=false;
+    private CollectableGO prefBonus; //префаб колетблза на пушере
+
+    private GameObject HelpPush; //изображение действия
+    private GameObject bonus; //колектблз на пушере
+    private bool isCreateBonus=false; 
 
     void Start()
     {
@@ -27,6 +29,9 @@ public class JumpPoint : MonoBehaviour
             LevelGenerator.Instance.AltPushers.Add(this);
             this.gameObject.SetActive(false);
         }
+
+        //HelpPush = transform.FindChild("HelpPush").gameObject;
+        
     }
 
     void Update()

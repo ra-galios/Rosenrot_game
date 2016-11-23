@@ -180,8 +180,8 @@ public class LevelGenerator : MonoBehaviour
 
     private Vector2 RandomPos()
     {
-        float x = Random.Range(-0.20f, 0.21f);
-        float y = Random.Range(-0.20f, 0.21f);
+        float x = Random.Range(-0.30f, 0.31f);
+        float y = Random.Range(-0.30f, 0.31f);
 
         return new Vector2(x, y);
     }

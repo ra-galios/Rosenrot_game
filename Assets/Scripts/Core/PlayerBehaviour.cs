@@ -134,7 +134,6 @@ public class PlayerBehaviour : MonoBehaviour {
         if (hitJumpPoint.Bonus)
             hitJumpPoint.Bonus.GetComponent<CollectableGO>().EnterBonus();
 
-
         transform.parent = hitObject.transform;
         idLine = hitJumpPoint.Line;
         idCollumn = hitJumpPoint.Collumn;
