@@ -18,7 +18,7 @@ public class JumpPoint : MonoBehaviour
     [SerializeField]
     private CollectableGO prefBonus; //префаб колетблза на пушере
 
-    private GameObject HelpPush; //изображение действия
+    //private GameObject HelpPush; //изображение действия
     private GameObject bonus; //колектблз на пушере
     private bool isCreateBonus=false; 
 

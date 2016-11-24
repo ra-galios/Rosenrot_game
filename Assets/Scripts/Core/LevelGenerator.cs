@@ -35,7 +35,8 @@ public class LevelGenerator : MonoBehaviour
     private bool _typePush;                   //тип пушера: рандомный или альтернативный
     private float _timeStartLevel;            //время запуска левела
     private bool _isRunLevel = false;          //запущен ли левел       
-    private int idLine=0;        //id родителя пушера - ИСПРАВИТЬ НА НАХОЖДЕНИЕ ПОСЛЕДНЕГО АЙДИ НА СЦЕНЕ В СТАТИЧЕСКИХ ПУШЕРАХ
+    private int idLine=0;        //id родителя пушера
+    private int linesInScene;   //кол-во линий со статическими пошерами
 
     void Awake()
     {
@@ -43,6 +44,11 @@ public class LevelGenerator : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    void Start()
+    {
+        linesInScene = CurrentLinesInScene();//колво уже созданных линий на сцене
     }
 
     void FixedUpdate()
@@ -54,12 +60,24 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        JumpPoint jumpPoint = other.GetComponent<JumpPoint>();
+
+        if (jumpPoint)
+        {
+            if (jumpPoint.Line == linesInScene)
+            {
+                StartCoroutine(GeneratorLines());//запускаем генератор линий после последнего статичного пушера
+            }
+        }
+    }
+
     public void StartLevel()
     {
         if (Market.Instance.Health > 0)//если есть жизни, то можно играть
         {
             _timeStartLevel = Time.time; //время старта
-            StartCoroutine(GeneratorLines());//запускаем генератор линий
             IsRunLevel = true;
             Market.Instance.Health-=1; //отнимаем одну использованную жизнь, т.к. запустили левел
             Market.Instance.SetCurrentDatePlayer(); //записываем новую дату обновления жизней, через 5 минут будет +1
@@ -74,7 +92,7 @@ public class LevelGenerator : MonoBehaviour
     }
 
     IEnumerator GeneratorLines()
-    {                                                       //Генератор линий и объектов на них
+    {                           //Генератор линий и объектов на них
         GameObject _obj = null; //здесь будет наш новый пушер
         JumpPoint _jp = null;   //компонент JumpPoint объекта _obj
         Transform _randomPos;   //рандомная позиция
@@ -82,8 +100,8 @@ public class LevelGenerator : MonoBehaviour
         GameObject _go;         //линия для пушеров
         int _idCurPos = 0;      //позиция для нового пушера
 
-        idLine = CurrentLinesInScene() + 1;
-        CurrentLinesCount = idLine;
+        idLine = linesInScene+1;
+        CurrentLinesCount = linesInScene+1;
         while (CurrentLinesCount <= MaxLines)        //пока не создадим нужное кол-во линий
         {
             bool[] SetCol = new bool[startPositions.Length]; ; //флаги занятых колонок, для избежания создания пушеров в одной колонке
@@ -117,7 +135,7 @@ public class LevelGenerator : MonoBehaviour
                 _idCurPos = Random.Range(0, startPositions.Length);     //получаем рандомную позицию из списка возможных
 
                 //смотриим чтобы эта позиция не совпала с другим пушером
-                var isSetPos = false; 
+                var isSetPos = false;
                 while (!isSetPos)
                 {
                     if (!SetCol[_idCurPos])
@@ -141,7 +159,7 @@ public class LevelGenerator : MonoBehaviour
                 {
                     var randomPos = RandomPos();
 
-                    _obj = Instantiate(_newPush.gameObject, new Vector2(_newPush.transform.position.x + randomPos.x,_newPush.transform.position.y + randomPos.y) , _newPush.transform.rotation) as GameObject; //рандомный
+                    _obj = Instantiate(_newPush.gameObject, new Vector2(_newPush.transform.position.x + randomPos.x, _newPush.transform.position.y + randomPos.y), _newPush.transform.rotation) as GameObject; //рандомный
                 }
 
                 if (!_obj.activeSelf) _obj.SetActive(true);
