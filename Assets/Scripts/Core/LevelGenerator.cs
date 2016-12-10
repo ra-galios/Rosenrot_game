@@ -9,32 +9,32 @@ public class LevelGenerator : MonoBehaviour
     public static LevelGenerator Instance;
 
     [SerializeField]
-    private List<JumpPoint> pushers = new List<JumpPoint>();        //варианты пушеров. (!) Добавляются из префабов
+    private List<JumpPoint> m_Pushers = new List<JumpPoint>();        //варианты пушеров. (!) Добавляются из префабов
 
     [SerializeField]
-    private Transform[] startPositions;                             //позиции в которых создавать новые пушеры
+    private Transform[] m_StartPositions;                             //позиции в которых создавать новые пушеры
 
     [SerializeField]
-    private List<JumpPoint> altPushers = new List<JumpPoint>();     //альтернативные пушеры. (!) Добавляются со сцены. Рекомендация: добавить пуш на сцену, указать ему время, line и collumn не указывать
+    private List<JumpPoint> m_AltPushers = new List<JumpPoint>();     //альтернативные пушеры. (!) Добавляются со сцены. Рекомендация: добавить пуш на сцену, указать ему время, line и collumn не указывать
 
     [SerializeField]
-    private int maxLines = 25;                 //кол-во генерируемых линий
+    private int m_MaxLines = 25;                 //кол-во генерируемых линий
 
     [SerializeField]
-    private int maxItemsInLine = 3;            //максимальное кол-во пушеров на линии
+    private int m_MaxItemsInLine = 3;            //максимальное кол-во пушеров на линии
 
     [SerializeField]
-    private float timeGenerationLines = 2f;   //интервал создания линий
+    private float m_TimeGenerationLines = 2f;   //интервал создания линий
 
     [SerializeField]
-    private float speedPusher = 1f;            //скорость пушера. Пушеры узнают текущую скорость
+    private float m_SpeedPusher = 1f;            //скорость пушера. Пушеры узнают текущую скорость
 
-    private float _baseTimeGenerationLines=2f; //начальная время генерации линий
-    private float _baseSpeedPusher=1f;         //начальная скорость пушеров
+    private float baseTimeGenerationLines=2f; //начальная время генерации линий
+    private float baseSpeedPusher=1f;         //начальная скорость пушеров
     private int currentLinesCount;            //текущее кол-во созданных линий
-    private bool _typePush;                   //тип пушера: рандомный или альтернативный
-    private float _timeStartLevel;            //время запуска левела
-    private bool _isRunLevel = false;          //запущен ли левел       
+    private bool typePush;                   //тип пушера: рандомный или альтернативный
+    private float timeStartLevel;            //время запуска левела
+    private bool isRunLevel = false;          //запущен ли левел       
     private int idLine=0;        //id родителя пушера
     private int linesInScene;   //кол-во линий со статическими пошерами
 
@@ -55,20 +55,22 @@ public class LevelGenerator : MonoBehaviour
     {
         if (IsRunLevel) //ускорение уровня
         {
-            SpeedPusher = Mathf.Clamp(SpeedPusher + _baseSpeedPusher * (0.2f / 5) * Time.deltaTime, 0, 6);
-            TimeGenerationLine = Mathf.Clamp(TimeGenerationLine - _baseTimeGenerationLines * (0.2f / 5) * Time.deltaTime, 0.5f, 6);
+            SpeedPusher = Mathf.Clamp(SpeedPusher + baseSpeedPusher * (0.2f / 5) * Time.deltaTime, 0, 6);
+            m_TimeGenerationLines = Mathf.Clamp(m_TimeGenerationLines - baseTimeGenerationLines * (0.2f / 5) * Time.deltaTime, 0.5f, 6);
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        JumpPoint jumpPoint = other.GetComponent<JumpPoint>();
-
-        if (jumpPoint)
+        if (isRunLevel)
         {
-            if (jumpPoint.Line == linesInScene)
+            JumpPoint jumpPoint = other.GetComponent<JumpPoint>();
+            if (jumpPoint)
             {
-                StartCoroutine(GeneratorLines());//запускаем генератор линий после последнего статичного пушера
+                if (jumpPoint.Line == linesInScene)
+                {
+                    StartCoroutine(GeneratorLines());//запускаем генератор линий после последнего статичного пушера
+                }
             }
         }
     }
@@ -77,7 +79,7 @@ public class LevelGenerator : MonoBehaviour
     {
         if (Market.Instance.Health > 0)//если есть жизни, то можно играть
         {
-            _timeStartLevel = Time.time; //время старта
+            timeStartLevel = Time.time; //время старта
             IsRunLevel = true;
             Market.Instance.Health-=1; //отнимаем одну использованную жизнь, т.к. запустили левел
             Market.Instance.SetCurrentDatePlayer(); //записываем новую дату обновления жизней, через 5 минут будет +1
@@ -86,7 +88,7 @@ public class LevelGenerator : MonoBehaviour
 
     public void StopLevel()
     {
-        _timeStartLevel = 0;
+        timeStartLevel = 0;
         StopCoroutine(GeneratorLines());//останавливаем
         IsRunLevel = false;
     }
@@ -104,7 +106,7 @@ public class LevelGenerator : MonoBehaviour
         CurrentLinesCount = linesInScene+1;
         while (CurrentLinesCount <= MaxLines)        //пока не создадим нужное кол-во линий
         {
-            bool[] SetCol = new bool[startPositions.Length]; ; //флаги занятых колонок, для избежания создания пушеров в одной колонке
+            bool[] SetCol = new bool[m_StartPositions.Length]; ; //флаги занятых колонок, для избежания создания пушеров в одной колонке
 
             var _countPushersInLine = Random.Range(1, MaxItemsInLine + 1);   //кол-во пушеров на линии
             _go = new GameObject();                 //новая линия, будет родителем пушера/ов
@@ -113,7 +115,7 @@ public class LevelGenerator : MonoBehaviour
             for (int _pushId = 0; _pushId < _countPushersInLine; _pushId++)  //создаем необходимое кол-во пушеров на линию
             {
                 _newPush = Pushers[Random.Range(0, Pushers.Count)];         //новый рандомный пушер
-                _typePush = false;
+                typePush = false;
 
                 if (AltPushers.Count > 0)
                 {
@@ -121,18 +123,18 @@ public class LevelGenerator : MonoBehaviour
                     {
                         if (push != null)
                         {
-                            if ((Time.time - _timeStartLevel) >= push.TimeCreate)   //пора ставить пушер с установленным временем
+                            if ((Time.time - timeStartLevel) >= push.TimeCreate)   //пора ставить пушер с установленным временем
                             {
                                 _newPush = push;
                                 AltPushers.RemoveAt(AltPushers.LastIndexOf(push));
-                                _typePush = true;                //указываем что это альтернативный пушер
+                                typePush = true;                //указываем что это альтернативный пушер
                                 break;
                             }
                         }
                     }
                 }
 
-                _idCurPos = Random.Range(0, startPositions.Length);     //получаем рандомную позицию из списка возможных
+                _idCurPos = Random.Range(0, m_StartPositions.Length);     //получаем рандомную позицию из списка возможных
 
                 //смотриим чтобы эта позиция не совпала с другим пушером
                 var isSetPos = false;
@@ -146,14 +148,14 @@ public class LevelGenerator : MonoBehaviour
                     }
                     else
                     {
-                        _idCurPos = Random.Range(0, startPositions.Length); //иначе берём новую
+                        _idCurPos = Random.Range(0, m_StartPositions.Length); //иначе берём новую
                     }
                 }
 
-                _randomPos = startPositions[_idCurPos];
+                _randomPos = m_StartPositions[_idCurPos];
                 _newPush.transform.position = _randomPos.position;          //ставим в позицию
 
-                if (_typePush)//если это альтернативный пушер, то просто становится в нужную позицию, иначе - инстантируется на сцену
+                if (typePush)//если это альтернативный пушер, то просто становится в нужную позицию, иначе - инстантируется на сцену
                     _obj = _newPush.gameObject; //альтернативный
                 else
                 {
@@ -178,7 +180,7 @@ public class LevelGenerator : MonoBehaviour
             _go = null;
             currentLinesCount++;
             idLine++;              //прикидываем имя для следующего родителя
-            yield return new WaitForSeconds(TimeGenerationLine);           //ждём сек. тут регулируем скорость создания линий
+            yield return new WaitForSeconds(TimeGenerationLines);           //ждём сек. тут регулируем скорость создания линий
         }
     }
 
@@ -207,28 +209,28 @@ public class LevelGenerator : MonoBehaviour
     //Свойства
     public List<JumpPoint> Pushers
     {
-        get { return pushers; }
-        set { pushers = value; }
+        get { return m_Pushers; }
+        set { m_Pushers = value; }
     }
     public List<JumpPoint> AltPushers
     {
-        get { return this.altPushers; }
-        set { this.altPushers = value; }
+        get { return this.m_AltPushers; }
+        set { this.m_AltPushers = value; }
     }
     public int MaxLines
     {
-        get { return maxLines; }
-        set { maxLines = value; }
+        get { return m_MaxLines; }
+        set { m_MaxLines = value; }
     }
     public int MaxItemsInLine
     {
-        get { return maxItemsInLine; }
-        set { maxItemsInLine = value; }
+        get { return m_MaxItemsInLine; }
+        set { m_MaxItemsInLine = value; }
     }
-    public float TimeGenerationLine
+    public float TimeGenerationLines
     {
-        get { return timeGenerationLines; }
-        set { timeGenerationLines = value; }
+        get { return m_TimeGenerationLines; }
+        set { m_TimeGenerationLines = value; }
     }
     public int CurrentLinesCount
     {
@@ -237,12 +239,12 @@ public class LevelGenerator : MonoBehaviour
     }
     public bool IsRunLevel
     {
-        get { return _isRunLevel; }
-        set { _isRunLevel = value; }
+        get { return isRunLevel; }
+        set { isRunLevel = value; }
     }
     public float SpeedPusher
     {
-        get { return this.speedPusher; }
-        set { this.speedPusher = value; }
+        get { return this.m_SpeedPusher; }
+        set { this.m_SpeedPusher = value; }
     }
 }

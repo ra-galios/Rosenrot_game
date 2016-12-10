@@ -5,26 +5,24 @@
 public class JumpPoint : MonoBehaviour
 {
     [SerializeField]
-    private float timeCreate=0; //время создания
+    private float m_TimeCreate=0; //время создания
 
     [SerializeField]
-    private int line; //линия в которой находится пуш
+    private int m_Line; //линия в которой находится пуш
 
     [SerializeField]
-    private int collumn; //колонка в которой находится пуш
+    private int m_Collumn; //колонка в которой находится пуш
+
+    [SerializeField]
+    private CollectableGO m_PrefBonus; //префаб колетблза на пушере
 
     private float speed; //скорость 
-
-    [SerializeField]
-    private CollectableGO prefBonus; //префаб колетблза на пушере
-
-    //private GameObject HelpPush; //изображение действия
     private GameObject bonus; //колектблз на пушере
-    private bool isCreateBonus=false; 
-
+    private bool isCreateBonus=false;
+    //private GameObject HelpPush; //изображение действия
     void Start()
     {
-        if (timeCreate != 0)
+        if (m_TimeCreate != 0)
         {
             LevelGenerator.Instance.AltPushers.Add(this);
             this.gameObject.SetActive(false);
@@ -40,7 +38,7 @@ public class JumpPoint : MonoBehaviour
         {
             MovePusher();
         }
-        if (gameObject.activeSelf && prefBonus && !isCreateBonus)//если пушер активировался, у него есть бонус и он ещё не инициализирован
+        if (gameObject.activeSelf && m_PrefBonus && !isCreateBonus)//если пушер активировался, у него есть бонус и он ещё не инициализирован
         {
             Vector3 bonusPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             bonusPos.y += 0.6f;
@@ -53,20 +51,20 @@ public class JumpPoint : MonoBehaviour
     //пользовательские методы
     void MovePusher()
     {
-        Speed = LevelGenerator.Instance.SpeedPusher;
-        this.transform.Translate(Vector2.down * Speed * Time.deltaTime);
+        speed = LevelGenerator.Instance.SpeedPusher;
+        this.transform.Translate(Vector2.down * speed * Time.deltaTime);
     }
 
     //свойства
     public int Line
     {
-        get{ return this.line; }
-        set{ this.line = value; }
+        get{ return this.m_Line; }
+        set{ this.m_Line = value; }
     }
     public int Collumn
     {
-        get { return this.collumn; }
-        set { this.collumn = value; }
+        get { return this.m_Collumn; }
+        set { this.m_Collumn = value; }
     }
     public float Speed
     {
@@ -75,8 +73,8 @@ public class JumpPoint : MonoBehaviour
     }
     public float TimeCreate
     {
-        get { return this.timeCreate; }
-        set { this.timeCreate = value; }
+        get { return this.m_TimeCreate; }
+        set { this.m_TimeCreate = value; }
     }
     public GameObject Bonus
     {
@@ -85,7 +83,7 @@ public class JumpPoint : MonoBehaviour
     }
     public CollectableGO PrefBonus
     {
-        get { return this.prefBonus; }
-        set { this.prefBonus = value; }
+        get { return this.m_PrefBonus; }
+        set { this.m_PrefBonus = value; }
     }
 }
