@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.EventSystems;
 
 public class PlayerBehaviour : MonoBehaviour {
     private GameObject hitObject;
@@ -9,103 +8,98 @@ public class PlayerBehaviour : MonoBehaviour {
     private int idLine = 0;
     private int idCollumn = 1;
     private bool isPlayerFall=false;
+    [SerializeField]
     private bool playerStaticPush = true;
-
+    private Animator animator;
     private Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
     
     void Start()
     {
+        animator = GetComponent<Animator>();
         rig2D = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            SetHitObject();//устанавливаем в какой объект нажали и записываем в hitObject, если таковый был, иначе null
-            if(!LevelGenerator.Instance.IsRunLevel)//если левел не запущен
-                LevelGenerator.Instance.StartLevel();//запускаем леввел
-        }
-    }
-
-    void OnEnable () {//когда объект активирован
+    void OnEnable () {
         GameInput.Instance.PlayerInputAction += JumpToNext; //подписываемся на эфир PlayerInputAction и ждём когда он скажет чё нам делать
 	}
 
-	void OnDisable () {//когда всё потухло
+	void OnDisable () {
         GameInput.Instance.PlayerInputAction -= JumpToNext; //отписываемся от эфира
     }
 
     void JumpToNext(GameInput.PlayerAction action) //Когда в эфире PlayerInputAction что-то "прозвучит", запускается JumpToNext
     {
-        if (hitObject && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
-        {
-			float dist = Vector2.Distance(transform.position, hitObject.transform.position);//Mathf.Abs(transform.position.x - hitObject.transform.position.x); // дистанция от игрока до hitObject'a       
-
-            var diffV = Mathf.Abs(hitJumpPoint.Collumn - idCollumn);
-            var diffH = Mathf.Abs(hitJumpPoint.Line - idLine);
-
+        this.hitObject = GameInput.Instance.HitObject;
+        this.hitJumpPoint = hitObject.GetComponent<JumpPoint>()? hitObject.GetComponent<JumpPoint>():null;
+        if (hitObject && hitJumpPoint)// && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
+        {      
             if (!isPlayerFall)
             {
-                switch (action)
+                if (hitJumpPoint.Line - 1 == idLine)
                 {
-                    case GameInput.PlayerAction.climb:
+                    if (action == hitJumpPoint.Action)
+                    {
+                        if (LerpCoroutine == null)
+                            StartCoroutine(Lerp());
+                    }
+                    else if (hitJumpPoint.Action == GameInput.PlayerAction.question)
+                    {
+                        var diffV = Mathf.Abs(hitJumpPoint.Collumn - idCollumn);
+                        var diffH = Mathf.Abs(hitJumpPoint.Line - idLine);
+
+                        switch (action)
                         {
-                            if(diffV == 0 && diffH == 1)
-                            { //подтягивание
-                                if (LerpCoroutine == null)
-                                    StartCoroutine(Lerp());
-                            }
-                            else
-                            {//Падение при неверном нажатии на пушер
-                                if(!playerStaticPush)
-                                    PlayerFall();
-                            }
-                            break;
+                            case GameInput.PlayerAction.climb:
+                                {
+                                    if (diffV == 0 && diffH == 1)
+                                    { //подтягивание
+                                        if (LerpCoroutine == null)
+                                            StartCoroutine(Lerp());
+                                    }
+                                    else
+                                    {//Падение при неверном нажатии на пушер
+                                        if (!playerStaticPush)
+                                            PlayerFall();
+                                    }
+                                    break;
+                                }
+                            case GameInput.PlayerAction.jump:
+                                {
+                                    if ((diffV == 1 && diffH == 1) || (diffV == 1 && diffH == 0))
+                                    { //прыжок
+                                        if (LerpCoroutine == null)
+                                            StartCoroutine(Lerp());
+                                    }
+                                    else
+                                    {//Падение при неверном нажатии на пушер
+                                        if (!playerStaticPush)
+                                            PlayerFall();
+                                    }
+                                    break;
+                                }
+                            case GameInput.PlayerAction.doubleJump:
+                                {
+                                    if (diffV == 2 || diffH == 2)
+                                    { //двойной прыжок
+                                        if (LerpCoroutine == null)
+                                            StartCoroutine(Lerp());
+                                    }
+                                    else
+                                    {//Падение при неверном нажатии на пушер
+                                        if (!playerStaticPush)
+                                            PlayerFall();
+                                    }
+                                    break;
+                                }
                         }
-                    case GameInput.PlayerAction.jump:
-                        {
-                            if((diffV == 1 && diffH == 1) || (diffV == 1 && diffH == 0))
-                            { //прыжок
-                                if (LerpCoroutine == null)
-                                    StartCoroutine(Lerp());
-                            }
-                            else
-                            {//Падение при неверном нажатии на пушер
-                                if (!playerStaticPush)
-                                    PlayerFall();
-                            }
-                            break;
-                        }
-                    case GameInput.PlayerAction.doubleJump:
-                        {
-                            if(diffV >= 2 || diffH >= 2)
-                            { //двойной прыжок
-                                if (LerpCoroutine == null)
-                                    StartCoroutine(Lerp());
-                            }
-                            else
-                            {//Падение при неверном нажатии на пушер
-                                if (!playerStaticPush)
-                                        PlayerFall(); 
-                            }
-                            break;
-                        }
+                    }
+                    else
+                    {
+                        if (!playerStaticPush)
+                            PlayerFall();
+                    }
                 }
             }
-        }
-    }
-
-    void SetHitObject(){
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-        if (hit.transform != null && hit.transform.gameObject.GetComponent<JumpPoint>()){
-            rig2D.isKinematic = true;
-            isPlayerFall = false; //уже не падаем
-            hitObject = hit.transform.gameObject; //объект на который нажали
-            hitJumpPoint = hitObject.GetComponent<JumpPoint>();
-        }
-        else{
-            this.hitObject = null;
         }
     }
 
@@ -113,11 +107,15 @@ public class PlayerBehaviour : MonoBehaviour {
     {//падение игрока
         isPlayerFall = true;
         rig2D.isKinematic = false;
+        transform.parent = null;
         StartCoroutine(Fall());
+       
     }
 
     IEnumerator Lerp()
     {
+        if (LevelGenerator.Instance.IsRunLevel == false)
+            LevelGenerator.Instance.StartLevel();
         var boxColl = GetComponent<BoxCollider2D>().enabled;
         boxColl = false;
         Vector2 _from = transform.position;
@@ -147,8 +145,9 @@ public class PlayerBehaviour : MonoBehaviour {
         GameObject[] _pushers = GameObject.FindGameObjectsWithTag("Pusher"); //берём все созданные на данный момент пушеры
         float _minDist=100f; //немного чисел с неба
         float _dist;//дистанция до ближайшего пушера
-        while(isPlayerFall) //пока мы падаем
-       {
+        while (isPlayerFall) //пока мы падаем
+        {
+            
             if (Input.GetMouseButtonDown(0)) //нажали кнопку мыши
             {
                 foreach (GameObject _push in _pushers) //какой пушер ближе всех?
@@ -165,11 +164,17 @@ public class PlayerBehaviour : MonoBehaviour {
                 StartCoroutine(Lerp()); //перемещаемся к спасительному пушеру
             }
             yield return null;
-       }
+        }
     }
 
+    //свойства
     public int IdLine
     {
         get { return this.idLine; }
+    }
+
+    public int IdCollumn
+    {
+        get { return this.idCollumn; }
     }
 }

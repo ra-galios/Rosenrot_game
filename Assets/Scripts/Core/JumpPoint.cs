@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-
-[System.Serializable]
+using System.Collections;
+using System;
 
 public class JumpPoint : MonoBehaviour
 {
@@ -16,10 +16,14 @@ public class JumpPoint : MonoBehaviour
     [SerializeField]
     private CollectableGO m_PrefBonus; //префаб колетблза на пушере
 
+    [SerializeField]
+    private GameInput.PlayerAction m_Action;
+
     private float speed; //скорость 
     private GameObject bonus; //колектблз на пушере
     private bool isCreateBonus=false;
-    //private GameObject HelpPush; //изображение действия
+    private Sprite helpPush;
+
     void Start()
     {
         if (m_TimeCreate != 0)
@@ -27,9 +31,6 @@ public class JumpPoint : MonoBehaviour
             LevelGenerator.Instance.AltPushers.Add(this);
             this.gameObject.SetActive(false);
         }
-
-        //HelpPush = transform.FindChild("HelpPush").gameObject;
-        
     }
 
     void Update()
@@ -48,12 +49,12 @@ public class JumpPoint : MonoBehaviour
         }
     }
 
-    //пользовательские методы
     void MovePusher()
     {
         speed = LevelGenerator.Instance.SpeedPusher;
         this.transform.Translate(Vector2.down * speed * Time.deltaTime);
     }
+
 
     //свойства
     public int Line
@@ -85,5 +86,10 @@ public class JumpPoint : MonoBehaviour
     {
         get { return this.m_PrefBonus; }
         set { this.m_PrefBonus = value; }
+    }
+    public GameInput.PlayerAction Action
+    {
+        get { return this.m_Action; }
+        set { this.m_Action = value; }
     }
 }

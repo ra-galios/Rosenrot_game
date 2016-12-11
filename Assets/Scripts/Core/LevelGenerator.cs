@@ -29,6 +29,9 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField]
     private float m_SpeedPusher = 1f;            //скорость пушера. Пушеры узнают текущую скорость
 
+    [SerializeField]
+    private PlayerBehaviour player;
+
     private float baseTimeGenerationLines=2f; //начальная время генерации линий
     private float baseSpeedPusher=1f;         //начальная скорость пушеров
     private int currentLinesCount;            //текущее кол-во созданных линий
@@ -60,21 +63,6 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (isRunLevel)
-        {
-            JumpPoint jumpPoint = other.GetComponent<JumpPoint>();
-            if (jumpPoint)
-            {
-                if (jumpPoint.Line == linesInScene)
-                {
-                    StartCoroutine(GeneratorLines());//запускаем генератор линий после последнего статичного пушера
-                }
-            }
-        }
-    }
-
     public void StartLevel()
     {
         if (Market.Instance.Health > 0)//если есть жизни, то можно играть
@@ -83,13 +71,14 @@ public class LevelGenerator : MonoBehaviour
             IsRunLevel = true;
             Market.Instance.Health-=1; //отнимаем одну использованную жизнь, т.к. запустили левел
             Market.Instance.SetCurrentDatePlayer(); //записываем новую дату обновления жизней, через 5 минут будет +1
+            //StartCoroutine("GeneratorLines");
         }
     }
 
     public void StopLevel()
     {
         timeStartLevel = 0;
-        StopCoroutine(GeneratorLines());//останавливаем
+        //StopCoroutine("GeneratorLines");//останавливаем
         IsRunLevel = false;
     }
 

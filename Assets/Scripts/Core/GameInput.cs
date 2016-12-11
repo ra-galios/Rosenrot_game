@@ -5,7 +5,7 @@ using System;
 
 public class GameInput : CreateSingletonGameObject<GameInput>
 {
-    public enum PlayerAction { climb, jump, doubleJump };
+    public enum PlayerAction { climb, jump, doubleJump, question };
     public Action<PlayerAction> PlayerInputAction; //вставляем enum в Action
 
     private float firstClickTime {get; set;}
@@ -35,7 +35,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                 {
                     firstClickTime = Time.time;
                     firstClickPosition = Input.mousePosition; //узнаём позицию первого клика
-                    Coroutine = StartCoroutine(WaitInput());
+                    Coroutine = StartCoroutine("WaitInput");
                 }
                 else //если карутина запущена
                 {
@@ -47,7 +47,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                     }
                     else //второй клик уже был, карутина не нужна
                     {
-                        StopCoroutine(WaitInput()); // если корутина запущена и secondClickTime не равно нулю, то останавливаем ее
+                        StopCoroutine("WaitInput"); // если корутина запущена и secondClickTime не равно нулю, то останавливаем ее
                     }
                 }
             }
@@ -58,7 +58,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     {
         yield return new WaitForSeconds(0.35f); // ждем 0.35 сек и продолжаем
         var action = PlayerAction.climb; // предполагаем что climb(малый прыжок)
-        if (secondClickTime > 0 && Vector2.Distance(firstClickPosition, secondClickPosition) < 6f)            //если был второй клик то записываем jump(средний прыжок)
+        if (secondClickTime > 0 && Vector2.Distance(firstClickPosition, secondClickPosition) < 20f)            //если был второй клик то записываем jump(средний прыжок)
         {                                                                           //узнаём дистанцию между кликами, чтобы пофиксить баг
             if (PlayerInputAction != null)
             {
@@ -69,13 +69,15 @@ public class GameInput : CreateSingletonGameObject<GameInput>
         if (Vector2.Distance(firstClickPosition, Input.mousePosition) >= 20f && secondClickTime == 0) // если мы свайпнули и второго клика не было(число 20 - минимальная длинна свайпа)
         {
             if (PlayerInputAction != null)
-            {                                        // то записываем doubleJump(дальний прыжок)
+            {                                        
                 action = PlayerAction.doubleJump;
             }
         }
+
         PlayerInputAction.Invoke(action);   // отправляем в эфир(принимать будем в PlayerBehaviour скрипте)
-        secondClickTime = 0;         // обнуляем время второго клика
-        Coroutine = null; // выключам корутину
+
+        secondClickTime = 0;         
+        Coroutine = null; 
     }
 
     GameObject GetHitObject()
@@ -89,5 +91,11 @@ public class GameInput : CreateSingletonGameObject<GameInput>
         {
             return null;
         }
+    }
+
+    //свойства
+    public GameObject HitObject
+    {
+        get { return this.hitObject; }
     }
 }
