@@ -90,6 +90,5 @@ public class JumpPoint : MonoBehaviour
     public GameInput.PlayerAction Action
     {
         get { return this.m_Action; }
-        set { this.m_Action = value; }
     }
 }

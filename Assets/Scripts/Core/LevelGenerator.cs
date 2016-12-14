@@ -8,38 +8,58 @@ public class LevelGenerator : MonoBehaviour
 {
     public static LevelGenerator Instance;
 
-    [SerializeField]
-    private List<JumpPoint> m_Pushers = new List<JumpPoint>();        //варианты пушеров. (!) Добавляются из префабов
+    //[SerializeField]
+    //private List<JumpPoint> m_Pushers = new List<JumpPoint>();        //варианты пушеров. (!) Добавляются из префабов
 
-    [SerializeField]
-    private Transform[] m_StartPositions;                             //позиции в которых создавать новые пушеры
+    //################# Из редактора ########################
+    [Header("Варианты скал для подтягиваний/прыжков/двойных прыжков: ")]
+    [SerializeField] private JumpPoint[] m_Array_JumpPoint;
+    [Header("Варианты скал с вопросами: (!пока не работает!) ")]
+    [SerializeField] private JumpPoint[] m_Array_JumpPoint_Question;
+    [Header("Скалы, которые должны появится по истечению времени: ")]
+    [SerializeField] private List<JumpPoint> m_AltPushers;     //альтернативные скалы. (!) Добавляются со сцены. Рекомендация: добавить скалу на сцену, указать ей время, line и collumn не указывать
+    [Space]
+    [Header("Позиции для генерирования скал: ")]
+    [SerializeField] private Transform[] m_StartPositions;                             //позиции в которых создавать новые скалы
+    [Header("Максимальное количество линий из скал: ")]
+    [SerializeField] private int m_MaxLines;                 //кол-во генерируемых линий
+    [Header("Максимальное кол-во скал на линии: ")]
+    [SerializeField] private int m_MaxItemsInLine;            //максимальное кол-во скал на линии
+    [Header("Интервал создания линий: ")]
+    [SerializeField] private float m_TimeGenerationLines;   //интервал создания линий
+    [Header("Скорость движения скал: ")]
+    [SerializeField] private float m_SpeedPusher;            //скорость скалы
+    //################################################################
 
-    [SerializeField]
-    private List<JumpPoint> m_AltPushers = new List<JumpPoint>();     //альтернативные пушеры. (!) Добавляются со сцены. Рекомендация: добавить пуш на сцену, указать ему время, line и collumn не указывать
 
-    [SerializeField]
-    private int m_MaxLines = 25;                 //кол-во генерируемых линий
+    private List<int[]> createdRocks;
 
-    [SerializeField]
-    private int m_MaxItemsInLine = 3;            //максимальное кол-во пушеров на линии
-
-    [SerializeField]
-    private float m_TimeGenerationLines = 2f;   //интервал создания линий
-
-    [SerializeField]
-    private float m_SpeedPusher = 1f;            //скорость пушера. Пушеры узнают текущую скорость
-
-    [SerializeField]
-    private PlayerBehaviour player;
-
-    private float baseTimeGenerationLines=2f; //начальная время генерации линий
-    private float baseSpeedPusher=1f;         //начальная скорость пушеров
+    private float baseTimeGenerationLines; //начальное время генерации линий
+    private float baseSpeedPusher;         //начальная скорость скал
     private int currentLinesCount;            //текущее кол-во созданных линий
-    private bool typePush;                   //тип пушера: рандомный или альтернативный
+    private bool typePush;                   //тип скалы: рандомная или альтернативная
     private float timeStartLevel;            //время запуска левела
-    private bool isRunLevel = false;          //запущен ли левел       
-    private int idLine=0;        //id родителя пушера
-    private int linesInScene;   //кол-во линий со статическими пошерами
+    private bool isRunLevel;          //запущен ли левел       
+    private int idLine;        //id линии родителя скалы
+    //private int linesInScene;   //кол-во линий со статическими пошерами
+
+    private int posPrevJumpPoint; //позиция предыдущей скалы
+
+
+    void Reset()
+    {
+        isRunLevel = false;
+
+        m_MaxLines = 25;
+        m_MaxItemsInLine = 3;
+        m_TimeGenerationLines = 2f;
+        m_SpeedPusher = 1f;
+
+        createdRocks = new List<int[]>();
+        idLine = 0;
+        baseSpeedPusher = 1f;
+        baseTimeGenerationLines = 2f;
+    }
 
     void Awake()
     {
@@ -51,7 +71,8 @@ public class LevelGenerator : MonoBehaviour
 
     void Start()
     {
-        linesInScene = CurrentLinesInScene();//колво уже созданных линий на сцене
+        currentLinesCount = CurrentLinesInScene();//колво уже созданных линий на сцене
+        idLine = currentLinesCount+1;
     }
 
     void FixedUpdate()
@@ -71,51 +92,57 @@ public class LevelGenerator : MonoBehaviour
             IsRunLevel = true;
             Market.Instance.Health-=1; //отнимаем одну использованную жизнь, т.к. запустили левел
             Market.Instance.SetCurrentDatePlayer(); //записываем новую дату обновления жизней, через 5 минут будет +1
-            //StartCoroutine("GeneratorLines");
+            StartCoroutine("GeneratorLines");
         }
     }
 
     public void StopLevel()
     {
         timeStartLevel = 0;
-        //StopCoroutine("GeneratorLines");//останавливаем
+        StopCoroutine("GeneratorLines");//останавливаем
         IsRunLevel = false;
     }
 
     IEnumerator GeneratorLines()
     {                           //Генератор линий и объектов на них
-        GameObject _obj = null; //здесь будет наш новый пушер
-        JumpPoint _jp = null;   //компонент JumpPoint объекта _obj
-        Transform _randomPos;   //рандомная позиция
-        JumpPoint _newPush;    //пушер
-        GameObject _go;         //линия для пушеров
-        int _idCurPos = 0;      //позиция для нового пушера
+        GameObject objNewRock = null; //здесь будет наш новый пушер
+        JumpPoint jumpPointRock = null;   //компонент JumpPoint объекта _obj
+        Transform randomPos;   //рандомная позиция
+        JumpPoint newRock;    //пушер
+        GameObject parentLine;         //линия для пушеров
+        int posNewRock = 0;      //позиция для нового пушера
 
-        idLine = linesInScene+1;
-        CurrentLinesCount = linesInScene+1;
-        while (CurrentLinesCount <= MaxLines)        //пока не создадим нужное кол-во линий
+        while (currentLinesCount <= m_MaxLines)        //пока не создадим нужное кол-во линий
         {
             bool[] SetCol = new bool[m_StartPositions.Length]; ; //флаги занятых колонок, для избежания создания пушеров в одной колонке
 
-            var _countPushersInLine = Random.Range(1, MaxItemsInLine + 1);   //кол-во пушеров на линии
-            _go = new GameObject();                 //новая линия, будет родителем пушера/ов
-            _go.name = idLine.ToString();          //даём ему имя
+            int countPushersInLine = Random.Range(1, MaxItemsInLine + 1);   //кол-во пушеров на линии
 
-            for (int _pushId = 0; _pushId < _countPushersInLine; _pushId++)  //создаем необходимое кол-во пушеров на линию
+            /*    
+             * Если позиции предыдущих скал были по краям, а сейчас нужно создать одину скалу в центре, то эта скала будет для прыжка, иначе с вопросом
+             * 
+             * Нужно создать несколько "конвееров" для каждой колонки и вызывать в них метод создания скалы.
+            */
+
+
+            parentLine = new GameObject();                 //новая линия, будет родителем пушера/ов
+            parentLine.name = idLine.ToString();          //даём ему имя
+
+            for (int _pushId = 0; _pushId < countPushersInLine; _pushId++)  //создаем необходимое кол-во пушеров на линию
             {
-                _newPush = Pushers[Random.Range(0, Pushers.Count)];         //новый рандомный пушер
+                newRock = m_Array_JumpPoint[Random.Range(0, m_Array_JumpPoint.Length)];         //новый рандомный пушер
                 typePush = false;
 
-                if (AltPushers.Count > 0)
+                if (m_AltPushers.Count > 0)
                 {
-                    foreach (JumpPoint push in AltPushers)
+                    foreach (JumpPoint push in m_AltPushers)
                     {
                         if (push != null)
                         {
                             if ((Time.time - timeStartLevel) >= push.TimeCreate)   //пора ставить пушер с установленным временем
                             {
-                                _newPush = push;
-                                AltPushers.RemoveAt(AltPushers.LastIndexOf(push));
+                                newRock = push;
+                                m_AltPushers.RemoveAt(m_AltPushers.LastIndexOf(push));
                                 typePush = true;                //указываем что это альтернативный пушер
                                 break;
                             }
@@ -123,50 +150,49 @@ public class LevelGenerator : MonoBehaviour
                     }
                 }
 
-                _idCurPos = Random.Range(0, m_StartPositions.Length);     //получаем рандомную позицию из списка возможных
+                posNewRock = Random.Range(0, m_StartPositions.Length);     //получаем рандомную позицию из списка возможных
 
                 //смотриим чтобы эта позиция не совпала с другим пушером
                 var isSetPos = false;
                 while (!isSetPos)
                 {
-                    if (!SetCol[_idCurPos])
+                    if (!SetCol[posNewRock])
                     {
                         isSetPos = true;
-                        SetCol[_idCurPos] = true;
+                        SetCol[posNewRock] = true;
                         break;
                     }
                     else
                     {
-                        _idCurPos = Random.Range(0, m_StartPositions.Length); //иначе берём новую
+                        posNewRock = Random.Range(0, m_StartPositions.Length); //иначе берём новую
                     }
                 }
 
-                _randomPos = m_StartPositions[_idCurPos];
-                _newPush.transform.position = _randomPos.position;          //ставим в позицию
+                randomPos = m_StartPositions[posNewRock];
+                newRock.transform.position = randomPos.position;          //ставим в позицию
 
                 if (typePush)//если это альтернативный пушер, то просто становится в нужную позицию, иначе - инстантируется на сцену
-                    _obj = _newPush.gameObject; //альтернативный
+                    objNewRock = newRock.gameObject; //альтернативный
                 else
                 {
-                    var randomPos = RandomPos();
-
-                    _obj = Instantiate(_newPush.gameObject, new Vector2(_newPush.transform.position.x + randomPos.x, _newPush.transform.position.y + randomPos.y), _newPush.transform.rotation) as GameObject; //рандомный
+                    Vector2 newRandomPos = RandomPos();
+                    objNewRock = Instantiate(newRock.gameObject, new Vector2(newRock.transform.position.x + newRandomPos.x, newRock.transform.position.y + newRandomPos.y), newRock.transform.rotation) as GameObject; //рандомный
                 }
 
-                if (!_obj.activeSelf) _obj.SetActive(true);
+                if (!objNewRock.activeSelf) objNewRock.SetActive(true);
 
-                _jp = _obj.GetComponent<JumpPoint>();
-                _jp.Line = idLine;              //задаём пушеру линию, на которой он находится
-                _jp.Collumn = _idCurPos;         //задаём пушеру колонку в которой он находится
-                _jp.Speed = SpeedPusher;         //задаём скорость пушера
-                _obj.transform.parent = _go.transform;                      //делаем новый пушер "ребёнком" нового родителя
+                jumpPointRock = objNewRock.GetComponent<JumpPoint>();
+                jumpPointRock.Line = idLine;              //задаём пушеру линию, на которой он находится
+                jumpPointRock.Collumn = posNewRock;         //задаём пушеру колонку в которой он находится
+                jumpPointRock.Speed = SpeedPusher;         //задаём скорость пушера
+                objNewRock.transform.parent = parentLine.transform;                      //делаем новый пушер "ребёнком" нового родителя
 
-                _obj = null;
-                _newPush = null;
-                _jp = null;
+                objNewRock = null;
+                newRock = null;
+                jumpPointRock = null;
             }
 
-            _go = null;
+            parentLine = null;
             currentLinesCount++;
             idLine++;              //прикидываем имя для следующего родителя
             yield return new WaitForSeconds(TimeGenerationLines);           //ждём сек. тут регулируем скорость создания линий
@@ -187,6 +213,17 @@ public class LevelGenerator : MonoBehaviour
         return maxIdLine;
     }
 
+    private void WhatTheRockCreate(int currentLinesCount)
+    {
+        Transform prevLine = GameObject.Find(currentLinesCount.ToString()).transform;
+
+        if (prevLine.childCount > 1)
+        {
+
+        }
+    }
+
+
     private Vector2 RandomPos()
     {
         float x = Random.Range(-0.30f, 0.31f);
@@ -196,11 +233,12 @@ public class LevelGenerator : MonoBehaviour
     }
 
     //Свойства
-    public List<JumpPoint> Pushers
-    {
-        get { return m_Pushers; }
-        set { m_Pushers = value; }
-    }
+    //public List<JumpPoint> Pushers
+    //{
+    //    get { return m_Pushers; }
+    //    set { m_Pushers = value; }
+    //}
+
     public List<JumpPoint> AltPushers
     {
         get { return this.m_AltPushers; }
