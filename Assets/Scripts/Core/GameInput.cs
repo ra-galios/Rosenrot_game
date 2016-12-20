@@ -25,29 +25,32 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     // Update is called once per frame
     void Update()
     {
-        //первый клик мышкой
-        if (Input.GetMouseButtonDown(0))
+        if (Market.Instance.Health > 0 || LevelGenerator.Instance.IsRunLevel)
         {
-            hitObject = GetHitObject(); //узнаём куда ткнули
-            if (hitObject)//если попали в пушер
+            //первый клик мышкой
+            if (Input.GetMouseButtonDown(0))
             {
-                if (Coroutine == null)  //если корутина не запущена, то запускаем и зпоминаем время первого клика для использования в корутине
+                hitObject = GetHitObject(); //узнаём куда ткнули
+                if (hitObject)//если попали в пушер
                 {
-                    firstClickTime = Time.time;
-                    firstClickPosition = Input.mousePosition; //узнаём позицию первого клика
-                    Coroutine = StartCoroutine("WaitInput");
-                }
-                else //если карутина запущена
-                {
-                    //второй клик мышкой
-                    if (secondClickTime == 0)   //если равно нулю (второго клика небыло), то зпоминаем время второго клика для использования в корутине                       
+                    if (Coroutine == null)  //если корутина не запущена, то запускаем и зпоминаем время первого клика для использования в корутине
                     {
-                        secondClickTime = Time.time; //время второго клика
-                        secondClickPosition = Input.mousePosition; //позиция второго клика
+                        firstClickTime = Time.time;
+                        firstClickPosition = Input.mousePosition; //узнаём позицию первого клика
+                        Coroutine = StartCoroutine("WaitInput");
                     }
-                    else //второй клик уже был, карутина не нужна
+                    else //если карутина запущена
                     {
-                        StopCoroutine("WaitInput"); // если корутина запущена и secondClickTime не равно нулю, то останавливаем ее
+                        //второй клик мышкой
+                        if (secondClickTime == 0)   //если равно нулю (второго клика небыло), то зпоминаем время второго клика для использования в корутине                       
+                        {
+                            secondClickTime = Time.time; //время второго клика
+                            secondClickPosition = Input.mousePosition; //позиция второго клика
+                        }
+                        else //второй клик уже был, карутина не нужна
+                        {
+                            StopCoroutine("WaitInput"); // если корутина запущена и secondClickTime не равно нулю, то останавливаем ее
+                        }
                     }
                 }
             }

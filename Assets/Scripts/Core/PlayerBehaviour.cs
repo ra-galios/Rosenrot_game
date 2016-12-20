@@ -8,7 +8,6 @@ public class PlayerBehaviour : MonoBehaviour {
     private int idLine = 0;
     private int idCollumn = 1;
     private bool isPlayerFall=false;
-    [SerializeField]
     private bool playerStaticPush = true;
     private Animator animator;
     private Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
