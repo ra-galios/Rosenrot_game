@@ -26,10 +26,18 @@ public class PlayerBehaviour : MonoBehaviour {
         GameInput.Instance.PlayerInputAction -= JumpToNext; //отписываемся от эфира
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.GetComponent<Enemy>())
+        {
+            PlayerFall();
+        }
+    }
+
     void JumpToNext(GameInput.PlayerAction action) //Когда в эфире PlayerInputAction что-то "прозвучит", запускается JumpToNext
     {
         this.hitObject = GameInput.Instance.HitObject;
-        this.hitJumpPoint = hitObject.GetComponent<JumpPoint>()? hitObject.GetComponent<JumpPoint>():null;
+        this.hitJumpPoint = hitObject.GetComponent<JumpPoint>()!=null? hitObject.GetComponent<JumpPoint>():null;
         if (hitObject && hitJumpPoint)// && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
         {      
             if (!isPlayerFall)
@@ -39,7 +47,7 @@ public class PlayerBehaviour : MonoBehaviour {
                     if (action == hitJumpPoint.Action)
                     {
                         if (LerpCoroutine == null)
-                            StartCoroutine(Lerp());
+                            StartCoroutine("Lerp");
                     }
                     else if (hitJumpPoint.Action == GameInput.PlayerAction.question)
                     {
@@ -53,7 +61,7 @@ public class PlayerBehaviour : MonoBehaviour {
                                     if (diffV == 0 && diffH == 1)
                                     { //подтягивание
                                         if (LerpCoroutine == null)
-                                            StartCoroutine(Lerp());
+                                            StartCoroutine("Lerp");
                                     }
                                     else
                                     {//Падение при неверном нажатии на пушер
@@ -67,7 +75,7 @@ public class PlayerBehaviour : MonoBehaviour {
                                     if ((diffV == 1 && diffH == 1) || (diffV == 1 && diffH == 0))
                                     { //прыжок
                                         if (LerpCoroutine == null)
-                                            StartCoroutine(Lerp());
+                                            StartCoroutine("Lerp");
                                     }
                                     else
                                     {//Падение при неверном нажатии на пушер
@@ -81,7 +89,7 @@ public class PlayerBehaviour : MonoBehaviour {
                                     if (diffV == 2 || diffH == 2)
                                     { //двойной прыжок
                                         if (LerpCoroutine == null)
-                                            StartCoroutine(Lerp());
+                                            StartCoroutine("Lerp");
                                     }
                                     else
                                     {//Падение при неверном нажатии на пушер
@@ -104,6 +112,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
     void PlayerFall()
     {//падение игрока
+        StopCoroutine("Lerp");
         isPlayerFall = true;
         rig2D.isKinematic = false;
         transform.parent = null;
@@ -160,7 +169,7 @@ public class PlayerBehaviour : MonoBehaviour {
                 }
                 rig2D.isKinematic = true;
                 isPlayerFall = false; //уже не падаем
-                StartCoroutine(Lerp()); //перемещаемся к спасительному пушеру
+                StartCoroutine("Lerp"); //перемещаемся к спасительному пушеру
             }
             yield return null;
         }

@@ -24,15 +24,6 @@ public class JumpPoint : MonoBehaviour
     private bool isCreateBonus=false;
     private Sprite helpPush;
 
-    //void Start()
-    //{
-    //    if (m_TimeCreate != 0)
-    //    {
-    //        LevelGenerator.Instance.AltPushers.Add(this);
-    //        this.gameObject.SetActive(false);
-    //    }
-    //}
-
     void Update()
     {
         if (LevelGenerator.Instance.IsRunLevel)

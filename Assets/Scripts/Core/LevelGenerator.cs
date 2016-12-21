@@ -16,24 +16,21 @@ public class LevelGenerator : MonoBehaviour
     [Header("Варианты скал для двайных прыжков: ")]
     [SerializeField]    private JumpPoint[] m_Array_DoubleJump;
     [Header("Варианты скал с вопросами: ")]
-    [SerializeField] private JumpPoint[] m_Array_JumpPoint_Question;
-
-    //[Header("Скалы, которые должны появится по истечению времени: ")]
-    //[SerializeField]
-    //private List<JumpPoint> m_AltPushers;     //альтернативные скалы. (!) Добавляются со сцены. Рекомендация: добавить скалу на сцену, указать ей время, line и collumn не указывать
-
+    [SerializeField]    private JumpPoint[] m_Array_JumpPoint_Question;
+    [Header("Декорации: ")]
+    [SerializeField]    private Decoration[] m_Decorations;
     [Space]
 
     [Header("Позиции для генерирования скал: ")]
-    [SerializeField] private Transform[] m_StartPositions;                             //позиции в которых создавать новые скалы
+    [SerializeField]    private Transform[] m_StartPositions;                             //позиции в которых создавать новые скалы
     [Header("Максимальное количество линий из скал: ")]
-    [SerializeField] private int m_MaxLines;                 //кол-во генерируемых линий
+    [SerializeField]    private int m_MaxLines;                 //кол-во генерируемых линий
     [Header("Максимальное кол-во скал на линии: ")]
-    [SerializeField] private int m_MaxItemsInLine;            //максимальное кол-во скал на линии
+    [SerializeField]    private int m_MaxItemsInLine;            //максимальное кол-во скал на линии
     [Header("Интервал создания линий: ")]
-    [SerializeField] private float m_TimeGenerationLines = 2f;   //интервал создания линий
+    [SerializeField]    private float m_TimeGenerationLines = 2f;   //интервал создания линий
     [Header("Скорость движения скал: ")]
-    [SerializeField] private float m_SpeedJumpPoint = 1f;            //скорость скалы
+    [SerializeField]    private float m_SpeedJumpPoint = 1f;            //скорость скалы
 
     [Space]
 
@@ -43,6 +40,9 @@ public class LevelGenerator : MonoBehaviour
     [Header("Кол-во скал на последней линии: ")]
     [SerializeField]
     private int prevCountJumpPoint; //кол-во скал на предыдущей линии
+    [Header("Скала, после которой нужно запустить генератор: ")]
+    [SerializeField]
+    private GameObject m_LastRock;
     //################################################################
 
     private List<int[]> createdRocks;
@@ -111,6 +111,11 @@ public class LevelGenerator : MonoBehaviour
         IsRunLevel = false;
     }
 
+    void CreateDecor()
+    {
+        Instantiate(m_Decorations[Random.Range(0,m_Decorations.Length)], new Vector2(Random.Range(-2.5f,2.5f), Instance.transform.position.y), Quaternion.identity);
+    }
+
     IEnumerator GeneratorLines()
     {                           //Генератор линий и объектов на них
         GameObject objNewRock = null; //здесь будет наш новый пушер
@@ -119,6 +124,12 @@ public class LevelGenerator : MonoBehaviour
         JumpPoint newRock;    //пушер
         GameObject parentLine;         //линия для пушеров
         int posNewRock = 0;      //позиция для нового пушера
+
+        while (!(m_LastRock.transform.position.y < transform.position.y))
+        {
+            CreateDecor();
+            yield return new WaitForSeconds(TimeGenerationLines);
+        }
 
         while (currentLinesCount <= m_MaxLines)        //пока не создадим нужное кол-во линий
         {
@@ -130,27 +141,9 @@ public class LevelGenerator : MonoBehaviour
 
             for (int _pushId = 0; _pushId < countPushersInLine; _pushId++)  //создаем необходимое кол-во пушеров на линию
             {
-                //newRock = m_Array_Climb[Random.Range(0, m_Array_Climb.Length)];         //новый рандомный пушер
                 typeJumpPoint = false;
-
-                //if (m_AltPushers.Count > 0)
-                //{
-                //    foreach (JumpPoint push in m_AltPushers)
-                //    {
-                //        if (push != null)
-                //        {
-                //            if ((Time.time - timeStartLevel) >= push.TimeCreate)   //пора ставить пушер с установленным временем
-                //            {
-                //                newRock = push;
-                //                m_AltPushers.RemoveAt(m_AltPushers.LastIndexOf(push));
-                //                typeJumpPoint = true;                //указываем что это альтернативный пушер
-                //                break;
-                //            }
-                //        }
-                //    }
-                //}
-
                 posNewRock = Random.Range(0, m_StartPositions.Length);     //получаем рандомную позицию из списка возможных
+
                 //смотриим чтобы эта позиция не совпала с другим пушером
                 var isSetPos = false;
                 while (!isSetPos)
@@ -217,15 +210,12 @@ public class LevelGenerator : MonoBehaviour
                 randomPos = m_StartPositions[posNewRock];
                 newRock.transform.position = randomPos.position;          //ставим в позицию
 
-                //if (typeJumpPoint)//если это альтернативный пушер, то просто становится в нужную позицию
-                //    objNewRock = newRock.gameObject; //альтернативный
-                //else
-                //{
-                    Vector2 newRandomPos = RandomPos();
-                    objNewRock = Instantiate(newRock.gameObject, new Vector2(newRock.transform.position.x + newRandomPos.x, newRock.transform.position.y + newRandomPos.y), newRock.transform.rotation) as GameObject; //рандомный
-                //}
+                Vector2 newRandomPos = RandomPos(0.31f);
+                objNewRock = 
+                    Instantiate(newRock.gameObject, new Vector2(newRock.transform.position.x + newRandomPos.x, newRock.transform.position.y + newRandomPos.y), newRock.transform.rotation) as GameObject; //рандомный
 
-                if (!objNewRock.activeSelf) objNewRock.SetActive(true);
+                if (!objNewRock.activeSelf)
+                    objNewRock.SetActive(true);
 
                 jumpPointRock = objNewRock.GetComponent<JumpPoint>();
                 jumpPointRock.Line = idLine;              //задаём пушеру линию, на которой он находится
@@ -233,6 +223,8 @@ public class LevelGenerator : MonoBehaviour
                 posPrevJumpPoint = posNewRock;              //запоминаем где создали
                 jumpPointRock.Speed = m_SpeedJumpPoint;         //задаём скорость пушера
                 objNewRock.transform.parent = parentLine.transform;                      //делаем новый пушер "ребёнком" нового родителя
+
+                CreateDecor();
 
                 objNewRock = null;
                 newRock = null;
@@ -271,20 +263,15 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private Vector2 RandomPos()
+    private Vector2 RandomPos(float error)
     {
-        float x = Random.Range(-0.30f, 0.31f);
-        float y = Random.Range(-0.30f, 0.31f);
+        float x = Random.Range(error, -error);
+        float y = Random.Range(error, -error);
 
         return new Vector2(x, y);
     }
 
     //Свойства
-    //public List<JumpPoint> AltPushers
-    //{
-    //    get { return this.m_AltPushers; }
-    //    set { this.m_AltPushers = value; }
-    //}
 
     public int MaxLines
     {

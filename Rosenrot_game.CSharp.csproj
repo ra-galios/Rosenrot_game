@@ -71,6 +71,7 @@
     <Compile Include="Assets\Scripts\Core\DateManager.cs" />
     <Compile Include="Assets\Scripts\Core\Decoration.cs" />
     <Compile Include="Assets\Scripts\Core\EndGame.cs" />
+    <Compile Include="Assets\Scripts\Core\Enemy.cs" />
     <Compile Include="Assets\Scripts\Core\GameController.cs" />
     <Compile Include="Assets\Scripts\Core\GameInput.cs" />
     <Compile Include="Assets\Scripts\Core\JumpPoint.cs" />
