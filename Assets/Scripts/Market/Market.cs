@@ -18,6 +18,8 @@ public class Market : CreateSingletonGameObject<Market>
        
     void OnEnable()
     {
+        CollectablesSaver.Instance.LoadCollectables();//загружаем бонусы
+
         if (!PlayerPrefs.HasKey("Health"))
         {
             PlayerPrefs.SetInt("Health", 5);
@@ -31,6 +33,7 @@ public class Market : CreateSingletonGameObject<Market>
     void OnDisable()
     {
         PlayerPrefs.SetInt("Health", Health);//сохраняем текущее значение жизней 
+        CollectablesSaver.Instance.SaveCollectables();//сохраняем бонусы
     }
 
     IEnumerator MarketCoroutine()
