@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class CollectablesSaver : CreateSingletonGameObject<CollectablesSaver>
 {
@@ -25,7 +24,6 @@ public class CollectablesSaver : CreateSingletonGameObject<CollectablesSaver>
             Market.Instance.Ruby = PlayerPrefs.GetInt("Rubies");
         else
             PlayerPrefs.SetInt("Rubies", Market.Instance.Ruby);
-
     }
 
     public void SaveCollectables()
