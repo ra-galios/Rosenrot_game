@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class GameController : CreateSingletonGameObject<GameController> {
+
+    public LevelData[] levelsData;
     public static int RubyCount;
     public static string RubyKey = "Rubies";
     public static int SeedsCount;
@@ -9,15 +11,6 @@ public class GameController : CreateSingletonGameObject<GameController> {
     public static int DiamondsCount;
     public static string DiamondKey = "Diamonds";
     public static bool inGame;
-
-    //public static GameController Instance;
-
-    //void Awake(){
-    //    if (Instance == null)
-    //    {
-    //      Instance = this;  
-    //    }
-    //}
 
 	// Use this for initialization
 	void Start () {

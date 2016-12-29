@@ -1,26 +1,34 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 
-public class LevelButton : MonoBehaviour {
+public class LevelButton : MonoBehaviour
+{
 
-	private int currentDiamonds;
-	private Button levelButton;
-	public Text diamondsInform;
-	public int diamondsRequired;
+    private int currentLevelDiamonds;
+    private int globalDiamonds;
+    private Button levelButton;
 
-	// Use this for initialization
-	void OnEnable () {
-		currentDiamonds = Market.Instance.Dimond;
-		levelButton = GetComponent<Button>();
-		if(currentDiamonds >= diamondsRequired)
-		{
-			levelButton.interactable = true;
-			diamondsInform.text = "";
-		}
-		else
-		{
-			levelButton.interactable = false;
-			diamondsInform.text = currentDiamonds.ToString() + "/" + diamondsRequired.ToString();
-		}
-	}
+    public Text levelNumber;
+    public Text diamondsInform;
+    public int diamondsToOpen;
+    public int diamondsOnLevel;
+
+    // Use this for initialization
+    void OnEnable()
+    {
+        globalDiamonds = Market.Instance.Dimond;
+        //currentLevelDiamonds = GameController.Instance.levelsData[Int32.Parse(levelNumber.text) - 1].diamondsCollected;
+        levelButton = GetComponent<Button>();
+        if (globalDiamonds >= diamondsToOpen)       //если уровень открыт
+        {
+            levelButton.interactable = true;
+            diamondsInform.text = currentLevelDiamonds.ToString() + "/" + diamondsOnLevel.ToString();
+        }
+        else        //если уровень не доступен
+        {
+            levelButton.interactable = false;
+            diamondsInform.text = (diamondsToOpen - globalDiamonds).ToString() + " More To Open";
+        }
+    }
 }
