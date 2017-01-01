@@ -9,16 +9,21 @@ public class LevelButton : MonoBehaviour
     private int globalDiamonds;
     private Button levelButton;
 
-    public Text levelNumber;
-    public Text diamondsInform;
-    public int diamondsToOpen;
-    public int diamondsOnLevel;
+    [SerializeField]
+    private Text diamondsInform;
+    [SerializeField]
+    private int diamondsToOpen;
+    [SerializeField]
+    private int diamondsOnLevel;
+    [SerializeField]
+    private int levelNumber;
 
-    // Use this for initialization
-    void OnEnable()
+
+    void Start()
     {
         globalDiamonds = Market.Instance.Dimond;
-        //currentLevelDiamonds = GameController.Instance.levelsData[Int32.Parse(levelNumber.text) - 1].diamondsCollected;
+        currentLevelDiamonds = GameController.Instance.levelsData[levelNumber].diamondsCollected;
+
         levelButton = GetComponent<Button>();
         if (globalDiamonds >= diamondsToOpen)       //если уровень открыт
         {
@@ -30,5 +35,12 @@ public class LevelButton : MonoBehaviour
             levelButton.interactable = false;
             diamondsInform.text = (diamondsToOpen - globalDiamonds).ToString() + " More To Open";
         }
+    }
+
+    void LoadGameLevel(string name)
+    {
+        GameController.Instance.CurrentLevel = levelNumber;
+
+        GameController.Instance.LoadScene(name);
     }
 }

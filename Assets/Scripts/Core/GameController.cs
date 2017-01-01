@@ -1,24 +1,56 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class GameController : CreateSingletonGameObject<GameController> {
+public class GameController : CreateSingletonGameObject<GameController>
+{
+
+    private int currentLevel;
 
     public LevelData[] levelsData;
-    public static int RubyCount;
-    public static string RubyKey = "Rubies";
-    public static int SeedsCount;
-    //public static int LifesCount;
-    public static int DiamondsCount;
-    public static string DiamondKey = "Diamonds";
     public static bool inGame;
 
-	// Use this for initialization
-	void Start () {
-        DiamondsCount = PlayerPrefs.GetInt(DiamondKey);
-    }
-	
-    public static void SaveBonus(string key, int _value)
+    // Use this for initialization
+    void OnEnable()
     {
-        PlayerPrefs.SetInt(key, _value);
+        if (Market.Instance != null)     //если маркет загружен
+        {
+            DataManager.Instance.LoadGameData();
+        }
+    }
+
+    public void LoadScene(string name)
+    {
+        DataManager.Instance.SaveGameData();
+
+        SceneManager.LoadScene(name);
+    }
+
+    public void LoadActiveScene()
+    {
+        DataManager.Instance.SaveGameData();
+
+        string name = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(name);
+    }
+
+    public void StopGame()
+    {
+        SetLevelDiamonds();
+        LoadActiveScene();
+    }
+
+    private void SetLevelDiamonds()
+    {
+        if(Market.Instance.LocalDiamond > levelsData[CurrentLevel].diamondsCollected)
+        {
+            levelsData[CurrentLevel].diamondsCollected = Market.Instance.LocalDiamond;
+        }
+    }
+
+    public int CurrentLevel
+    {
+        get { return currentLevel; }
+        set { currentLevel = value; }
     }
 }

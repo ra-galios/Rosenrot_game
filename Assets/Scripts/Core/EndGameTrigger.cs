@@ -3,8 +3,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 
 
-public class EndGame : MonoBehaviour {
-    private bool endGame=false;
+public class EndGameTrigger : MonoBehaviour {
+    private bool endGame = false;
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -13,7 +13,7 @@ public class EndGame : MonoBehaviour {
 
         if (player)
         {
-            endGame = true;
+                GameController.Instance.StopGame();
         }
 
         if (jumpPoint)
@@ -21,14 +21,8 @@ public class EndGame : MonoBehaviour {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviour>();
             if (jumpPoint.Line >= player.IdLine)
             {
-                endGame = true;
+                GameController.Instance.StopGame();
             }
-        }
-
-        if (endGame)
-        {
-            print("Defeat");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

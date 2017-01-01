@@ -14,8 +14,14 @@ public class Market : CreateSingletonGameObject<Market>
     private int m_Seeds;//семечки
     private int m_Bomb;//порох/бомбочка
     private int m_Dimond;//брилиант
+    private int m_LocalDiamond;
     private int m_Ruby;//рубин
        
+    void OnLevelWasLoaded()
+    {
+        m_LocalDiamond = 0;
+    }
+
     void OnEnable()
     {
         if (!PlayerPrefs.HasKey("Health"))
@@ -103,6 +109,11 @@ public class Market : CreateSingletonGameObject<Market>
     {
         get { return this.m_Dimond; }
         set { this.m_Dimond = value; }
+    }
+    public int LocalDiamond
+    {
+        get { return this.m_LocalDiamond; }
+        set { this.m_LocalDiamond = value; }
     }
     public int Ruby
     {

@@ -5,6 +5,8 @@ public class StatusBar : MonoBehaviour
 {
 
     [SerializeField]
+    private Text lifesCounter;
+    [SerializeField]
     private Text seedsStatus;
     [SerializeField]
     private Text bombsStatus;
@@ -16,6 +18,7 @@ public class StatusBar : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        lifesCounter.text = Market.Instance.Health.ToString();
         seedsStatus.text = Market.Instance.Seeds.ToString();
         bombsStatus.text = Market.Instance.Bomb.ToString();
         diamondsStatus.text = Market.Instance.Dimond.ToString();

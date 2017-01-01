@@ -4,13 +4,13 @@ using System.Collections;
 public class Bonus_Diamond : Bonus {
     public override void GetBonus()
     {
-        GameController.DiamondsCount++;
+        //GameController.DiamondsCount++;
         base.GetBonus();
     }
 
     public override void SaveBonus()
     {
-        GameController.SaveBonus(GameController.DiamondKey, GameController.DiamondsCount);
+        //GameController.SaveBonus(GameController.DiamondKey, GameController.DiamondsCount);
         Destroy(gameObject);
     }
 }
