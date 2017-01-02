@@ -7,6 +7,8 @@ public class Dimond : CollectableGO
     {
         Market.Instance.Dimond++;
         Market.Instance.LocalDiamond++;
-        Destroy(this.gameObject);
+        Animator anim = GetComponent<Animator>();
+        anim.SetBool("Collect", true);
+        Destroy(this.gameObject, 1f);
     }
 }

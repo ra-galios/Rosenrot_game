@@ -6,7 +6,7 @@ using System;
 
 public class GameInput : CreateSingletonGameObject<GameInput>
 {
-    public enum PlayerAction { climb, jump, doubleJump, question, none };
+    public enum PlayerAction { climb, jump, doubleJump, question};
     public Action<PlayerAction> PlayerInputAction; //вставляем enum в Action
 
     public Action EnemyInputAction;
@@ -41,7 +41,6 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviour>();
         playerPos = player.transform.position;
-        action = PlayerAction.none;
         firstClickTime = 0;
         secondClickTime = 0;
         clickedOnce = false;

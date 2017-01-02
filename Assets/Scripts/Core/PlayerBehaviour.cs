@@ -43,41 +43,45 @@ public class PlayerBehaviour : MonoBehaviour
 
     void JumpToNext(GameInput.PlayerAction action) //Когда в эфире PlayerInputAction что-то "прозвучит", запускается JumpToNext
     {
-        this.hitObject = GameInput.Instance.HitObject;
-        if (hitObject)// && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
+        if (!isPlayerFall)
         {
-            this.hitJumpPoint = hitObject.GetComponent<JumpPoint>() != null ? hitObject.GetComponent<JumpPoint>() : null;
-            if (!isPlayerFall && hitJumpPoint)
+            this.hitObject = GameInput.Instance.HitObject;
+            this.hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
+            if (hitObject && hitJumpPoint)// && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
             {
-                if (hitJumpPoint.Line - 1 == idLine)
+                if (hitJumpPoint)
                 {
-                    if (action == hitJumpPoint.Action)
+                    if (hitJumpPoint.Line - 1 == idLine)
                     {
-                        if (LerpCoroutine == null)
-                            StartCoroutine("Lerp");
-                    }
-                    else if (hitJumpPoint.Action == GameInput.PlayerAction.question)
-                    {
-                        GameInput.PlayerAction questionPusherAction = GetQuestionPusherType(hitJumpPoint);
-                        print("Expected: " + questionPusherAction);
-                        if (questionPusherAction == action)
+                        if (action == hitJumpPoint.Action)
                         {
                             if (LerpCoroutine == null)
                                 StartCoroutine("Lerp");
                         }
-                        else
+                        else if (hitJumpPoint.Action == GameInput.PlayerAction.question)
                         {
-                            if (!playerStaticPush)
-                                PlayerFall();
+                            GameInput.PlayerAction questionPusherAction = GetQuestionPusherType(hitJumpPoint);
+                            print("Expected: " + questionPusherAction);
+                            if (questionPusherAction == action)
+                            {
+                                if (LerpCoroutine == null)
+                                    StartCoroutine("Lerp");
+                            }
+                            else
+                            {
+                                if (!playerStaticPush)
+                                    PlayerFall();
+                            }
                         }
                     }
                 }
             }
+            else
+            {
+                PlayerFall();
+            }
         }
-        else
-        {
-            PlayerFall();
-        }
+
     }
 
     void PlayerFall()
@@ -107,7 +111,12 @@ public class PlayerBehaviour : MonoBehaviour
         }
 
         if (hitJumpPoint.Bonus)
-            hitJumpPoint.Bonus.GetComponent<CollectableGO>().EnterBonus();
+        {
+            CollectableGO bonus = hitJumpPoint.Bonus.GetComponent<CollectableGO>();
+            bonus.transform.parent = transform;
+            bonus.transform.position += new Vector3(0.04f, 1.5f, 0f);      //бонус над головой Якова
+            bonus.EnterBonus();
+        }
 
         transform.parent = hitObject.transform;
         idLine = hitJumpPoint.Line;
@@ -115,6 +124,7 @@ public class PlayerBehaviour : MonoBehaviour
         playerStaticPush = hitObject.layer == 10 ? true : false; // 10 - это layer StaticPushers, со статического пушера упасть нельзя
         LerpCoroutine = null;
         boxColl = true;
+        isPlayerFall = false; //уже не падаем если падали
     }
 
     IEnumerator Fall()//пока падаем, отслеживаем нажатие на кнопку мыши и целимся в ближайший пушер
@@ -134,11 +144,10 @@ public class PlayerBehaviour : MonoBehaviour
                     {
                         _minDist = _dist; //минимальная
                         hitObject = _push; //а вот и он, наш спаситель
-                        hitJumpPoint = hitObject.GetComponent<JumpPoint>() != null ? hitObject.GetComponent<JumpPoint>() : null;
+                        hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
                     }
                 }
                 rig2D.isKinematic = true;
-                isPlayerFall = false; //уже не падаем
                 StartCoroutine("Lerp"); //перемещаемся к спасительному пушеру
             }
             yield return null;

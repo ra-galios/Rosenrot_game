@@ -6,6 +6,7 @@ public class Ruby : CollectableGO {
     public override void EnterBonus()
     {
         Market.Instance.Ruby++;
-        Destroy(this.gameObject);
-    }
+        Animator anim = GetComponent<Animator>();
+        anim.SetBool("Collect", true);
+        Destroy(this.gameObject, 1f);    }
 }
