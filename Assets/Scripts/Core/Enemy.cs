@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour {
         if (transform.childCount > 0)
             this.m_TypeEnemy = TypeEnemy.RockCrack;
     }
-
+    
     void Update()
     {
         if (LevelGenerator.Instance.IsRunLevel)
@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour {
         this.transform.Translate(Vector2.down * speed * Time.deltaTime);
     }
 
-    void OnMouseDown()
+    public void DestroyEnemy()
     {
         if (m_TypeEnemy == TypeEnemy.RockCrack)
         {

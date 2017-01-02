@@ -44,10 +44,10 @@ public class PlayerBehaviour : MonoBehaviour
     void JumpToNext(GameInput.PlayerAction action) //Когда в эфире PlayerInputAction что-то "прозвучит", запускается JumpToNext
     {
         this.hitObject = GameInput.Instance.HitObject;
-        this.hitJumpPoint = hitObject.GetComponent<JumpPoint>() != null ? hitObject.GetComponent<JumpPoint>() : null;
-        if (hitObject && hitJumpPoint)// && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
+        if (hitObject)// && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
         {
-            if (!isPlayerFall)
+            this.hitJumpPoint = hitObject.GetComponent<JumpPoint>() != null ? hitObject.GetComponent<JumpPoint>() : null;
+            if (!isPlayerFall && hitJumpPoint)
             {
                 if (hitJumpPoint.Line - 1 == idLine)
                 {
@@ -68,16 +68,15 @@ public class PlayerBehaviour : MonoBehaviour
                         else
                         {
                             if (!playerStaticPush)
-                            PlayerFall();
+                                PlayerFall();
                         }
-                    }
-                    else
-                    {
-                        if (!playerStaticPush)
-                            PlayerFall();
                     }
                 }
             }
+        }
+        else
+        {
+            PlayerFall();
         }
     }
 
