@@ -71,7 +71,6 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                 if (hitObject != null && hitObject.GetComponent<Enemy>())
                 {
                     hitObject.GetComponent<Enemy>().DestroyEnemy();
-                    print("Enemy");
                 }
                 else
                 {

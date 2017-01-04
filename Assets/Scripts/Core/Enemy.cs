@@ -11,6 +11,9 @@ public class Enemy : MonoBehaviour {
     }
 
     [SerializeField]
+    private GameObject bombPrefab;
+
+    [SerializeField]
     private TypeEnemy m_TypeEnemy;
 
     private float speed;
@@ -39,7 +42,10 @@ public class Enemy : MonoBehaviour {
     {
         if (m_TypeEnemy == TypeEnemy.RockCrack)
         {
-            Destroy(this.gameObject);
+            GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
+            bomb.transform.parent = transform;
+            bomb.GetComponent<Bomb>().Action();
+            Destroy(this.gameObject, .35f);
         }
     }
 

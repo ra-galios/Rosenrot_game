@@ -13,6 +13,6 @@ public class CollectableGO : MonoBehaviour
         anim.SetBool("Collect", true);
         Destroy(this.gameObject, 1f);
     } //взять колектблз
-    virtual public void Action() { } //действие колетблза
+
     virtual public void Save() { } //сохранить собранные колектблзы ... язык сломаешь :(
 }

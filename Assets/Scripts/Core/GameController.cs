@@ -9,7 +9,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     private List<string> levelsPath = new List<string>();
 
     public LevelData[] levelsData;
-    public int totalGameLevels;
+    public int totalGameLevels = 14;
     public bool inGame;
 
     // Use this for initialization
