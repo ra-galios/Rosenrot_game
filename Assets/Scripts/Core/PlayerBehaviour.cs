@@ -11,10 +11,11 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField]
     private int idCollumn = 1;
     private bool isPlayerFall = false;
+    private bool onPlatformAfterFall = true;
     private bool playerStaticPush = true;
-    private Animator animator;
     private Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
     private Vector3 playerOffset;
+    private PlayerAnimationController animController;
 
     [RangeAttribute(0f, 15f)]
     [SerializeField]
@@ -22,7 +23,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Start()
     {
-        animator = GetComponent<Animator>();
+        animController = GetComponentInChildren<PlayerAnimationController>();
         rig2D = GetComponent<Rigidbody2D>();
         playerOffset = new Vector3(0f, 1f, 0f);    //приподнять игрока
     }
@@ -47,7 +48,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     void JumpToNext(GameInput.PlayerAction action) //Когда в эфире PlayerInputAction что-то "прозвучит", запускается JumpToNext
     {
-        if (!isPlayerFall)
+        if (!isPlayerFall && onPlatformAfterFall)
         {
             this.hitObject = GameInput.Instance.HitObject;
             this.hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
@@ -60,16 +61,21 @@ public class PlayerBehaviour : MonoBehaviour
                         if (action == hitJumpPoint.Action)
                         {
                             if (LerpCoroutine == null)
+                            {
                                 StartCoroutine("Lerp");
+                                animController.SetJump(action);
+                            }
                         }
                         else if (hitJumpPoint.Action == GameInput.PlayerAction.question)
                         {
                             GameInput.PlayerAction questionPusherAction = GetQuestionPusherType(hitJumpPoint);
-                            print("Expected: " + questionPusherAction);
                             if (questionPusherAction == action)
                             {
                                 if (LerpCoroutine == null)
+                                {
                                     StartCoroutine("Lerp");
+                                    animController.SetJump(action);
+                                }
                             }
                             else
                             {
@@ -92,7 +98,8 @@ public class PlayerBehaviour : MonoBehaviour
     {//падение игрока
         StopCoroutine("Lerp");
         isPlayerFall = true;
-        rig2D.isKinematic = false;
+        onPlatformAfterFall = false;
+        rig2D.bodyType = RigidbodyType2D.Dynamic;
         transform.parent = null;
         StartCoroutine(Fall());
 
@@ -125,18 +132,17 @@ public class PlayerBehaviour : MonoBehaviour
                 bonus.EnterBonus();
             }
         }
-
-        
+        onPlatformAfterFall = true;
         idLine = hitJumpPoint.Line;
         idCollumn = hitJumpPoint.Collumn;
         playerStaticPush = hitObject.layer == 10 ? true : false; // 10 - это layer StaticPushers, со статического пушера упасть нельзя
         LerpCoroutine = null;
         boxColl = true;
-        isPlayerFall = false; //уже не падаем если падали
     }
 
     IEnumerator Fall()//пока падаем, отслеживаем нажатие на кнопку мыши и целимся в ближайший пушер
     {
+        animController.SetFall(true);
         GameObject[] _pushers = GameObject.FindGameObjectsWithTag("Pusher"); //берём все созданные на данный момент пушеры
         float _minDist = 100f; //немного чисел с неба
         float _dist;//дистанция до ближайшего пушера
@@ -155,7 +161,9 @@ public class PlayerBehaviour : MonoBehaviour
                         hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
                     }
                 }
-                rig2D.isKinematic = true;
+                isPlayerFall = false; //уже не падаем если падали
+                rig2D.bodyType = RigidbodyType2D.Static;
+                animController.SetFall(false);
                 StartCoroutine("Lerp"); //перемещаемся к спасительному пушеру
             }
             yield return null;
