@@ -47,3 +47,13 @@ Temporary Items
 .apdisk
 Library
 Temp
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp.csproj
+Rosenrot_game.CSharp.csproj
+Rosenrot_game.CSharp.Editor.csproj
+Rosenrot_game.csproj
+Rosenrot_game.Editor.csproj
+Rosenrot_game.sln
+Rosenrote.sln
+.vscode/launch.json
+.vscode/settings.json

@@ -16,6 +16,10 @@ public class PlayerBehaviour : MonoBehaviour
     private Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
     private Vector3 playerOffset;
 
+    [RangeAttribute(0f, 15f)]
+    [SerializeField]
+    private float m_SpeedMultiplayer = 2f;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -96,17 +100,18 @@ public class PlayerBehaviour : MonoBehaviour
 
     IEnumerator Lerp()
     {
+        transform.parent = hitObject.transform;
         if (LevelGenerator.Instance.IsRunLevel == false)
             LevelGenerator.Instance.StartLevel();
         var boxColl = GetComponent<BoxCollider2D>().enabled;
         boxColl = false;
-        Vector2 _from = transform.position;
-        Vector2 _to = hitObject.transform.position + playerOffset;      //приподнять игрока
+        Vector2 _from = transform.localPosition;
+        Vector2 _to = Vector3.zero;
         float _t = 0f;
         while (_t < 1)
         {
-            _t += 0.05f;
-            transform.position = Vector2.Lerp(_from, _to, _t); //перемещаем тело в позицию объекта, на который нажали
+            _t += Time.deltaTime * m_SpeedMultiplayer;
+            transform.localPosition = Vector2.Lerp(_from, _to, _t); //перемещаем тело в позицию объекта, на который нажали
             yield return null;
         }
 
@@ -121,7 +126,7 @@ public class PlayerBehaviour : MonoBehaviour
             }
         }
 
-        transform.parent = hitObject.transform;
+        
         idLine = hitJumpPoint.Line;
         idCollumn = hitJumpPoint.Collumn;
         playerStaticPush = hitObject.layer == 10 ? true : false; // 10 - это layer StaticPushers, со статического пушера упасть нельзя
