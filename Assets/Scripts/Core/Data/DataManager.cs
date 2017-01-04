@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.IO;
+using System;
 
 public class DataManager : CreateSingletonGameObject<DataManager>
 {
@@ -9,7 +10,7 @@ public class DataManager : CreateSingletonGameObject<DataManager>
 
     public void SaveGameData()
     {
-        string outputPath = Path.Combine(Application.persistentDataPath, saveFileName);     //путь к файлу сохранений
+        string outputPath = Application.persistentDataPath + "/" + saveFileName;     //путь к файлу сохранений
         GetData();                                                                          //получаем данные
 
         StreamWriter writer = new StreamWriter(outputPath);
@@ -19,7 +20,7 @@ public class DataManager : CreateSingletonGameObject<DataManager>
 
     public void LoadGameData()
     {
-        string outputPath = Path.Combine(Application.persistentDataPath, saveFileName);
+        string outputPath = Application.persistentDataPath + "/" + saveFileName;
 
         if (File.Exists(outputPath))
         {
@@ -31,7 +32,10 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         }
         if (gameData == null)
         {
+            print("init");
             gameData = new GameData();
+            gameData.LevelsData = new LevelData[GameController.Instance.totalGameLevels];
+            SetData();
         }
     }
 
@@ -41,7 +45,15 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         Market.Instance.Bomb = gameData.bombs;
         Market.Instance.Dimond = gameData.diamonds;
         Market.Instance.Ruby = gameData.rubies;
-        GameController.Instance.levelsData = gameData.LevelsData;
+        if(gameData.LevelsData.Length != GameController.Instance.totalGameLevels)
+        {
+            Array.Resize(ref gameData.LevelsData, GameController.Instance.totalGameLevels);
+            GameController.Instance.levelsData = gameData.LevelsData;
+        }
+        else
+        {
+            GameController.Instance.levelsData = gameData.LevelsData;
+        }
     }
 
     private void GetData()

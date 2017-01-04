@@ -10,9 +10,9 @@ public class Market : CreateSingletonGameObject<Market>
     private string revTime;
     private int m_MaxHealth = 5;
     private int timeSetHealth = 5;
-    [SerializeField]
     private int m_Seeds;//семечки
     private int m_Bomb;//порох/бомбочка
+    [SerializeField]
     private int m_Dimond;//брилиант
     private int m_LocalDiamond;
     private int m_Ruby;//рубин

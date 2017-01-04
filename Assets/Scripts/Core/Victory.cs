@@ -17,7 +17,7 @@ public class Victory : MonoBehaviour {
         if (player.IdLine == maxLines)
         {
             print("Victory");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            GameController.Instance.StopGame();
         }
 	}
 }

@@ -1,28 +1,39 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
+using System.Collections.Generic;
 
 public class GameController : CreateSingletonGameObject<GameController>
 {
 
     private int currentLevel;
+    private List<string> levelsPath = new List<string>();
 
     public LevelData[] levelsData;
-    public static bool inGame;
+    public int totalGameLevels;
+    public bool inGame;
 
     // Use this for initialization
     void OnEnable()
     {
-        if (Market.Instance != null)     //если маркет загружен
+        GetData();
+    }
+
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.Escape))
         {
-            DataManager.Instance.LoadGameData();
+            LoadPrevScene();
         }
     }
 
     public void LoadScene(string name)
     {
-        DataManager.Instance.SaveGameData();
+        if (!levelsPath.Contains(SceneManager.GetActiveScene().name))
+        {
+            levelsPath.Add(SceneManager.GetActiveScene().name);
+        }
 
+        DataManager.Instance.SaveGameData();
         SceneManager.LoadScene(name);
     }
 
@@ -34,6 +45,19 @@ public class GameController : CreateSingletonGameObject<GameController>
         SceneManager.LoadScene(name);
     }
 
+
+    public void LoadPrevScene()
+    {
+        if (levelsPath.Count > 0)
+        {
+            string name = levelsPath[levelsPath.Count - 1];
+            levelsPath.RemoveAt(levelsPath.Count - 1);
+
+            DataManager.Instance.SaveGameData();
+            SceneManager.LoadScene(name);
+        }
+    }
+
     public void StopGame()
     {
         SetLevelDiamonds();
@@ -42,9 +66,17 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     private void SetLevelDiamonds()
     {
-        if(Market.Instance.LocalDiamond > levelsData[CurrentLevel].diamondsCollected)
+        if (Market.Instance.LocalDiamond > levelsData[currentLevel].diamondsCollected)
         {
-            levelsData[CurrentLevel].diamondsCollected = Market.Instance.LocalDiamond;
+            levelsData[currentLevel].diamondsCollected = Market.Instance.LocalDiamond;
+        }
+    }
+
+    void GetData()
+    {
+        if (Market.Instance != null)     //если маркет загружен
+        {
+            DataManager.Instance.LoadGameData();
         }
     }
 

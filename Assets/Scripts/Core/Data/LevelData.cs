@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public class LevelData 
+public struct LevelData 
 {
 	public int diamondsCollected;
 

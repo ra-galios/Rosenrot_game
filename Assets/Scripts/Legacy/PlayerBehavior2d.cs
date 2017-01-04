@@ -41,7 +41,7 @@ public  class PlayerBehavior2d : MonoBehaviour {
         if (Input.GetMouseButtonDown(0) && PlayerLifes > 0)
         {
             //if (!GameController.inGame)
-                GameController.inGame = true;
+                GameController.Instance.inGame = true;
          //   anim.SetBool("start", true);
             if (!isFalling)
             {

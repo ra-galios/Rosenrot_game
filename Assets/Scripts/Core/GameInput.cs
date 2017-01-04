@@ -39,8 +39,9 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 
     void Initialization()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviour>();
-        playerPos = player.transform.position;
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        player = playerObj ? playerObj.GetComponent<PlayerBehaviour>() : null;
+        playerPos = player ? player.transform.position : Vector3.zero;
         firstClickTime = 0;
         secondClickTime = 0;
         clickedOnce = false;
@@ -52,7 +53,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     // Update is called once per frame
     void Update()
     {
-        if (Market.Instance.Health > 0 || LevelGenerator.Instance.IsRunLevel)
+        if ((Market.Instance.Health > 0 || LevelGenerator.Instance.IsRunLevel) && player)
         {
 
             if (Input.GetMouseButtonDown(0))

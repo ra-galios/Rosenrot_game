@@ -45,7 +45,7 @@ public class LevelGenerator2d : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if(generatorCoroutine == null && GameController.inGame)
+        if(generatorCoroutine == null && GameController.Instance.inGame)
         {
             generatorCoroutine = StartCoroutine(Generator());
         }
