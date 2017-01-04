@@ -16,7 +16,7 @@ public class Market : CreateSingletonGameObject<Market>
     private int m_Dimond;//брилиант
     private int m_LocalDiamond;
     private int m_Ruby;//рубин
-       
+
     void OnLevelWasLoaded()
     {
         m_LocalDiamond = 0;

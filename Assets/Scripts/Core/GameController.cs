@@ -18,6 +18,11 @@ public class GameController : CreateSingletonGameObject<GameController>
         GetData();
     }
 
+    public void AddHealth()
+    {
+        Market.Instance.Health = 100 ;
+    }
+
     void Update()
     {
         if (Input.GetKey(KeyCode.Escape))
