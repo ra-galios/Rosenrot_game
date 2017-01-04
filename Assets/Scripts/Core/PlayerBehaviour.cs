@@ -113,9 +113,12 @@ public class PlayerBehaviour : MonoBehaviour
         if (hitJumpPoint.Bonus)
         {
             CollectableGO bonus = hitJumpPoint.Bonus.GetComponent<CollectableGO>();
-            bonus.transform.parent = transform;
-            bonus.transform.position += new Vector3(0.04f, 1.5f, 0f);      //бонус над головой Якова
-            bonus.EnterBonus();
+            if (!bonus.collected)
+            {
+                bonus.transform.parent = transform;
+                bonus.transform.position += new Vector3(0.04f, 1.5f, 0f);      //бонус над головой Якова
+                bonus.EnterBonus();
+            }
         }
 
         transform.parent = hitObject.transform;

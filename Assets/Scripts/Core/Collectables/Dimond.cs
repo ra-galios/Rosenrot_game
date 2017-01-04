@@ -5,10 +5,8 @@ public class Dimond : CollectableGO
 {
     public override void EnterBonus()
     {
+        base.EnterBonus();
         Market.Instance.Dimond++;
         Market.Instance.LocalDiamond++;
-        Animator anim = GetComponent<Animator>();
-        anim.SetBool("Collect", true);
-        Destroy(this.gameObject, 1f);
     }
 }
