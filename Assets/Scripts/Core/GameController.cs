@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
+using System.Collections;
 
 public class GameController : CreateSingletonGameObject<GameController>
 {
 
     private int currentLevel;
-    private List<string> levelsPath = new List<string>();
+    //private List<string> levelsPath = new List<string>();
 
     public LevelData[] levelsData;
     public int totalGameLevels = 14;
@@ -20,26 +20,22 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void AddHealth()
     {
-        Market.Instance.Health = 100 ;
+        Market.Instance.Health = 100;
     }
 
     void Update()
     {
         if (Input.GetKey(KeyCode.Escape))
         {
-            LoadPrevScene();
+            LoadFirstScene();
         }
     }
 
     public void LoadScene(string name)
     {
-        if (!levelsPath.Contains(SceneManager.GetActiveScene().name))
-        {
-            levelsPath.Add(SceneManager.GetActiveScene().name);
-        }
-
         DataManager.Instance.SaveGameData();
-        SceneManager.LoadScene(name);
+        SceneManager.LoadScene("LoadingScene");
+        StartCoroutine(LoadLevel(name));
     }
 
     public void LoadActiveScene()
@@ -47,19 +43,18 @@ public class GameController : CreateSingletonGameObject<GameController>
         DataManager.Instance.SaveGameData();
 
         string name = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(name);
+        SceneManager.LoadScene("LoadingScene");
+        StartCoroutine(LoadLevel(name));
     }
 
 
-    public void LoadPrevScene()
+    public void LoadFirstScene()
     {
-        if (levelsPath.Count > 0)
+        if (SceneManager.GetActiveScene().buildIndex != 0)
         {
-            string name = levelsPath[levelsPath.Count - 1];
-            levelsPath.RemoveAt(levelsPath.Count - 1);
-
             DataManager.Instance.SaveGameData();
-            SceneManager.LoadScene(name);
+            SceneManager.LoadScene("LoadingScene");
+            StartCoroutine(LoadLevel("menu"));
         }
     }
 
@@ -68,6 +63,15 @@ public class GameController : CreateSingletonGameObject<GameController>
         SetLevelDiamonds();
         LoadActiveScene();
     }
+
+    private IEnumerator LoadLevel(string name)
+    {
+        yield return null;
+        AsyncOperation load = SceneManager.LoadSceneAsync(name);
+        while (!load.isDone)
+            yield return null;
+    }
+
 
     private void SetLevelDiamonds()
     {
