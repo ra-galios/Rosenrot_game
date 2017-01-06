@@ -8,8 +8,8 @@ public class EndGameTrigger : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        var jumpPoint = other.gameObject.GetComponent<JumpPoint>() ? other.GetComponent<JumpPoint>() : null;
-        var player = other.gameObject.GetComponent<PlayerBehaviour>() ? other.gameObject.GetComponent<PlayerBehaviour>() : null;
+        var jumpPoint = other.gameObject.GetComponent<JumpPoint>();
+        var player = other.gameObject.GetComponent<PlayerBehaviour>();
 
         if (player)
         {
@@ -18,7 +18,7 @@ public class EndGameTrigger : MonoBehaviour {
 
         if (jumpPoint)
         {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviour>();
+            player = GameController.Instance.playerBeh;
             if (jumpPoint.Line >= player.IdLine)
             {
                 GameController.Instance.StopGame();

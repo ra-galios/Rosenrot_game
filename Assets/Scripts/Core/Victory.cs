@@ -8,13 +8,12 @@ public class Victory : MonoBehaviour {
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviour>();
         maxLines = LevelGenerator.Instance.MaxLines;
     }
 
 	// Update is called once per frame
 	void Update () {
-        if (player.IdLine == maxLines)
+        if (GameController.Instance.playerBeh.IdLine == maxLines)
         {
             print("Victory");
             GameController.Instance.StopGame();

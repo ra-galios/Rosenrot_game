@@ -23,6 +23,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Start()
     {
+        GameInput.Instance.playerBeh = this;
+        GameController.Instance.playerBeh = this;
         animController = GetComponentInChildren<PlayerAnimationController>();
         rig2D = GetComponent<Rigidbody2D>();
         playerOffset = new Vector3(0f, 1f, 0f);    //приподнять игрока
@@ -107,6 +109,9 @@ public class PlayerBehaviour : MonoBehaviour
 
     IEnumerator Lerp()
     {
+        if (onPlatformAfterFall)
+            yield return new WaitForSeconds(.3f);
+
         transform.parent = hitObject.transform;
         if (LevelGenerator.Instance.IsRunLevel == false)
             LevelGenerator.Instance.StartLevel();

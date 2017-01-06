@@ -18,14 +18,13 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     private Coroutine Coroutine { get; set; }  //переменная корутины
     private GameObject hitObject;//на что тыкнули
     private GameObject bonusHitObject;//бонус того, на что тыкнули
-    private PlayerBehaviour player;
+    public PlayerBehaviour playerBeh;
     private Vector2 playerPos;
     private bool isEnemy;
     private bool clickedOnce;
     private bool readInput;
     private float waitTime;
     private PlayerAction action;
-
 
     void OnLevelWasLoaded()
     {
@@ -39,9 +38,6 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 
     void Initialization()
     {
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        player = playerObj ? playerObj.GetComponent<PlayerBehaviour>() : null;
-        playerPos = player ? player.transform.position : Vector3.zero;
         firstClickTime = 0;
         secondClickTime = 0;
         clickedOnce = false;
@@ -53,7 +49,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     // Update is called once per frame
     void Update()
     {
-        if ((Market.Instance.Health > 0 || LevelGenerator.Instance.IsRunLevel) && player)
+        if ((Market.Instance.Health > 0 || LevelGenerator.Instance.IsRunLevel) && playerBeh)
         {
 
             if (Input.GetMouseButtonDown(0))
@@ -129,7 +125,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     {
         readInput = false;
         secondClickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        playerPos = player.transform.position;
+        playerPos = playerBeh.transform.position;
         GameObject[] pushers = GameObject.FindGameObjectsWithTag("Pusher");
         List<GameObject> swipePushers = new List<GameObject>();
         float prevSwipeAngle = 180f;
@@ -141,8 +137,8 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                 if (pusherAction == PlayerAction.doubleJump || pusherAction == PlayerAction.question)
                 {
                     JumpPoint doubleJunmpPusher = pusher.GetComponent<JumpPoint>();
-                    int diffV = Mathf.Abs(doubleJunmpPusher.Collumn - player.IdCollumn);
-                    int diffH = doubleJunmpPusher.Line - player.IdLine;
+                    int diffV = Mathf.Abs(doubleJunmpPusher.Collumn - playerBeh.IdCollumn);
+                    int diffH = doubleJunmpPusher.Line - playerBeh.IdLine;
                     if (diffH == 1 && diffV == 2)
                     {
                         swipePushers.Add(pusher);

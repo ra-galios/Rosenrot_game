@@ -11,6 +11,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     public LevelData[] levelsData;
     public int totalGameLevels = 14;
     public bool inGame;
+    public PlayerBehaviour playerBeh = null;
 
     // Use this for initialization
     void OnEnable()
@@ -20,7 +21,7 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void AddHealth()
     {
-        Market.Instance.Health = 100;
+        Market.Instance.Health += 100;
     }
 
     void Update()
