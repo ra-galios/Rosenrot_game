@@ -21,11 +21,11 @@ public class StaffBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        EasticStaff();
+        ElasticStaff();
 
     }
 
-    private void EasticStaff()
+    private void ElasticStaff()
     {
         lineRend.SetPosition(0, staffHead.transform.position);      //позиция верхней точки палки
 

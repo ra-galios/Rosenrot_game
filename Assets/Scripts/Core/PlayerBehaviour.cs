@@ -46,6 +46,12 @@ public class PlayerBehaviour : MonoBehaviour
         {
             PlayerFall();
         }
+
+        CollectableGO bonus = collider.gameObject.GetComponent<CollectableGO>();
+        if(bonus)
+        {
+            bonus.EnterBonus();
+        }
     }
 
     void JumpToNext(GameInput.PlayerAction action) //Когда в эфире PlayerInputAction что-то "прозвучит", запускается JumpToNext
@@ -207,5 +213,10 @@ public class PlayerBehaviour : MonoBehaviour
     public int IdCollumn
     {
         get { return this.idCollumn; }
+    }
+
+    public bool IsPlayerFall
+    {
+        get { return this.isPlayerFall; }
     }
 }

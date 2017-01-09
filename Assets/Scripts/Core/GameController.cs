@@ -6,7 +6,6 @@ public class GameController : CreateSingletonGameObject<GameController>
 {
 
     private int currentLevel;
-    //private List<string> levelsPath = new List<string>();
 
     public LevelData[] levelsData;
     public int totalGameLevels = 14;

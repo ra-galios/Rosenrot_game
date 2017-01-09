@@ -6,25 +6,24 @@ using System;
 
 public class GameInput : CreateSingletonGameObject<GameInput>
 {
-    public enum PlayerAction { climb, jump, doubleJump, question};
+    public enum PlayerAction { climb, jump, doubleJump, question };
     public Action<PlayerAction> PlayerInputAction; //вставляем enum в Action
 
     public Action EnemyInputAction;
 
     private float firstClickTime { get; set; }
-    private float secondClickTime { get; set; }
     private Vector2 firstClickPosition { get; set; }
     private Vector2 secondClickPosition { get; set; }
     private Coroutine Coroutine { get; set; }  //переменная корутины
     private GameObject hitObject;//на что тыкнули
-    private GameObject bonusHitObject;//бонус того, на что тыкнули
     public PlayerBehaviour playerBeh;
     private Vector2 playerPos;
-    private bool isEnemy;
     private bool clickedOnce;
     private bool readInput;
     private float waitTime;
     private PlayerAction action;
+    public LayerMask hitObjectMask = 1537;              //default, pushers, staticPushers
+    private JumpPoint clickedPusher;
 
     void OnLevelWasLoaded()
     {
@@ -39,9 +38,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     void Initialization()
     {
         firstClickTime = 0;
-        secondClickTime = 0;
         clickedOnce = false;
-        isEnemy = false;
         readInput = true;
         waitTime = 0.3f;
     }
@@ -51,27 +48,36 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     {
         if ((Market.Instance.Health > 0 || LevelGenerator.Instance.IsRunLevel) && playerBeh)
         {
-
             if (Input.GetMouseButtonDown(0))
             {
                 CheckClick();
             }
             if (Input.GetMouseButtonUp(0))
             {
-                CheckSwipe();
+                readInput = false;
+                //CheckSwipe();
             }
 
             if (Time.time > firstClickTime + waitTime && !readInput)  //если истекло время ожидания и ввод не прочитан
             {
-                //Debug.Log("Do: " + action);
+                if (playerBeh.IsPlayerFall && clickedPusher) //если игрок падает и нажал на пушер
+                {
+                    if(clickedPusher.Line < playerBeh.IdLine)
+                    {
+
+                    }
+                }
                 if (hitObject != null && hitObject.GetComponent<Enemy>())
                 {
                     hitObject.GetComponent<Enemy>().DestroyEnemy();
                 }
                 else
                 {
+                    CheckDoubleClick();
+                    //Debug.Log("Do: " + action);
                     PlayerInputAction.Invoke(action);
                 }
+                clickedPusher = null;
                 clickedOnce = false;        //сбрасываем первый клик
                 readInput = true;
             }
@@ -81,8 +87,8 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 
     private GameObject GetHitObject()
     {
-        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-        if(hit.transform != null)
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, hitObjectMask);
+        if (hit.transform != null)
         {
             //print(hitObject.name);
             return hit.transform.gameObject; //объект на который нажали
@@ -99,14 +105,16 @@ public class GameInput : CreateSingletonGameObject<GameInput>
         hitObject = GetHitObject();
         if (hitObject)
         {
-            if (hitObject.GetComponent<JumpPoint>())
+            clickedPusher = hitObject.GetComponent<JumpPoint>();
+            if (clickedPusher)
             {
                 readInput = false;
 
                 if (!clickedOnce)                //клик
                 {
-                    action = PlayerAction.climb;//
+                    action = PlayerAction.climb;
                     firstClickTime = Time.time;
+                    firstClickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);       //для свайпа
                     clickedOnce = true;
                     //print("click");
                 }
@@ -114,11 +122,18 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                 {
                     action = PlayerAction.jump;
                     clickedOnce = false;
-                    //print("double");
+                    //print("doubleclick");
                 }
             }
         }
-        firstClickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);       //для свайпа
+    }
+
+    private void CheckDoubleClick()
+    {
+        if (Vector2.Distance(firstClickPosition, Camera.main.ScreenToWorldPoint(Input.mousePosition)) > 0.15f && clickedOnce) //если длина свайпа больше 0.15
+        {
+            action = PlayerAction.doubleJump;
+        }
     }
 
     private void CheckSwipe()
