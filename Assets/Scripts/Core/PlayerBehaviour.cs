@@ -14,7 +14,6 @@ public class PlayerBehaviour : MonoBehaviour
     private bool onPlatformAfterFall = true;
     private bool playerStaticPush = true;
     private Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
-    private Vector3 playerOffset;
     private PlayerAnimationController animController;
 
     [RangeAttribute(0f, 15f)]
@@ -22,15 +21,14 @@ public class PlayerBehaviour : MonoBehaviour
     private float m_SpeedMultiplayer = 2f;
 
     [SerializeField]
-    private GameObject staff;
+    private GameObject staffObj;
 
-    void Start()
+    void Awake()
     {
         GameInput.Instance.playerBeh = this;
         GameController.Instance.playerBeh = this;
         animController = GetComponentInChildren<PlayerAnimationController>();
         rig2D = GetComponent<Rigidbody2D>();
-        playerOffset = new Vector3(0f, 1f, 0f);    //приподнять игрока
     }
 
     void OnEnable()
@@ -51,7 +49,7 @@ public class PlayerBehaviour : MonoBehaviour
         }
 
         CollectableGO bonus = collider.gameObject.GetComponent<CollectableGO>();
-        if(bonus)
+        if (bonus)
         {
             bonus.EnterBonus();
         }
@@ -59,34 +57,28 @@ public class PlayerBehaviour : MonoBehaviour
 
     void JumpToNext(GameInput.PlayerAction action) //Когда в эфире PlayerInputAction что-то "прозвучит", запускается JumpToNext
     {
-        this.hitObject = GameInput.Instance.HitObject;
-        this.hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
-        if (!isPlayerFall && onPlatformAfterFall)
+        if (LerpCoroutine == null)
         {
-            if (hitObject && hitJumpPoint)// && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
+            this.hitObject = GameInput.Instance.HitObject;
+            this.hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
+            if (!isPlayerFall && onPlatformAfterFall)
             {
-                if (hitJumpPoint)
+                if (hitObject && hitJumpPoint)// && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
                 {
                     if (hitJumpPoint.Line - 1 == idLine)
                     {
                         if (action == hitJumpPoint.Action)
                         {
-                            if (LerpCoroutine == null)
-                            {
-                                StartCoroutine("Lerp");
-                                animController.SetJump(action);
-                            }
+                            LerpCoroutine = StartCoroutine("Lerp");
+                            animController.SetJump(action);
                         }
                         else if (hitJumpPoint.Action == GameInput.PlayerAction.question)
                         {
                             GameInput.PlayerAction questionPusherAction = GetQuestionPusherType(hitJumpPoint);
                             if (questionPusherAction == action)
                             {
-                                if (LerpCoroutine == null)
-                                {
-                                    StartCoroutine("Lerp");
-                                    animController.SetJump(action);
-                                }
+                                LerpCoroutine = StartCoroutine("Lerp");
+                                animController.SetJump(action);
                             }
                             else
                             {
@@ -97,25 +89,25 @@ public class PlayerBehaviour : MonoBehaviour
                     }
                 }
             }
-            else
+            else if (action == GameInput.PlayerAction.climbAfterFall)
             {
-                PlayerFall();
+                LerpCoroutine = StartCoroutine("ClimbAfterFall");
             }
         }
-        else if (action == GameInput.PlayerAction.climbAfterFall)
-        {
-            StartCoroutine("ClimbAfterFall");
-        }
 
+        JumpPoint jumpPoint = GameInput.Instance.HitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
+        if (!jumpPoint)
+            PlayerFall();
     }
 
     void PlayerFall()
     {//падение игрока
         StopCoroutine("Lerp");
+        LerpCoroutine = null;
         isPlayerFall = true;
         onPlatformAfterFall = false;
         rig2D.bodyType = RigidbodyType2D.Dynamic;
-        rig2D.gravityScale = 0.1f;
+        rig2D.gravityScale = 0.8f;
         transform.parent = null;
         animController.SetFall(true);
         //StartCoroutine(Fall());
@@ -160,45 +152,17 @@ public class PlayerBehaviour : MonoBehaviour
         boxColl = true;
     }
 
-    //IEnumerator Fall()//пока падаем, отслеживаем нажатие на кнопку мыши и целимся в ближайший пушер
-    //{
-    //    GameObject[] _pushers = GameObject.FindGameObjectsWithTag("Pusher"); //берём все созданные на данный момент пушеры
-    //    float _minDist = 100f; //немного чисел с неба
-    //    float _dist;//дистанция до ближайшего пушера
-    //    while (isPlayerFall) //пока мы падаем
-    //    {
-
-    //        if (Input.GetMouseButtonDown(0)) //нажали кнопку мыши
-    //        {
-    //            foreach (GameObject _push in _pushers) //какой пушер ближе всех?
-    //            {
-    //                _dist = Vector2.Distance(_push.transform.position, transform.position); //дистанция от игрока до пушера
-    //                if (_dist < _minDist)
-    //                {
-    //                    _minDist = _dist; //минимальная
-    //                    hitObject = _push; //а вот и он, наш спаситель
-    //                    hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
-    //                }
-    //            }
-    //            isPlayerFall = false; //уже не падаем если падали
-    //            rig2D.bodyType = RigidbodyType2D.Static;
-    //            animController.SetFall(false);
-    //            StartCoroutine("Lerp"); //перемещаемся к спасительному пушеру
-    //        }
-    //        yield return null;
-    //    }
-    //}
-
     private IEnumerator ClimbAfterFall()
     {
         animController.SetFall(true);
-        GameObject staffObj = Instantiate(staff);
-        //staffObj.transform.parent = this.transform;
-        staffObj.transform.position = transform.position;
+        //staffObj.transform.position = transform.position;
         StaffBehaviour staffBeh = staffObj.GetComponent<StaffBehaviour>();
-        StartCoroutine(staffBeh.MoveStaff(hitObject));
+        staffBeh.moveCoroutine = StartCoroutine(staffBeh.MoveStaff(hitObject));
 
-        yield return new WaitForSeconds(.4f);
+        while (staffBeh.moveCoroutine != null)
+        {
+            yield return null;
+        }
 
         isPlayerFall = false;
         rig2D.bodyType = RigidbodyType2D.Static;
