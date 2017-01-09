@@ -21,6 +21,9 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField]
     private float m_SpeedMultiplayer = 2f;
 
+    [SerializeField]
+    private GameObject staff;
+
     void Start()
     {
         GameInput.Instance.playerBeh = this;
@@ -56,10 +59,10 @@ public class PlayerBehaviour : MonoBehaviour
 
     void JumpToNext(GameInput.PlayerAction action) //Когда в эфире PlayerInputAction что-то "прозвучит", запускается JumpToNext
     {
+        this.hitObject = GameInput.Instance.HitObject;
+        this.hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
         if (!isPlayerFall && onPlatformAfterFall)
         {
-            this.hitObject = GameInput.Instance.HitObject;
-            this.hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
             if (hitObject && hitJumpPoint)// && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
             {
                 if (hitJumpPoint)
@@ -99,6 +102,10 @@ public class PlayerBehaviour : MonoBehaviour
                 PlayerFall();
             }
         }
+        else if (action == GameInput.PlayerAction.climbAfterFall)
+        {
+            StartCoroutine("ClimbAfterFall");
+        }
 
     }
 
@@ -108,8 +115,10 @@ public class PlayerBehaviour : MonoBehaviour
         isPlayerFall = true;
         onPlatformAfterFall = false;
         rig2D.bodyType = RigidbodyType2D.Dynamic;
+        rig2D.gravityScale = 0.1f;
         transform.parent = null;
-        StartCoroutine(Fall());
+        animController.SetFall(true);
+        //StartCoroutine(Fall());
 
     }
 
@@ -151,34 +160,50 @@ public class PlayerBehaviour : MonoBehaviour
         boxColl = true;
     }
 
-    IEnumerator Fall()//пока падаем, отслеживаем нажатие на кнопку мыши и целимся в ближайший пушер
+    //IEnumerator Fall()//пока падаем, отслеживаем нажатие на кнопку мыши и целимся в ближайший пушер
+    //{
+    //    GameObject[] _pushers = GameObject.FindGameObjectsWithTag("Pusher"); //берём все созданные на данный момент пушеры
+    //    float _minDist = 100f; //немного чисел с неба
+    //    float _dist;//дистанция до ближайшего пушера
+    //    while (isPlayerFall) //пока мы падаем
+    //    {
+
+    //        if (Input.GetMouseButtonDown(0)) //нажали кнопку мыши
+    //        {
+    //            foreach (GameObject _push in _pushers) //какой пушер ближе всех?
+    //            {
+    //                _dist = Vector2.Distance(_push.transform.position, transform.position); //дистанция от игрока до пушера
+    //                if (_dist < _minDist)
+    //                {
+    //                    _minDist = _dist; //минимальная
+    //                    hitObject = _push; //а вот и он, наш спаситель
+    //                    hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
+    //                }
+    //            }
+    //            isPlayerFall = false; //уже не падаем если падали
+    //            rig2D.bodyType = RigidbodyType2D.Static;
+    //            animController.SetFall(false);
+    //            StartCoroutine("Lerp"); //перемещаемся к спасительному пушеру
+    //        }
+    //        yield return null;
+    //    }
+    //}
+
+    private IEnumerator ClimbAfterFall()
     {
         animController.SetFall(true);
-        GameObject[] _pushers = GameObject.FindGameObjectsWithTag("Pusher"); //берём все созданные на данный момент пушеры
-        float _minDist = 100f; //немного чисел с неба
-        float _dist;//дистанция до ближайшего пушера
-        while (isPlayerFall) //пока мы падаем
-        {
+        GameObject staffObj = Instantiate(staff);
+        //staffObj.transform.parent = this.transform;
+        staffObj.transform.position = transform.position;
+        StaffBehaviour staffBeh = staffObj.GetComponent<StaffBehaviour>();
+        StartCoroutine(staffBeh.MoveStaff(hitObject));
 
-            if (Input.GetMouseButtonDown(0)) //нажали кнопку мыши
-            {
-                foreach (GameObject _push in _pushers) //какой пушер ближе всех?
-                {
-                    _dist = Vector2.Distance(_push.transform.position, transform.position); //дистанция от игрока до пушера
-                    if (_dist < _minDist)
-                    {
-                        _minDist = _dist; //минимальная
-                        hitObject = _push; //а вот и он, наш спаситель
-                        hitJumpPoint = hitObject != null ? hitObject.GetComponent<JumpPoint>() : null;
-                    }
-                }
-                isPlayerFall = false; //уже не падаем если падали
-                rig2D.bodyType = RigidbodyType2D.Static;
-                animController.SetFall(false);
-                StartCoroutine("Lerp"); //перемещаемся к спасительному пушеру
-            }
-            yield return null;
-        }
+        yield return new WaitForSeconds(.4f);
+
+        isPlayerFall = false;
+        rig2D.bodyType = RigidbodyType2D.Static;
+        animController.SetFall(false);
+        StartCoroutine("Lerp");
     }
 
     public GameInput.PlayerAction GetQuestionPusherType(JumpPoint pusher)

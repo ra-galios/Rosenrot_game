@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StaffBehaviour : MonoBehaviour {
+public class StaffBehaviour : MonoBehaviour
+{
 
     private LineRenderer lineRend;
     private PlayerBehaviour player;
@@ -12,16 +13,20 @@ public class StaffBehaviour : MonoBehaviour {
     [Range(0f, 1f)]
     public float staffLerpSpeed = 1f;
 
+    public Vector3 staffHeadOffset = new Vector3(-0.4f, 1.6f, 0f);
+
     // Use this for initialization
-    void Start () {
+    void OnEnable()
+    {
         player = GameController.Instance.playerBeh;
         lineRend = GetComponent<LineRenderer>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
 
-        ElasticStaff();
+    // Update is called once per frame
+    void Update()
+    {
+
+        //ElasticStaff();
 
     }
 
@@ -43,13 +48,24 @@ public class StaffBehaviour : MonoBehaviour {
 
     public IEnumerator MoveStaff(GameObject hitObject)
     {
-        float t = staffLerpSpeed;
-
-        while(t < 1f)
+        while(Vector2.Distance(staffHead.transform.position, hitObject.transform.position + staffHeadOffset) > 0.1f)
         {
-            staffHead.transform.position = Vector2.Lerp(staffHead.transform.position, hitObject.transform.position, t);
+            staffHead.transform.position = Vector2.Lerp(staffHead.transform.position, hitObject.transform.position + staffHeadOffset, staffLerpSpeed);
+            ElasticStaff();
             yield return null;
         }
+        StartCoroutine(StayAtHitObj(hitObject));
+        StopCoroutine("MoveStaff");
+    }
 
+    public IEnumerator StayAtHitObj(GameObject hitObject)
+    {
+        while (true)
+        {
+            staffHead.transform.position = hitObject.transform.position + staffHeadOffset;
+
+            yield return null;
+            ElasticStaff();
+        }
     }
 }

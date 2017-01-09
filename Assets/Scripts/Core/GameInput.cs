@@ -6,23 +6,23 @@ using System;
 
 public class GameInput : CreateSingletonGameObject<GameInput>
 {
-    public enum PlayerAction { climb, jump, doubleJump, question };
+    public enum PlayerAction { climb, jump, doubleJump, question, climbAfterFall };
     public Action<PlayerAction> PlayerInputAction; //вставляем enum в Action
-
     public Action EnemyInputAction;
+
+    public PlayerBehaviour playerBeh;
 
     private float firstClickTime { get; set; }
     private Vector2 firstClickPosition { get; set; }
     private Vector2 secondClickPosition { get; set; }
     private Coroutine Coroutine { get; set; }  //переменная корутины
     private GameObject hitObject;//на что тыкнули
-    public PlayerBehaviour playerBeh;
     private Vector2 playerPos;
     private bool clickedOnce;
     private bool readInput;
     private float waitTime;
     private PlayerAction action;
-    public LayerMask hitObjectMask = 1537;              //default, pushers, staticPushers
+    private LayerMask hitObjectMask = 1537;              //default, pushers, staticPushers
     private JumpPoint clickedPusher;
 
     void OnLevelWasLoaded()
@@ -60,13 +60,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 
             if (Time.time > firstClickTime + waitTime && !readInput)  //если истекло время ожидания и ввод не прочитан
             {
-                if (playerBeh.IsPlayerFall && clickedPusher) //если игрок падает и нажал на пушер
-                {
-                    if(clickedPusher.Line < playerBeh.IdLine)
-                    {
 
-                    }
-                }
                 if (hitObject != null && hitObject.GetComponent<Enemy>())
                 {
                     hitObject.GetComponent<Enemy>().DestroyEnemy();
@@ -74,6 +68,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                 else
                 {
                     CheckDoubleClick();
+                    CheckClimbAfterFall();
                     //Debug.Log("Do: " + action);
                     PlayerInputAction.Invoke(action);
                 }
@@ -133,6 +128,17 @@ public class GameInput : CreateSingletonGameObject<GameInput>
         if (Vector2.Distance(firstClickPosition, Camera.main.ScreenToWorldPoint(Input.mousePosition)) > 0.15f && clickedOnce) //если длина свайпа больше 0.15
         {
             action = PlayerAction.doubleJump;
+        }
+    }
+
+    private void CheckClimbAfterFall()
+    {
+        if (playerBeh.IsPlayerFall && clickedPusher) //если игрок падает и нажал на пушер
+        {
+            if (clickedPusher.Line < playerBeh.IdLine)
+            {
+                action = PlayerAction.climbAfterFall;
+            }
         }
     }
 
