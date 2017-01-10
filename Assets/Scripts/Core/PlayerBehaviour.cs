@@ -20,9 +20,6 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField]
     private float m_SpeedMultiplayer = 2f;
 
-    [SerializeField]
-    private GameObject staffObj;
-
     void Awake()
     {
         GameInput.Instance.playerBeh = this;
@@ -71,10 +68,6 @@ public class PlayerBehaviour : MonoBehaviour
                         {
                             LerpCoroutine = StartCoroutine("Lerp");
                             animController.SetJump(action);
-                            if (action == GameInput.PlayerAction.climb)
-                            {
-                                LerpCoroutine = StartCoroutine("ClimbAfterFall");
-                            }
                         }
                         else if (hitJumpPoint.Action == GameInput.PlayerAction.question)
                         {
@@ -83,10 +76,6 @@ public class PlayerBehaviour : MonoBehaviour
                             {
                                 LerpCoroutine = StartCoroutine("Lerp");
                                 animController.SetJump(action);
-                                if (action == GameInput.PlayerAction.climb)
-                                {
-                                    LerpCoroutine = StartCoroutine("ClimbAfterFall");
-                                }
                             }
                             else
                             {
@@ -103,7 +92,7 @@ public class PlayerBehaviour : MonoBehaviour
             }
             else if (action == GameInput.PlayerAction.climbAfterFall)
             {
-                LerpCoroutine = StartCoroutine("ClimbAfterFall");
+                GrabAfterFall();
             }
         }
 
@@ -164,20 +153,27 @@ public class PlayerBehaviour : MonoBehaviour
         boxColl = true;
     }
 
-    private IEnumerator ClimbAfterFall()
+    // private IEnumerator ClimbAfterFall()
+    // {
+    //     StaffBehaviour staffBeh = staffObj.GetComponent<StaffBehaviour>();
+    //     staffBeh.moveCoroutine = StartCoroutine(staffBeh.MoveStaff(hitObject));
+
+    //     while (staffBeh.moveCoroutine != null)
+    //     {
+    //         yield return null;
+    //     }
+
+    //     isPlayerFall = false;
+    //     rig2D.bodyType = RigidbodyType2D.Static;
+    //     animController.SetFall(false);
+    //     StartCoroutine("Lerp");
+    // }
+
+    private void GrabAfterFall()
     {
-        //staffObj.transform.position = transform.position;
-        StaffBehaviour staffBeh = staffObj.GetComponent<StaffBehaviour>();
-        staffBeh.moveCoroutine = StartCoroutine(staffBeh.MoveStaff(hitObject));
-
-        while (staffBeh.moveCoroutine != null)
-        {
-            yield return null;
-        }
-
         isPlayerFall = false;
         rig2D.bodyType = RigidbodyType2D.Static;
-        animController.SetFall(false);
+        animController.SetFall(isPlayerFall);
         StartCoroutine("Lerp");
     }
 

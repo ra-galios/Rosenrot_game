@@ -16,17 +16,16 @@ public class PlayerAnimationController : MonoBehaviour {
     {
         if(action == GameInput.PlayerAction.climb)
         {
+            playerAnimator.SetTrigger("Grab");
+        }
+        else if(action == GameInput.PlayerAction.jump)
+        {
             playerAnimator.SetTrigger("Jump");
         }
         else
         {
             playerAnimator.SetTrigger("DoubleJump");
         }
-    }
-
-    public void SetDoubleJump()
-    {
-        playerAnimator.SetTrigger("DoubleJump");
     }
 
     public void SetFall(bool isFall)
