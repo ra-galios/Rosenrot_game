@@ -71,6 +71,10 @@ public class PlayerBehaviour : MonoBehaviour
                         {
                             LerpCoroutine = StartCoroutine("Lerp");
                             animController.SetJump(action);
+                            if (action == GameInput.PlayerAction.climb)
+                            {
+                                LerpCoroutine = StartCoroutine("ClimbAfterFall");
+                            }
                         }
                         else if (hitJumpPoint.Action == GameInput.PlayerAction.question)
                         {
@@ -79,6 +83,10 @@ public class PlayerBehaviour : MonoBehaviour
                             {
                                 LerpCoroutine = StartCoroutine("Lerp");
                                 animController.SetJump(action);
+                                if (action == GameInput.PlayerAction.climb)
+                                {
+                                    LerpCoroutine = StartCoroutine("ClimbAfterFall");
+                                }
                             }
                             else
                             {
@@ -158,7 +166,6 @@ public class PlayerBehaviour : MonoBehaviour
 
     private IEnumerator ClimbAfterFall()
     {
-        animController.SetFall(true);
         //staffObj.transform.position = transform.position;
         StaffBehaviour staffBeh = staffObj.GetComponent<StaffBehaviour>();
         staffBeh.moveCoroutine = StartCoroutine(staffBeh.MoveStaff(hitObject));
