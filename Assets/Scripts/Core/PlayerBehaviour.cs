@@ -87,6 +87,10 @@ public class PlayerBehaviour : MonoBehaviour
                             }
                         }
                     }
+                    else
+                    {
+                        PlayerFall();
+                    }
                 }
             }
             else if (action == GameInput.PlayerAction.climbAfterFall)
