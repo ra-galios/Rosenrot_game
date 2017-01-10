@@ -113,7 +113,7 @@ public class LevelGenerator : MonoBehaviour
 
     void CreateDecor()
     {
-        Instantiate(m_Decorations[Random.Range(0,m_Decorations.Length)], new Vector2(Random.Range(-2.5f,2.5f), Instance.transform.position.y), Quaternion.identity);
+        Instantiate(m_Decorations[Random.Range(0,m_Decorations.Length)], new Vector3(Random.Range(-2.5f,2.5f), Instance.transform.position.y, 2f), Quaternion.identity);
     }
 
     IEnumerator GeneratorLines()

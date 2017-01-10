@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Market : CreateSingletonGameObject<Market>
 {
+    public Action ChangeStatusAction;
+
     [SerializeField]
     private int m_Health;
 
     private DateManager m_DateManager = new DateManager();
-    private string revTime;
+    private string prevTime;
     private int m_MaxHealth = 5;
     private int timeSetHealth = 5;
     private int m_Seeds;//семечки
@@ -16,6 +19,9 @@ public class Market : CreateSingletonGameObject<Market>
     private int m_Dimond;//брилиант
     private int m_LocalDiamond;
     private int m_Ruby;//рубин
+    private int m_MinutesUntilHealth;
+    private int m_SecondsUntilHealth;
+    private Coroutine marketCoroutine = null;
 
     void OnLevelWasLoaded()
     {
@@ -28,10 +34,10 @@ public class Market : CreateSingletonGameObject<Market>
         {
             PlayerPrefs.SetInt("Health", 5);
         }
-
+        PlayerPrefs.SetInt("Health", 2);
         Health = PlayerPrefs.GetInt("Health");//получаем сколько у нас было жизней ранее
 
-        StartCoroutine(MarketCoroutine());//запускаем карутину, которая будет по таймауту отслеживать количесвто прошедшего времени
+        marketCoroutine = StartCoroutine(MarketCoroutine());//запускаем карутину, которая будет по таймауту отслеживать количесвто прошедшего времени
     }
 
     void OnDisable()
@@ -39,20 +45,32 @@ public class Market : CreateSingletonGameObject<Market>
         PlayerPrefs.SetInt("Health", Health);//сохраняем текущее значение жизней 
     }
 
+    void Update()
+    {
+        if (Health < m_MaxHealth && marketCoroutine == null)
+        {
+            marketCoroutine = StartCoroutine(MarketCoroutine());
+        }
+    }
+
     IEnumerator MarketCoroutine()
     {
-        while (Health < 5)
+        while (Health < m_MaxHealth)
         {
-            revTime = m_DateManager.GetPlayerDate("Date");
-            var passedTime = m_DateManager.HowTimePassed(revTime, DateManager.DateType.minutes);//сколько прошло времени
-            if (passedTime >= timeSetHealth)//если прошло больше, чем время для начисления жизни
+            prevTime = m_DateManager.GetPlayerDate("Date");
+            var passedTimeMinutes = m_DateManager.HowTimePassed(prevTime, DateManager.DateType.minutes);//сколько прошло времени
+            var passedTimeSeconds = m_DateManager.HowTimePassed(prevTime, DateManager.DateType.seconds);//сколько прошло времени
+            print((4 - passedTimeMinutes) + " : " + (59 - Mathf.Repeat(passedTimeSeconds, 60)));
+            if (passedTimeMinutes >= timeSetHealth)//если прошло больше, чем время для начисления жизни
             {
-                Health = passedTime / timeSetHealth; //делим прошедшие минуты на время создания одной жизни и берём целую часть от этого, клампим, чтобы получить не больше 5
+                Health = passedTimeMinutes / timeSetHealth; //делим прошедшие минуты на время создания одной жизни и берём целую часть от этого, клампим, чтобы получить не больше 5
                 Mathf.Clamp(Health, 0, m_MaxHealth);
                 SetCurrentDatePlayer(); //ставим дату обновления жизней
             }
-            yield return new WaitForSeconds(30f);//ждём 30 сек
+            yield return new WaitForSeconds(1f);//ждём 30 сек
         }
+        StopCoroutine(marketCoroutine);
+        marketCoroutine = null;
     }
 
     public void SetCurrentDatePlayer() // устанавливаем текущее время
@@ -119,5 +137,15 @@ public class Market : CreateSingletonGameObject<Market>
     {
         get { return this.m_Ruby; }
         set { this.m_Ruby = value; }
+    }
+
+    public int MinutesUntilHealth
+    {
+        get { return this.m_MinutesUntilHealth; }
+    }
+
+    public int SecondsUntilHealth
+    {
+        get { return this.m_SecondsUntilHealth; }
     }
 }
