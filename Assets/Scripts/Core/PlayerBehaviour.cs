@@ -103,16 +103,17 @@ public class PlayerBehaviour : MonoBehaviour
 
     void PlayerFall()
     {//падение игрока
-        StopCoroutine("Lerp");
-        LerpCoroutine = null;
-        isPlayerFall = true;
-        onPlatformAfterFall = false;
-        rig2D.bodyType = RigidbodyType2D.Dynamic;
-        rig2D.gravityScale = 0.8f;
-        transform.parent = null;
-        animController.SetFall(true);
-        //StartCoroutine(Fall());
-
+        if (LevelGenerator.Instance.IsRunLevel)
+        {
+            StopCoroutine("Lerp");
+            LerpCoroutine = null;
+            isPlayerFall = true;
+            onPlatformAfterFall = false;
+            rig2D.bodyType = RigidbodyType2D.Dynamic;
+            rig2D.gravityScale = 0.8f;
+            transform.parent = null;
+            animController.SetFall(true);
+        }
     }
 
     IEnumerator Lerp()

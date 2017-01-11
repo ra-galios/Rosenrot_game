@@ -20,7 +20,7 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void AddHealth()
     {
-        Market.Instance.Health += 100;
+        Market.Instance.AddHealth(100);
     }
 
     void Update()
@@ -33,15 +33,12 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void LoadScene(string name)
     {
-        DataManager.Instance.SaveGameData();
         SceneManager.LoadScene("LoadingScene");
         StartCoroutine(LoadLevel(name));
     }
 
     public void LoadActiveScene()
     {
-        DataManager.Instance.SaveGameData();
-
         string name = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene("LoadingScene");
         StartCoroutine(LoadLevel(name));
@@ -52,7 +49,6 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {
-            DataManager.Instance.SaveGameData();
             SceneManager.LoadScene("LoadingScene");
             StartCoroutine(LoadLevel("menu"));
         }
@@ -87,6 +83,11 @@ public class GameController : CreateSingletonGameObject<GameController>
         {
             DataManager.Instance.LoadGameData();
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        DataManager.Instance.SaveGameData();
     }
 
     public int CurrentLevel

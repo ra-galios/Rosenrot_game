@@ -5,7 +5,8 @@ using System;
 public class DataManager : CreateSingletonGameObject<DataManager>
 {
 
-    public GameData gameData;
+    [SerializeField, HideInInspector]
+    private GameData gameData;
     private string saveFileName = "gameData.json";
 
     public void SaveGameData()
@@ -41,6 +42,8 @@ public class DataManager : CreateSingletonGameObject<DataManager>
 
     private void SetData()
     {
+        Market.Instance.CurentlyAddHealth = gameData.curentlyAddHealth;
+        Market.Instance.Health = gameData.health;
         Market.Instance.Seeds = gameData.seeds;
         Market.Instance.Bomb = gameData.bombs;
         Market.Instance.Dimond = gameData.diamonds;
@@ -58,6 +61,8 @@ public class DataManager : CreateSingletonGameObject<DataManager>
 
     private void GetData()
     {
+        gameData.curentlyAddHealth = Market.Instance.CurentlyAddHealth;
+        gameData.health = Market.Instance.Health;
         gameData.seeds = Market.Instance.Seeds;
         gameData.bombs = Market.Instance.Bomb;
         gameData.diamonds = Market.Instance.Dimond;

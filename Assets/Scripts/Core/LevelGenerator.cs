@@ -98,8 +98,7 @@ public class LevelGenerator : MonoBehaviour
         {
             timeStartLevel = Time.time; //время старта
             IsRunLevel = true;
-            Market.Instance.Health-=1; //отнимаем одну использованную жизнь, т.к. запустили левел
-            Market.Instance.SetCurrentDatePlayer(); //записываем новую дату обновления жизней, через 5 минут будет +1
+            Market.Instance.AddHealth(-1); //отнимаем одну использованную жизнь, т.к. запустили левел
             StartCoroutine("GeneratorLines");
         }
     }

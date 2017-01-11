@@ -22,20 +22,15 @@ public class StatusBar : MonoBehaviour
         ChangeStatus();
     }
 
-    void OnEnable()
-    {
-        Market.Instance.ChangeStatusAction += ChangeStatus;
-    }
-
-    void OnDisable()
-    {
-        Market.Instance.ChangeStatusAction -= ChangeStatus;
-    }
-
     // Use this for initialization
     void ChangeStatus()
     {
-        timeStatus.text = Market.Instance.Health.ToString() + ":" + Market.Instance.Health.ToString();
+        string secondsUntilHealth = Market.Instance.SecondsUntilHealth.ToString();
+        if(secondsUntilHealth.Length < 2)
+        {
+            secondsUntilHealth = "0" + secondsUntilHealth;
+        }
+        timeStatus.text = Market.Instance.MinutesUntilHealth.ToString() + ":" + secondsUntilHealth;
         lifesCounter.text = Market.Instance.Health.ToString();
         seedsStatus.text = Market.Instance.Seeds.ToString();
         bombsStatus.text = Market.Instance.Bomb.ToString();
