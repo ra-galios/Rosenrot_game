@@ -154,22 +154,6 @@ public class PlayerBehaviour : MonoBehaviour
         boxColl = true;
     }
 
-    // private IEnumerator ClimbAfterFall()
-    // {
-    //     StaffBehaviour staffBeh = staffObj.GetComponent<StaffBehaviour>();
-    //     staffBeh.moveCoroutine = StartCoroutine(staffBeh.MoveStaff(hitObject));
-
-    //     while (staffBeh.moveCoroutine != null)
-    //     {
-    //         yield return null;
-    //     }
-
-    //     isPlayerFall = false;
-    //     rig2D.bodyType = RigidbodyType2D.Static;
-    //     animController.SetFall(false);
-    //     StartCoroutine("Lerp");
-    // }
-
     private void GrabAfterFall()
     {
         isPlayerFall = false;

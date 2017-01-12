@@ -111,13 +111,11 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                     firstClickTime = Time.time;
                     firstClickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);       //для свайпа
                     clickedOnce = true;
-                    //print("click");
                 }
                 else                             //даблклик
                 {
                     action = PlayerAction.jump;
                     clickedOnce = false;
-                    //print("doubleclick");
                 }
             }
         }
@@ -125,7 +123,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 
     private void CheckDoubleClick()
     {
-        if (Vector2.Distance(firstClickPosition, Camera.main.ScreenToWorldPoint(Input.mousePosition)) > 0.2f && clickedOnce) //если длина свайпа больше 0.2
+        if (Vector2.Distance(firstClickPosition, Camera.main.ScreenToWorldPoint(Input.mousePosition)) > 0.3f && clickedOnce) //если длина свайпа больше 0.3
         {
             action = PlayerAction.doubleJump;
         }

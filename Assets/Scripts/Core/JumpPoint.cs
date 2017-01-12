@@ -5,30 +5,48 @@ using System;
 public class JumpPoint : MonoBehaviour
 {
     [SerializeField]
-    private float m_TimeCreate=0; //время создания
-
-    [SerializeField]
     private int m_Line; //линия в которой находится пуш
-
     [SerializeField]
     private int m_Collumn; //колонка в которой находится пуш
-
     [SerializeField]
     private CollectableGO m_PrefBonus; //префаб колетблза на пушере
-
     [SerializeField]
     private GameInput.PlayerAction m_Action;
+    [SerializeField]
+    private bool isSeed = false;
+
 
     private float speed; //скорость 
     private GameObject bonus; //колектблз на пушере
     private bool isCreateBonus=false;
-    private Sprite helpPush;
+    private Animator anim;
+    private bool CreatePusher = false;
+
+    void Start()
+    {
+        if(isSeed)
+        {
+            anim = GetComponent<Animator>();
+        }
+    }
 
     void Update()
     {
+
+        
         if (LevelGenerator.Instance.IsRunLevel)
         {
             MovePusher();
+
+            if(isSeed)
+            {
+                if(!CreatePusher && transform.position.y < Camera.main.transform.position.y + Camera.main.orthographicSize)
+                {
+                    anim.SetBool("CreatePusher", true);
+                    Market.Instance.Seeds--;
+                    CreatePusher = true;
+                }
+            }
         }
         if (gameObject.activeSelf && m_PrefBonus && !isCreateBonus)//если пушер активировался, у него есть бонус и он ещё не инициализирован
         {
@@ -62,11 +80,6 @@ public class JumpPoint : MonoBehaviour
     {
         get { return this.speed; }
         set { this.speed = value; }
-    }
-    public float TimeCreate
-    {
-        get { return this.m_TimeCreate; }
-        set { this.m_TimeCreate = value; }
     }
     public GameObject Bonus
     {
