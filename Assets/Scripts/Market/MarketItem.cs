@@ -27,10 +27,10 @@ public class MarketItem : MonoBehaviour
 		{
 			if(m_MarketItemPrice)
 			{
-				if(checkPurchase(m_MarketItemPrice.GetItemCount(), -m_Cost))
+				if(checkPurchase(m_MarketItemPrice.GetItemCount(), -m_Cost * value))
 				{
 					SetItemCount(value);
-					m_MarketItemPrice.SpendItem(m_Cost);
+					m_MarketItemPrice.SpendItem(m_Cost * value);
 				} 
 			}
 			else
