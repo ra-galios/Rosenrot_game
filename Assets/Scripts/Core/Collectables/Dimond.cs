@@ -7,6 +7,9 @@ public class Dimond : CollectableGO
     {
         base.EnterBonus();
         Market.Instance.Dimond++;
-        Market.Instance.LocalDiamond++;
+        
+        GameController.Instance.levelsData[GameController.Instance.CurrentLevel].diamondsCollected++;
+
+        LevelDiamondKeeper.Instance.SetCollected(this);
     }
 }

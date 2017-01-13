@@ -136,16 +136,16 @@ public class PlayerBehaviour : MonoBehaviour
             yield return null;
         }
 
-        if (hitJumpPoint.Bonus)
-        {
-            CollectableGO bonus = hitJumpPoint.Bonus.GetComponent<CollectableGO>();
-            if (!bonus.collected)
-            {
-                bonus.transform.parent = transform;
-                bonus.transform.position += new Vector3(0.04f, 1.5f, 0f);      //бонус над головой Якова
-                bonus.EnterBonus();
-            }
-        }
+        // if (hitJumpPoint.Bonus)
+        // {
+        //     CollectableGO bonus = hitJumpPoint.Bonus.GetComponent<CollectableGO>();
+        //     if (!bonus.collected)
+        //     {
+        //         bonus.transform.parent = transform;
+        //         bonus.transform.position += new Vector3(0.04f, 1.5f, 0f);      //бонус над головой Якова
+        //         bonus.EnterBonus();
+        //     }
+        // }
         onPlatformAfterFall = true;
         idLine = hitJumpPoint.Line;
         idCollumn = hitJumpPoint.Collumn;

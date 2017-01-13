@@ -17,22 +17,22 @@ public class MenuSwipe : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.GetMouseButtonDown(0))
         {
-            prevFingerPosY = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position).y;
+            prevFingerPosY = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
         }
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        if (Input.GetMouseButton(0))
         {
-            deltaPosY = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position).y - prevFingerPosY;
+            deltaPosY = Camera.main.ScreenToWorldPoint(Input.mousePosition).y - prevFingerPosY;
 
             posY = transform.position.y + deltaPosY;
             posY = Mathf.Clamp(posY, defaultPositionY, bottomPositionY);
 
             transform.position = new Vector3(transform.position.x, posY, transform.position.z);
 
-            prevFingerPosY = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position).y;
+            prevFingerPosY = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
         }
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended)
+        if (Input.GetMouseButtonUp(0))
         {
             movePanel = true;
         }

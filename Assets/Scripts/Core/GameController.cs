@@ -21,6 +21,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     public void AddHealth()
     {
         Market.Instance.AddHealth(100);
+        Market.Instance.Seeds += 50;
     }
 
     void Update()
@@ -56,7 +57,6 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void StopGame()
     {
-        SetLevelDiamonds();
         LoadActiveScene();
     }
 
@@ -68,14 +68,6 @@ public class GameController : CreateSingletonGameObject<GameController>
             yield return null;
     }
 
-
-    private void SetLevelDiamonds()
-    {
-        if (Market.Instance.LocalDiamond > levelsData[currentLevel].diamondsCollected)
-        {
-            levelsData[currentLevel].diamondsCollected = Market.Instance.LocalDiamond;
-        }
-    }
 
     void GetData()
     {

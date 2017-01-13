@@ -1,0 +1,55 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class LevelDiamondKeeper : MonoBehaviour
+{
+
+    private static LevelDiamondKeeper instance;
+    [SerializeField]
+    private Dimond[] diamonds;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
+    // Use this for initialization
+    void Start()
+    {
+		if(diamonds.Length != GameController.Instance.levelsData[GameController.Instance.CurrentLevel].isCollected.Length)
+		{
+			GameController.Instance.levelsData[GameController.Instance.CurrentLevel] = new LevelData(diamonds.Length);
+		}
+
+        for (int i = 0; i < diamonds.Length; i++)
+        {
+            if (GameController.Instance.levelsData[GameController.Instance.CurrentLevel].isCollected[i])
+            {
+                diamonds[i].gameObject.SetActive(false);
+            }
+        }
+
+    }
+
+    public void SetCollected(Dimond colDiamond)
+    {
+        for (int i = 0; i < diamonds.Length; i++)
+        {
+            if (colDiamond == diamonds[i])
+            {
+                GameController.Instance.levelsData[GameController.Instance.CurrentLevel].isCollected[i] = true;
+            }
+        }
+    }
+
+    public static LevelDiamondKeeper Instance
+    {
+        get { return instance; }
+    }
+
+    public Dimond[] Diamonds
+    {
+        get { return diamonds; }
+    }
+}

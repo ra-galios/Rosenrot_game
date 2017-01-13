@@ -14,7 +14,6 @@ public class Market : CreateSingletonGameObject<Market>
     private int m_Bomb;//порох/бомбочка
     [SerializeField]
     private int m_Dimond;//брилиант
-    private int m_LocalDiamond;
     private int m_Ruby;//рубин
     private int m_MinutesUntilHealth;
     private float m_SecondsUntilHealth;
@@ -23,10 +22,10 @@ public class Market : CreateSingletonGameObject<Market>
     private Coroutine timerCoroutine = null;
     private int curentlyAddHealth = 0;
 
-    void OnLevelWasLoaded()
-    {
-        m_LocalDiamond = 0;
-    }
+    // void OnLevelWasLoaded()
+    // {
+    //     m_LocalDiamond = 0;
+    // }
 
     void Start()
     {
@@ -182,11 +181,6 @@ public class Market : CreateSingletonGameObject<Market>
     {
         get { return this.m_Dimond; }
         set { this.m_Dimond = value; }
-    }
-    public int LocalDiamond
-    {
-        get { return this.m_LocalDiamond; }
-        set { this.m_LocalDiamond = value; }
     }
     public int Ruby
     {

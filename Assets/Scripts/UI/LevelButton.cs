@@ -5,36 +5,43 @@ using System;
 public class LevelButton : MonoBehaviour
 {
 
-    private int currentLevelDiamonds;
-    private int globalDiamonds;
+    private int levelCollectDiamonds;
+    private int prevLevelCollectDiamonds;
+    private int diamondsOnPrevLevel;
     private Button levelButton;
 
-    [SerializeField]
+    [SerializeField, HeaderAttribute("информация под камнем")]
     private Text diamondsInform;
-    [SerializeField]
-    private int diamondsToOpen;
-    [SerializeField]
-    private int diamondsOnLevel;
-    [SerializeField]
+    [SerializeField, HeaderAttribute("индекс уровня начиная с 0")]
     private int levelNumber;
+    [SerializeField, HeaderAttribute("количество алмазов на уровне")]
+    private int diamondsOnLevel;
+
 
 
     void Start()
     {
-        globalDiamonds = Market.Instance.Dimond;
-        currentLevelDiamonds = GameController.Instance.levelsData[levelNumber].diamondsCollected;
+        levelCollectDiamonds = GameController.Instance.levelsData[levelNumber].diamondsCollected;       //собрано алмазов на уровнеми
+
+        if (levelNumber > 0)
+        {
+            prevLevelCollectDiamonds = GameController.Instance.levelsData[levelNumber - 1].diamondsCollected;    //собрано алмазов на предыдущем уровнеми
+            diamondsOnPrevLevel = GameController.Instance.levelsData[levelNumber - 1].isCollected.Length;       //всего алмазов на предыдущем уровне
+        }
+
 
         levelButton = GetComponent<Button>();
-        if (globalDiamonds >= diamondsToOpen)       //если уровень открыт
+        if ((prevLevelCollectDiamonds >= diamondsOnPrevLevel && diamondsOnPrevLevel != 0) || (levelNumber == 0))       //если уровень открыт или это первый уровень
         {
             levelButton.interactable = true;
-            diamondsInform.text = currentLevelDiamonds.ToString() + "/" + diamondsOnLevel.ToString();
         }
         else        //если уровень не доступен
         {
             levelButton.interactable = false;
-            diamondsInform.text = (diamondsToOpen - globalDiamonds).ToString() + " More To Open";
         }
+
+        diamondsInform.text = levelCollectDiamonds.ToString() + "/" + diamondsOnLevel.ToString();
+
     }
 
     void LoadGameLevel(string name)

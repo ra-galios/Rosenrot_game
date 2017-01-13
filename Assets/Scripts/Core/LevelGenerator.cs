@@ -66,6 +66,7 @@ public class LevelGenerator : MonoBehaviour
     private Decoration lastDecoration;     //последняя созданная декорация
     private GameObject decorParent;
     private GameObject pushersParent;
+    private List<GameObject> lastlineObjects = new List<GameObject>();
 
     void Reset()
     {
@@ -115,7 +116,7 @@ public class LevelGenerator : MonoBehaviour
             IsRunLevel = true;
             Market.Instance.AddHealth(-1); //отнимаем одну использованную жизнь, т.к. запустили левел
             StartCoroutine("GeneratorLines");
-            StartCoroutine("CreateDecor");
+            //StartCoroutine("CreateDecor");
         }
     }
 
@@ -125,36 +126,43 @@ public class LevelGenerator : MonoBehaviour
         IsRunLevel = false;
     }
 
-    IEnumerator CreateDecor()
+    IEnumerator CreateDecorNew()    //создание декораций
     {
-        Vector3 decorPos = new Vector3(Random.Range(-2.5f, 2.5f) + transform.position.x, Instance.transform.position.y, 3f);
+        int tryCreateDecor = 8;
+        int decorCount = 0;     //количество уже построенных
 
-        lastDecoration = Instantiate(m_Decorations[Random.Range(0, m_Decorations.Length)], decorPos, Quaternion.identity);  //создать первую декорацию
-        lastDecoration.transform.parent = decorParent.transform;
-
-        while (true)
+        for (int i = 0; i < tryCreateDecor; i++)        //попытки построить декорации
         {
-            while ((transform.position.y - lastDecoration.transform.position.y) < 3.5f) //ждем пeред тем как построить новые декорации
+            bool canCreate = true;
+            Vector3 decorPos = new Vector3(Random.Range(-2.5f, 2.5f) + transform.position.x, Instance.transform.position.y + Random.Range(0f, lineSpacing - 1f), 3f);
+
+            for (int j = 0; j < lastlineObjects.Count; j++)
             {
-                yield return null;
-            }
-
-            int tryCreateDecor = 2;
-
-            for (int i = 0; i < tryCreateDecor; i++)
-            {
-                decorPos = new Vector3(Random.Range(-2.5f, 2.5f) + transform.position.x, Instance.transform.position.y + Random.Range(-1f, 1f), 3f);
-
-                if (Vector2.Distance(decorPos, lastDecoration.transform.position) > 1.5f)       //если расстояние между позициями > 1.5
+                if (Vector2.Distance(decorPos, lastlineObjects[j].transform.position) < 1.7f)       //выходим если расстояние между объектами < 1.7 
                 {
-                    lastDecoration = Instantiate(m_Decorations[Random.Range(0, m_Decorations.Length)], decorPos, Quaternion.identity); //построить декорацию
-
-                    lastDecoration.transform.parent = decorParent.transform;
+                    canCreate = false;
+                    break;
                 }
 
                 yield return null;
             }
+
+            if (canCreate)  //построить декорацию
+            {
+                lastDecoration = Instantiate(m_Decorations[Random.Range(0, m_Decorations.Length)], decorPos, Quaternion.identity);
+                lastDecoration.transform.parent = decorParent.transform;
+                lastlineObjects.Add(lastDecoration.gameObject);
+                decorCount++;
+            }
+            if (decorCount >= 2f) //максимальное количество на линию
+            {
+                break;
+            }
+
+            yield return null;
         }
+
+        lastlineObjects.Clear();
     }
 
     IEnumerator GeneratorLines()
@@ -166,13 +174,18 @@ public class LevelGenerator : MonoBehaviour
         GameObject parentLine;         //линия для пушеров
         int posNewRock = 0;      //позиция для нового пушера
 
-        while (currentLinesCount <= m_MaxLines)        //пока не создадим нужное кол-во линий
+        while (currentLinesCount < m_MaxLines)        //пока не создадим нужное кол-во линий
         {
             while ((transform.position.y - lastLinePusher.transform.position.y) < lineSpacing)       //ждем пeред тем как построить новую линию
             {
                 yield return null;
             }
 
+            if (m_Array_Climb[0].IsSeed && Market.Instance.Seeds <= 0)
+            {
+                m_MaxLines = currentLinesCount;
+                break;         //остановить генерацию
+            }
 
             bool[] SetCol = new bool[m_StartPositions.Length]; ; //флаги занятых колонок, для избежания создания пушеров в одной колонке
             int countPushersInLine = Random.Range(1, MaxItemsInLine + 1);   //кол-во пушеров на линии
@@ -227,14 +240,18 @@ public class LevelGenerator : MonoBehaviour
                 newRock = null;
                 jumpPointRock = null;
                 tempArray = null;
+                lastlineObjects.Add(lastLinePusher);
 
                 yield return null;
             }
+
+            StartCoroutine("CreateDecorNew");       //построить декорации
 
             parentLine = null;
             currentLinesCount++;
             idLine++;              //прикидываем имя для следующего родителя
         }
+
     }
 
     private int CurrentLinesInScene()
