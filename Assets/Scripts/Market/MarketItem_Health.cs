@@ -16,7 +16,7 @@ public class MarketItem_Health : MarketItem {
 	
 	// Update is called once per frame
 	void Update () {
-		if(previewValue != Market.Instance.Health)
+		if(m_ItemText && previewValue != Market.Instance.Health)
 		{
 			previewValue = GetItemCount();
 			m_ItemText.text = previewValue.ToString();

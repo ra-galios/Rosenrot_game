@@ -15,7 +15,7 @@
 	
 	// Update is called once per frame
 	void Update () {
-		if(previewValue != Market.Instance.Seeds)
+		if(m_ItemText && previewValue != Market.Instance.Seeds)
 		{
 			previewValue = GetItemCount();
 			m_ItemText.text = previewValue.ToString();

@@ -15,7 +15,7 @@
 	
 	// Update is called once per frame
 	void Update () {
-		if(previewValue != Market.Instance.Dimond)
+		if(m_ItemText && previewValue != Market.Instance.Dimond)
 		{
 			previewValue = GetItemCount();
 			m_ItemText.text = previewValue.ToString();
