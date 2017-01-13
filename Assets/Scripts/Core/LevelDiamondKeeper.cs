@@ -6,7 +6,7 @@ public class LevelDiamondKeeper : MonoBehaviour
 {
 
     private static LevelDiamondKeeper instance;
-    [SerializeField]
+    [SerializeField, HeaderAttribute("алмазы на сцене")]
     private Dimond[] diamonds;
 
     void Awake()
