@@ -123,7 +123,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 
     private void CheckDoubleClick()
     {
-        if (Vector2.Distance(firstClickPosition, Camera.main.ScreenToWorldPoint(Input.mousePosition)) > 0.7f && clickedOnce) //если длина свайпа больше 0.7
+        if (Vector2.Distance(firstClickPosition, Camera.main.ScreenToWorldPoint(Input.mousePosition)) > 0.5f && clickedOnce) //если длина свайпа больше 0.5
         {
             action = PlayerAction.doubleJump;
         }

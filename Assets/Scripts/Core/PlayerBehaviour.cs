@@ -12,7 +12,7 @@ public class PlayerBehaviour : MonoBehaviour
     private int idCollumn = 1;
     private bool isPlayerFall = false;
     private bool onPlatformAfterFall = true;
-    private bool playerStaticPush = true;
+    //private bool playerStaticPush = true;
     private Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
     private PlayerAnimationController animController;
 
@@ -79,9 +79,12 @@ public class PlayerBehaviour : MonoBehaviour
                             }
                             else
                             {
-                                if (!playerStaticPush)
-                                    PlayerFall();
+                                PlayerFall();
                             }
+                        }
+                        else
+                        {
+                            PlayerFall();
                         }
                     }
                     else
@@ -149,7 +152,7 @@ public class PlayerBehaviour : MonoBehaviour
         onPlatformAfterFall = true;
         idLine = hitJumpPoint.Line;
         idCollumn = hitJumpPoint.Collumn;
-        playerStaticPush = hitObject.layer == 10 ? true : false; // 10 - это layer StaticPushers, со статического пушера упасть нельзя
+        //playerStaticPush = hitObject.layer == 10 ? true : false; // 10 - это layer StaticPushers, со статического пушера упасть нельзя
         LerpCoroutine = null;
         boxColl = true;
     }
