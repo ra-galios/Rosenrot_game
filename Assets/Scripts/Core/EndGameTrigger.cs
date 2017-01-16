@@ -12,7 +12,13 @@ public class EndGameTrigger : MonoBehaviour {
 
         if (player)
         {
-                GameController.Instance.StopGame();
+                StartCoroutine("StopGame");
         }
+    }
+
+    private IEnumerator StopGame()
+    {
+        yield return new WaitForSeconds(0.4f);
+        GameController.Instance.FailGame();
     }
 }

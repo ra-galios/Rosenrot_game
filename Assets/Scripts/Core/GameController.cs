@@ -9,8 +9,13 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public LevelData[] levelsData;
     public int totalGameLevels = 14;
-    public bool inGame;
     public PlayerBehaviour playerBeh = null;
+
+    [HideInInspector]
+    public Animator VictoryPanelAnim;
+    [HideInInspector]
+    public Animator FailPanelAnim;
+
 
     // Use this for initialization
     void OnEnable()
@@ -49,7 +54,13 @@ public class GameController : CreateSingletonGameObject<GameController>
         }
     }
 
-    public void StopGame()
+    public void FailGame()
+    {
+        //FailPanelAnim.SetTrigger("Achievement");
+        PauseGame();
+    }
+
+    public void WinGame()
     {
         LoadActiveScene();
     }

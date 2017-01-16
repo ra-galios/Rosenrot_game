@@ -34,15 +34,15 @@ public class JumpPoint : MonoBehaviour
         if (isSeed)
         {
 
-            if (Market.Instance.Seeds > 0)
-            {
-                anim.SetBool("CreatePusher", true);
-                Market.Instance.Seeds--;
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
+            anim.SetBool("CreatePusher", true);
+            // if (Market.Instance.Seeds > 0)
+            // {
+            //     anim.SetBool("CreatePusher", true);
+            // }
+            // else
+            // {
+            //     Destroy(this.gameObject);
+            // }
         }
     }
 

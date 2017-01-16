@@ -179,12 +179,6 @@ public class LevelGenerator : MonoBehaviour
                 yield return null;
             }
 
-            if (m_Array_Climb[0].IsSeed && Market.Instance.Seeds <= 0)
-            {
-                m_MaxLines = currentLinesCount;
-                break;         //остановить генерацию
-            }
-
             bool[] SetCol = new bool[m_StartPositions.Length]; ; //флаги занятых колонок, для избежания создания пушеров в одной колонке
             int countPushersInLine = Random.Range(1, MaxItemsInLine + 1);   //кол-во пушеров на линии
             countPushersInLine = Mathf.Clamp(countPushersInLine, 0, Market.Instance.Seeds);

@@ -6,30 +6,26 @@ public class MenuPause : MonoBehaviour
 {
 
     [SerializeField]
-    private Button pauseGame;
+    private Button pauseButton;
     [SerializeField]
-    private Button resumeGame;
+    private Button resumeButton;
     [SerializeField]
-    private Button returnToMain;
+    private Button returnToMainButton;
 
     // Use this for initialization
     void OnEnable()
     {
-        pauseGame.onClick.AddListener(GameController.Instance.PauseGame);
-        resumeGame.onClick.AddListener(GameController.Instance.ResumeGame);
-        returnToMain.onClick.AddListener(GameController.Instance.LoadMainScene);
-        returnToMain.onClick.AddListener(GameController.Instance.ResumeGame);
+        pauseButton.onClick.AddListener(GameController.Instance.PauseGame);
+        resumeButton.onClick.AddListener(GameController.Instance.ResumeGame);
+        returnToMainButton.onClick.AddListener(GameController.Instance.LoadMainScene);
+        returnToMainButton.onClick.AddListener(GameController.Instance.ResumeGame);
     }
 
     void OnDisable()
     {
-        pauseGame.onClick.RemoveListener(GameController.Instance.PauseGame);
-        resumeGame.onClick.RemoveListener(GameController.Instance.ResumeGame);
-        returnToMain.onClick.RemoveListener(GameController.Instance.LoadMainScene);
+        pauseButton.onClick.RemoveListener(GameController.Instance.PauseGame);
+        resumeButton.onClick.RemoveListener(GameController.Instance.ResumeGame);
+        returnToMainButton.onClick.RemoveListener(GameController.Instance.LoadMainScene);
+        returnToMainButton.onClick.RemoveListener(GameController.Instance.ResumeGame);
     }
-
-	public void Some()
-	{
-		print("click");
-	}
 }

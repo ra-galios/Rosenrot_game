@@ -10,7 +10,7 @@ public class Victory : MonoBehaviour {
         if (GameController.Instance.playerBeh.IdLine == LevelGenerator.Instance.MaxLines)
         {
             print("Victory");
-            GameController.Instance.StopGame();
+            GameController.Instance.WinGame();
         }
 	}
 }

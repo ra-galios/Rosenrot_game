@@ -139,6 +139,11 @@ public class PlayerBehaviour : MonoBehaviour
             yield return null;
         }
 
+        if(hitJumpPoint.IsSeed && Market.Instance.Seeds > 0)
+        {
+            Market.Instance.Seeds--;
+        }
+
         // if (hitJumpPoint.Bonus)
         // {
         //     CollectableGO bonus = hitJumpPoint.Bonus.GetComponent<CollectableGO>();
