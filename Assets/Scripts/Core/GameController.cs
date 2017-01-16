@@ -18,40 +18,34 @@ public class GameController : CreateSingletonGameObject<GameController>
         GetData();
     }
 
-    public void AddHealth()
-    {
-        Market.Instance.AddHealth(100);
-        Market.Instance.Seeds += 50;
-    }
-
     void Update()
     {
         if (Input.GetKey(KeyCode.Escape))
         {
-            LoadFirstScene();
+            LoadMainScene();
         }
     }
 
     public void LoadScene(string name)
     {
         SceneManager.LoadScene("LoadingScene");
-        StartCoroutine(LoadLevel(name));
+        StartCoroutine(LoadLevelAsync(name));
     }
 
     public void LoadActiveScene()
     {
         string name = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene("LoadingScene");
-        StartCoroutine(LoadLevel(name));
+        StartCoroutine(LoadLevelAsync(name));
     }
 
 
-    public void LoadFirstScene()
+    public void LoadMainScene()
     {
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {
             SceneManager.LoadScene("LoadingScene");
-            StartCoroutine(LoadLevel("menu"));
+            StartCoroutine(LoadLevelAsync("menu"));
         }
     }
 
@@ -60,7 +54,17 @@ public class GameController : CreateSingletonGameObject<GameController>
         LoadActiveScene();
     }
 
-    private IEnumerator LoadLevel(string name)
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1f;
+    }
+
+    private IEnumerator LoadLevelAsync(string name)
     {
         yield return null;
         AsyncOperation load = SceneManager.LoadSceneAsync(name);
