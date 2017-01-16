@@ -19,6 +19,7 @@ public class MenuSwipe : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            movePanel = false;
             prevFingerPosY = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
         }
         if (Input.GetMouseButton(0))

@@ -8,24 +8,42 @@ public class JumpPoint : MonoBehaviour
     private int m_Line; //линия в которой находится пуш
     [SerializeField]
     private int m_Collumn; //колонка в которой находится пуш
-    // [SerializeField]
-    // private CollectableGO m_PrefBonus; //префаб колетблза на пушере
     [SerializeField]
     private GameInput.PlayerAction m_Action;
-    [SerializeField]
+    [SerializeField, HeaderAttribute("скала из семечки")]
     private bool isSeed = false;
+    [SerializeField, HeaderAttribute("обваливающаяся скала")]
+    private bool canFall = false;
+    private bool isFalling = false;
+    private Rigidbody2D rBody;
 
 
     private float speed; //скорость 
-    // private GameObject bonus; //колектблз на пушере
-    // private bool isCreateBonus=false;
     private Animator anim;
 
     void Start()
     {
+        rBody = GetComponent<Rigidbody2D>();
+
         if (isSeed)
         {
             anim = GetComponent<Animator>();
+        }
+    }
+
+    void OnEnable()
+    {
+        if (canFall)
+        {
+            PlayerBehaviour.PlayerChangeLine += SetFallPusher;
+        }
+    }
+
+    void OnDisable()
+    {
+        if (canFall)
+        {
+            PlayerBehaviour.PlayerChangeLine -= SetFallPusher;
         }
     }
 
@@ -33,45 +51,16 @@ public class JumpPoint : MonoBehaviour
     {
         if (isSeed)
         {
-
             anim.SetBool("CreatePusher", true);
-            // if (Market.Instance.Seeds > 0)
-            // {
-            //     anim.SetBool("CreatePusher", true);
-            // }
-            // else
-            // {
-            //     Destroy(this.gameObject);
-            // }
         }
     }
 
     void Update()
     {
-
-
-        if (LevelGenerator.Instance.IsRunLevel)
+        if (LevelGenerator.Instance.IsRunLevel && !isFalling)
         {
-             MovePusher();
-
-        //     if(isSeed)
-        //     {
-        //         if(!CreatePusher && transform.position.y < Camera.main.transform.position.y + Camera.main.orthographicSize)
-        //         {
-        //             anim.SetBool("CreatePusher", true);
-        //             Market.Instance.Seeds--;
-        //             CreatePusher = true;
-        //         }
-        //     }
+            MovePusher();
         }
-        // if (gameObject.activeSelf && m_PrefBonus && !isCreateBonus)//если пушер активировался, у него есть бонус и он ещё не инициализирован
-        // {
-        //     Vector3 bonusPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        //     bonusPos.y += 0.6f;
-        //     Bonus = Instantiate(PrefBonus.gameObject, bonusPos, transform.rotation) as GameObject;
-        //     Bonus.transform.parent = transform;
-        //     isCreateBonus = true;
-        // }
     }
 
     void MovePusher()
@@ -80,6 +69,15 @@ public class JumpPoint : MonoBehaviour
         this.transform.Translate(Vector2.down * speed * Time.deltaTime);
     }
 
+    public void SetFallPusher(int playerIdLine)
+    {
+        if (m_Line < playerIdLine && rBody)
+        {
+            isFalling = true;
+            rBody.bodyType = RigidbodyType2D.Dynamic;
+            rBody.gravityScale = 1f;
+        }
+    }
 
     //свойства
     public int Line
@@ -97,16 +95,6 @@ public class JumpPoint : MonoBehaviour
         get { return this.speed; }
         set { this.speed = value; }
     }
-    // public GameObject Bonus
-    // {
-    //     get { return this.bonus; }
-    //     set { this.bonus = value; }
-    // }
-    // public CollectableGO PrefBonus
-    // {
-    //     get { return this.m_PrefBonus; }
-    //     set { this.m_PrefBonus = value; }
-    // }
     public bool IsSeed
     {
         get { return this.isSeed; }

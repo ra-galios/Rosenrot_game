@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -8,11 +9,11 @@ public class PlayerBehaviour : MonoBehaviour
     private Rigidbody2D rig2D;
     [SerializeField]
     private int idLine = 0;
+    public static Action<int> PlayerChangeLine;
     [SerializeField]
     private int idCollumn = 1;
     private bool isPlayerFall = false;
     private bool onPlatformAfterFall = true;
-    //private bool playerStaticPush = true;
     private Coroutine LerpCoroutine; //здесь будем хранить выполняющуюся корутину лерпа движения игрока
     private PlayerAnimationController animController;
 
@@ -144,20 +145,11 @@ public class PlayerBehaviour : MonoBehaviour
             Market.Instance.Seeds--;
         }
 
-        // if (hitJumpPoint.Bonus)
-        // {
-        //     CollectableGO bonus = hitJumpPoint.Bonus.GetComponent<CollectableGO>();
-        //     if (!bonus.collected)
-        //     {
-        //         bonus.transform.parent = transform;
-        //         bonus.transform.position += new Vector3(0.04f, 1.5f, 0f);      //бонус над головой Якова
-        //         bonus.EnterBonus();
-        //     }
-        // }
         onPlatformAfterFall = true;
         idLine = hitJumpPoint.Line;
+        if(PlayerChangeLine != null)
+                PlayerChangeLine.Invoke(idLine);
         idCollumn = hitJumpPoint.Collumn;
-        //playerStaticPush = hitObject.layer == 10 ? true : false; // 10 - это layer StaticPushers, со статического пушера упасть нельзя
         LerpCoroutine = null;
         boxColl = true;
     }
