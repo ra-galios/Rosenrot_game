@@ -95,7 +95,7 @@ public class Market : CreateSingletonGameObject<Market>
                     Health++;
                 }
             }
-            m_SecondsUntilHealth -= Time.deltaTime;
+            m_SecondsUntilHealth -= Time.unscaledDeltaTime;
             //print(m_MinutesUntilHealth + " : " + (int)m_SecondsUntilHealth);
             yield return null;
         }

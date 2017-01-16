@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System;
 
@@ -8,18 +8,17 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 {
     public enum PlayerAction { climb, jump, doubleJump, question, climbAfterFall };
     public Action<PlayerAction> PlayerInputAction; //вставляем enum в Action
-    public Action EnemyInputAction;
 
     public PlayerBehaviour playerBeh;
 
     private float firstClickTime { get; set; }
     private Vector2 firstClickPosition { get; set; }
     private Vector2 secondClickPosition { get; set; }
-    private Coroutine Coroutine { get; set; }  //переменная корутины
     private GameObject hitObject;//на что тыкнули
     private Vector2 playerPos;
     private bool clickedOnce;
     private bool readInput;
+    private bool clickOverUI = false;
     private float waitTime;
     private PlayerAction action;
     private LayerMask hitObjectMask = 1537;              //default, pushers, staticPushers
@@ -50,6 +49,8 @@ public class GameInput : CreateSingletonGameObject<GameInput>
         {
             if (Input.GetMouseButtonDown(0))
             {
+                clickOverUI = EventSystem.current.IsPointerOverGameObject();
+
                 CheckClick();
             }
             if (Input.GetMouseButtonUp(0))
@@ -65,13 +66,14 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                 {
                     hitObject.GetComponent<Enemy>().DestroyEnemy();
                 }
-                else
+                else if(!clickOverUI)
                 {
                     CheckDoubleClick();
                     CheckClimbAfterFall();
-                    Debug.Log("Do: " + action);
+                    //Debug.Log("Do: " + action);
                     PlayerInputAction.Invoke(action);
                 }
+
                 clickedPusher = null;
                 clickedOnce = false;        //сбрасываем первый клик
                 readInput = true;
@@ -82,14 +84,14 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 
     private GameObject GetHitObject()
     {
+        
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, hitObjectMask);
         if (hit.transform != null)
         {
-            //print(hitObject.name);
             return hit.transform.gameObject; //объект на который нажали
         }
         else
-        {
+        {        
             return null;
         }
 

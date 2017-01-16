@@ -33,7 +33,6 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         }
         if (gameData == null)
         {
-            print("init");
             gameData = new GameData();
             gameData.LevelsData = new LevelData[GameController.Instance.totalGameLevels];
             SetData();
