@@ -20,7 +20,6 @@ public class JumpPoint : MonoBehaviour
     // private GameObject bonus; //колектблз на пушере
     // private bool isCreateBonus=false;
     private Animator anim;
-    private bool CreatePusher = false;
 
     void Start()
     {
@@ -35,11 +34,14 @@ public class JumpPoint : MonoBehaviour
         if (isSeed)
         {
 
-            if (!CreatePusher)
+            if (Market.Instance.Seeds > 0)
             {
                 anim.SetBool("CreatePusher", true);
                 Market.Instance.Seeds--;
-                CreatePusher = true;
+            }
+            else
+            {
+                Destroy(this.gameObject);
             }
         }
     }

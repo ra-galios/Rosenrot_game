@@ -66,11 +66,11 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                 {
                     hitObject.GetComponent<Enemy>().DestroyEnemy();
                 }
-                else if(!clickOverUI)
+                else if(!clickOverUI && Time.timeScale > 0f)
                 {
                     CheckDoubleClick();
                     CheckClimbAfterFall();
-                    //Debug.Log("Do: " + action);
+                    Debug.Log("Do: " + action);
                     PlayerInputAction.Invoke(action);
                 }
 

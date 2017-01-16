@@ -143,8 +143,6 @@ public class LevelGenerator : MonoBehaviour
                     canCreate = false;
                     break;
                 }
-
-                yield return null;
             }
 
             if (canCreate)  //построить декорацию
@@ -189,6 +187,7 @@ public class LevelGenerator : MonoBehaviour
 
             bool[] SetCol = new bool[m_StartPositions.Length]; ; //флаги занятых колонок, для избежания создания пушеров в одной колонке
             int countPushersInLine = Random.Range(1, MaxItemsInLine + 1);   //кол-во пушеров на линии
+            countPushersInLine = Mathf.Clamp(countPushersInLine, 0, Market.Instance.Seeds);
 
             parentLine = new GameObject();                 //новая линия, будет родителем пушера/ов
             parentLine.transform.parent = pushersParent.transform;
