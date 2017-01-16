@@ -57,7 +57,8 @@ public class GameController : CreateSingletonGameObject<GameController>
     public void FailGame()
     {
         //FailPanelAnim.SetTrigger("Achievement");
-        PauseGame();
+        //PauseGame();
+        LoadActiveScene();
     }
 
     public void WinGame()
