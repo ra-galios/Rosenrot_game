@@ -10,4 +10,6 @@ public class GameData{
 	public int bombs;
 	public int diamonds;
 	public int rubies;
+
+    public int[] achievements;
 }
