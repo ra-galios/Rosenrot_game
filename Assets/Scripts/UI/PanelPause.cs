@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine;
 
-public class MenuPause : MonoBehaviour
+public class PanelPause : MonoBehaviour
 {
 
     [SerializeField]

@@ -15,6 +15,8 @@ public class GameController : CreateSingletonGameObject<GameController>
     public Animator VictoryPanelAnim;
     [HideInInspector]
     public Animator FailPanelAnim;
+    [HideInInspector]
+    public Animator FailDeadJacobAnim;
 
 
     // Use this for initialization
@@ -44,7 +46,6 @@ public class GameController : CreateSingletonGameObject<GameController>
         StartCoroutine(LoadLevelAsync(name));
     }
 
-
     public void LoadMainScene()
     {
         if (SceneManager.GetActiveScene().buildIndex != 0)
@@ -54,16 +55,27 @@ public class GameController : CreateSingletonGameObject<GameController>
         }
     }
 
+    public void LoadNextLevel()
+    {
+        if(levelsData[currentLevel].diamondsCollected == levelsData[currentLevel].isCollected.Length)
+        {
+            SceneManager.LoadScene("LoadingScene");
+            StartCoroutine(LoadLevelAsync(SceneManager.GetSceneAt(SceneManager.GetActiveScene().buildIndex + 1).name));
+        }
+    }
+
+
     public void FailGame()
     {
-        //FailPanelAnim.SetTrigger("Achievement");
-        //PauseGame();
-        LoadActiveScene();
+        FailPanelAnim.SetTrigger("Fail");
+        FailDeadJacobAnim.SetTrigger("Dead");
+        PauseGame();
     }
 
     public void WinGame()
     {
-        LoadActiveScene();
+        VictoryPanelAnim.SetTrigger("Fail");
+        PauseGame();
     }
 
     public void PauseGame()

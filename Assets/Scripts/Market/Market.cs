@@ -9,7 +9,7 @@ public class Market : CreateSingletonGameObject<Market>
 
     private DateManager m_DateManager = new DateManager();
     private int m_MaxHealth = 5;
-    private int timeSetHealth = 5;
+    private int timeSetHealth = 5;  //минут до восполнения жизни
     private int m_Seeds;//семечки
     private int m_Bomb;//порох/бомбочка
     [SerializeField]
@@ -17,15 +17,9 @@ public class Market : CreateSingletonGameObject<Market>
     private int m_Ruby;//рубин
     private int m_MinutesUntilHealth;
     private float m_SecondsUntilHealth;
-    private string timeChangeHealth = null;
     private const float secondsInMinute = 60f;
     private Coroutine timerCoroutine = null;
     private int curentlyAddHealth = 0;
-
-    // void OnLevelWasLoaded()
-    // {
-    //     m_LocalDiamond = 0;
-    // }
 
     void Start()
     {
@@ -36,7 +30,7 @@ public class Market : CreateSingletonGameObject<Market>
     {
         if (Health < m_MaxHealth)
         {
-            timeChangeHealth = m_DateManager.GetPlayerDate("Date");
+            string timeChangeHealth = m_DateManager.GetPlayerDate("Date");
 
             if (timeChangeHealth != null && timeChangeHealth != "")
             {

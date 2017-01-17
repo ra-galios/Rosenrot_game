@@ -247,7 +247,7 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
-    private int CurrentLinesInScene()
+    public int CurrentLinesInScene()
     {
         return m_LastRock.GetComponent<JumpPoint>().Line;
     }
@@ -319,12 +319,6 @@ public class LevelGenerator : MonoBehaviour
     {
         get { return m_MaxItemsInLine; }
         set { m_MaxItemsInLine = value; }
-    }
-
-    public int CurrentLinesCount
-    {
-        get { return currentLinesCount; }
-        set { currentLinesCount = value; }
     }
 
     public bool IsRunLevel

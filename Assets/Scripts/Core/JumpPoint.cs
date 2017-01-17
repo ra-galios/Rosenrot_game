@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 
 public class JumpPoint : MonoBehaviour
 {
@@ -9,6 +7,8 @@ public class JumpPoint : MonoBehaviour
     [SerializeField]
     private int m_Collumn; //колонка в которой находится пуш
     [SerializeField]
+    private CollectableGO m_PrefBonus; //префаб колетблза на пушере
+    [SerializeField]
     private GameInput.PlayerAction m_Action;
     [SerializeField, HeaderAttribute("скала из семечки")]
     private bool isSeed = false;
@@ -16,6 +16,7 @@ public class JumpPoint : MonoBehaviour
     private bool canFall = false;
     private bool isFalling = false;
     private Rigidbody2D rBody;
+    private bool isCreateBonus = false;
 
 
     private float speed; //скорость 
@@ -60,6 +61,15 @@ public class JumpPoint : MonoBehaviour
         if (LevelGenerator.Instance.IsRunLevel && !isFalling)
         {
             MovePusher();
+        }
+
+        if (gameObject.activeSelf && m_PrefBonus && !isCreateBonus)//если пушер активировался, у него есть бонус и он ещё не инициализирован
+        {
+            Vector3 bonusPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            bonusPos.y += 1.4f;
+            GameObject Bonus = Instantiate(m_PrefBonus.gameObject, bonusPos, transform.rotation) as GameObject;
+            Bonus.transform.parent = transform;
+            isCreateBonus = true;
         }
     }
 
