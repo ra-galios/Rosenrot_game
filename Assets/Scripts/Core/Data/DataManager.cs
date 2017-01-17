@@ -68,4 +68,22 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         gameData.rubies = Market.Instance.Ruby;
         gameData.LevelsData = GameController.Instance.levelsData;
     }
+
+    public void SetAchievement(int index, int val)
+    {
+        if(index > (gameData.achievements.Length - 1))
+        {
+            Array.Resize(ref gameData.achievements, index + 1);
+        }
+        gameData.achievements[index] = val;
+    }
+
+    public int GetAchievement(int index)
+    {
+        if(index > (gameData.achievements.Length - 1))
+        {
+            Array.Resize(ref gameData.achievements, index + 1);
+        }
+        return gameData.achievements[index];
+    }
 }
