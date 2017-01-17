@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 
 public class Market : CreateSingletonGameObject<Market>
 {
@@ -108,12 +107,6 @@ public class Market : CreateSingletonGameObject<Market>
         m_DateManager.SetPlayerDate(null);
     }
 
-    public void AddHealth(int val)
-    {
-        Health += val;
-        CheckHealth();
-    }
-
     //свойства
     public int Health
     {
@@ -136,6 +129,7 @@ public class Market : CreateSingletonGameObject<Market>
         set
         {
             curentlyAddHealth = value;
+            CheckHealth();
         }
     }
 

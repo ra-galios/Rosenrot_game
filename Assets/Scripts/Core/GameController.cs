@@ -11,18 +11,26 @@ public class GameController : CreateSingletonGameObject<GameController>
     public int totalGameLevels = 14;
     public PlayerBehaviour playerBeh = null;
 
-    [HideInInspector]
-    public Animator VictoryPanelAnim;
-    [HideInInspector]
-    public Animator FailPanelAnim;
-    [HideInInspector]
-    public Animator FailDeadJacobAnim;
+    private Animator victoryPanelAnim;
+    private Animator failPanelAnim;
+    private Animator failDeadJacobAnim;
 
+    private int diamondsCollectedOnLevel;
+    private int rubiesCollectedOnLevel;
+    private int seedsCollectedOnLevel;
+    private int bombsCollectedOnLevel;
 
     // Use this for initialization
     void OnEnable()
     {
         GetData();
+
+        SceneManager.sceneLoaded += ClearLocalBonuses;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= ClearLocalBonuses;
     }
 
     void Update()
@@ -64,7 +72,6 @@ public class GameController : CreateSingletonGameObject<GameController>
         }
     }
 
-
     public void FailGame()
     {
         FailPanelAnim.SetTrigger("Fail");
@@ -96,13 +103,20 @@ public class GameController : CreateSingletonGameObject<GameController>
             yield return null;
     }
 
-
     void GetData()
     {
         if (Market.Instance != null)     //если маркет загружен
         {
             DataManager.Instance.LoadGameData();
         }
+    }
+
+    private void ClearLocalBonuses(Scene scene, LoadSceneMode mode)
+    {
+        DiamondsCollectedOnLevel = 0;
+        RubiesCollectedOnLevel = 0;
+        SeedsCollectedOnLevel = 0;
+        BombsCollectedOnLevel = 0;
     }
 
     void OnApplicationQuit()
@@ -114,5 +128,47 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         get { return currentLevel; }
         set { currentLevel = value; }
+    }
+
+    public Animator VictoryPanelAnim
+    {
+        get { return victoryPanelAnim; }
+        set { victoryPanelAnim = value; }
+    }
+
+    public Animator FailPanelAnim
+    {
+        get { return failPanelAnim; }
+        set { failPanelAnim = value; }
+    }
+
+    public Animator FailDeadJacobAnim
+    {
+        get { return failDeadJacobAnim; }
+        set { failDeadJacobAnim = value; }
+    }
+
+    public int DiamondsCollectedOnLevel
+    {
+        get { return diamondsCollectedOnLevel; }
+        set { diamondsCollectedOnLevel = value; }
+    }
+
+    public int RubiesCollectedOnLevel
+    {
+        get { return rubiesCollectedOnLevel; }
+        set { rubiesCollectedOnLevel = value; }
+    }
+
+    public int SeedsCollectedOnLevel
+    {
+        get { return seedsCollectedOnLevel; }
+        set { seedsCollectedOnLevel = value; }
+    }
+
+    public int BombsCollectedOnLevel
+    {
+        get { return bombsCollectedOnLevel; }
+        set { bombsCollectedOnLevel = value; }
     }
 }

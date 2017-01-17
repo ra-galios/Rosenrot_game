@@ -6,6 +6,7 @@ public class Bomb : CollectableGO
     public override void EnterBonus()
     {
         base.EnterBonus();
+        GameController.Instance.BombsCollectedOnLevel++;
         Market.Instance.Bomb++;
     }
 

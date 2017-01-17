@@ -8,5 +8,6 @@ public class Ruby : CollectableGO
     {
         base.EnterBonus();
         Market.Instance.Ruby++;
+        GameController.Instance.RubiesCollectedOnLevel++;
     }
 }

@@ -19,6 +19,11 @@ public class PanelFail : MonoBehaviour {
         GameController.Instance.FailDeadJacobAnim = deadJacobAnim; 
 	}
 
+    void Update()
+    {
+        health.text = Market.Instance.Health.ToString();
+    }
+
     void OnEnable()
     {
         restartButton.onClick.AddListener(GameController.Instance.LoadActiveScene);

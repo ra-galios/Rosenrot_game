@@ -6,7 +6,8 @@ public class Victory : MonoBehaviour {
     private PlayerBehaviour player;
 
 	// Update is called once per frame
-	void Update () {
+	void Update ()                //!!!
+    {
         if (GameController.Instance.playerBeh.IdLine == LevelGenerator.Instance.CurrentLinesInScene())
         {
             print("Victory");

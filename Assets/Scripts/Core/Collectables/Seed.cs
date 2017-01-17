@@ -7,5 +7,6 @@ public class Seed : CollectableGO
     {
         base.EnterBonus();
         Market.Instance.Seeds++;
+        GameController.Instance.SeedsCollectedOnLevel++;
     }
 }

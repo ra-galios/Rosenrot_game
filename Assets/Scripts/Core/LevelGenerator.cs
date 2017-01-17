@@ -114,7 +114,7 @@ public class LevelGenerator : MonoBehaviour
         if (Market.Instance.Health > 0)//если есть жизни, то можно играть
         {
             IsRunLevel = true;
-            Market.Instance.AddHealth(-1); //отнимаем одну использованную жизнь, т.к. запустили левел
+            Market.Instance.Health--; //отнимаем одну использованную жизнь, т.к. запустили левел
             StartCoroutine("GeneratorLines");
             //StartCoroutine("CreateDecor");
         }

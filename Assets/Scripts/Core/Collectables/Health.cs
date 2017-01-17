@@ -6,6 +6,6 @@ public class Health : CollectableGO
     public override void EnterBonus()
     {
         base.EnterBonus();
-        Market.Instance.AddHealth(1);
+        Market.Instance.Health++;
     }
 }

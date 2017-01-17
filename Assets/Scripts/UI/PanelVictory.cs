@@ -28,6 +28,16 @@ public class PanelVictory : MonoBehaviour
         GameController.Instance.VictoryPanelAnim = GetComponent<Animator>();
     }
 
+    public void Update()
+    {
+        health.text = Market.Instance.Health.ToString();
+
+        rubiesCollected.text = "+" + GameController.Instance.RubiesCollectedOnLevel.ToString();
+        diamondsCollected.text = "+" + GameController.Instance.DiamondsCollectedOnLevel.ToString();
+        bombsCollected.text = "+" + GameController.Instance.BombsCollectedOnLevel.ToString();
+        seedsCollected.text = "+" + GameController.Instance.SeedsCollectedOnLevel.ToString();
+    }
+
     void OnEnable()
     {
         restartButton.onClick.AddListener(GameController.Instance.LoadActiveScene);
