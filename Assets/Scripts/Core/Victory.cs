@@ -8,7 +8,7 @@ public class Victory : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()                //!!!
     {
-        if (GameController.Instance.playerBeh.IdLine == LevelGenerator.Instance.CurrentLinesInScene())
+        if (GameController.Instance.playerBeh.IdLine == LevelGenerator.Instance.MaxLines)
         {
             print("Victory");
             GameController.Instance.WinGame();

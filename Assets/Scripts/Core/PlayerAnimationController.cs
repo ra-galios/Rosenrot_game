@@ -16,7 +16,7 @@ public class PlayerAnimationController : MonoBehaviour {
     {
         if(action == GameInput.PlayerAction.climb)
         {
-            playerAnimator.SetTrigger("Grab");
+            playerAnimator.SetTrigger("Jump");
         }
         else if(action == GameInput.PlayerAction.jump)
         {

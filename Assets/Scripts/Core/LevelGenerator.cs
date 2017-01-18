@@ -247,9 +247,22 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
-    public int CurrentLinesInScene()
+    private int CurrentLinesInScene()
     {
-        return m_LastRock.GetComponent<JumpPoint>().Line;
+        int maxIdLine = 0;
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("Pusher");
+
+        foreach (GameObject item in objs)
+        {
+            var line = item.GetComponent<JumpPoint>().Line;
+            if(maxIdLine < line)
+            {
+                maxIdLine = line;
+                m_LastRock = item;
+            }
+        }
+
+        return maxIdLine;
     }
 
     private JumpPoint[] identifyTypeOfJumpPoint(int countPushersInLine, int posNewRock)

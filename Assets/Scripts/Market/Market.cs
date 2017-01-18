@@ -35,7 +35,7 @@ public class Market : CreateSingletonGameObject<Market>
             {
                 int passedMinutes = m_DateManager.HowTimePassed(timeChangeHealth, DateManager.DateType.minutes);        //прошло минут с прошедшего запуска
                 int passedSeconds = m_DateManager.HowTimePassed(timeChangeHealth, DateManager.DateType.seconds);
-                print(m_Health + " " + ((int)passedMinutes / TimeSetHealth - curentlyAddHealth));
+                //print(m_Health + " " + ((int)passedMinutes / TimeSetHealth - curentlyAddHealth));
 
                 Health += (int)passedMinutes / TimeSetHealth - curentlyAddHealth;
                 curentlyAddHealth = (int)passedMinutes / TimeSetHealth;
@@ -117,6 +117,7 @@ public class Market : CreateSingletonGameObject<Market>
         set
         {
             m_Health = value;//добавляем жизней
+            //CheckHealth();
         }
     }
 
@@ -129,7 +130,6 @@ public class Market : CreateSingletonGameObject<Market>
         set
         {
             curentlyAddHealth = value;
-            CheckHealth();
         }
     }
 

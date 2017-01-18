@@ -30,6 +30,16 @@ public class PanelVictory : MonoBehaviour
 
     public void Update()
     {
+        if (Market.Instance.Health < 1)
+        {
+            restartButton.interactable = false;
+            nextLevelButton.interactable = false;
+        }
+        else
+        {
+            restartButton.interactable = true;
+        }
+
         health.text = Market.Instance.Health.ToString();
 
         rubiesCollected.text = "+" + GameController.Instance.RubiesCollectedOnLevel.ToString();

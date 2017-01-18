@@ -70,7 +70,7 @@ public class GameInput : CreateSingletonGameObject<GameInput>
                 {
                     CheckDoubleClick();
                     CheckClimbAfterFall();
-                    Debug.Log("Do: " + action);
+                    //Debug.Log("Do: " + action);
                     PlayerInputAction.Invoke(action);
                 }
 
