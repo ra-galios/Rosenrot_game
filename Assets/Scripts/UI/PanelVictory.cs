@@ -30,15 +30,21 @@ public class PanelVictory : MonoBehaviour
 
     public void Update()
     {
+        restartButton.interactable = true;
+        nextLevelButton.interactable = true;
+
         if (Market.Instance.Health < 1)
         {
             restartButton.interactable = false;
             nextLevelButton.interactable = false;
         }
-        else
+
+
+        if(GameController.Instance.levelsData[GameController.Instance.CurrentLevel].diamondsCollected != GameController.Instance.levelsData[GameController.Instance.CurrentLevel].isCollected.Length)
         {
-            restartButton.interactable = true;
+            nextLevelButton.interactable = false;
         }
+
 
         health.text = Market.Instance.Health.ToString();
 
