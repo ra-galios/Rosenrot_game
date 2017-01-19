@@ -20,5 +20,5 @@
 			previewValue = GetItemCount();
 			m_ItemText.text = previewValue.ToString();
 		}
-	}
+	}	
 }

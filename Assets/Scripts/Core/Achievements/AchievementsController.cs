@@ -48,9 +48,9 @@ public static class AchievementsController
 		DataManager.Instance.SetAchievement((int)type, -1);
 	}
 
-	public static int GetAchievement(Type type)
+	public static int GetAchievement(Type type, int level = 0)
 	{
-		return DataManager.Instance.GetAchievement((int)type);
+		return DataManager.Instance.GetAchievement((int)type + level);
 	}
 
 	public static bool CheckAchievement(Type type, int currentValue)
@@ -65,12 +65,22 @@ public static class AchievementsController
 		return false;
 	}
 
-	public static bool CheckAchievementComplete(Type type)
+	public static bool CheckAchievementComplete(Type type, int level = 0)
 	{
-		if(GetAchievement(type) < 0)
+		if(GetAchievement(type, level) < 0)
 		{
 			return true;
 		}
 		return false;
+	}
+
+	public static void GetRevard(Type type, out int revard)
+	{
+		revard = 0;		
+	}
+
+	public static void GetRevard(Type type, out int[] revards)
+	{
+		revards = new int[3] {0, 0, 0};		
 	}
 }

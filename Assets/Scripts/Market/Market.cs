@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class Market : CreateSingletonGameObject<Market>
-{
+{    
+
     [SerializeField]
     private int m_Health;
 
