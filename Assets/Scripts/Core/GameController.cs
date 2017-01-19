@@ -20,6 +20,8 @@ public class GameController : CreateSingletonGameObject<GameController>
     private int seedsCollectedOnLevel;
     private int bombsCollectedOnLevel;
 
+    private bool isBonusLevel = false;
+
     // Use this for initialization
     void OnEnable()
     {
