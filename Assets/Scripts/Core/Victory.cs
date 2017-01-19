@@ -1,18 +1,29 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class Victory : MonoBehaviour {
-    private PlayerBehaviour player;
-    private bool isVictory = false;
 
-	// Update is called once per frame
-	void Update ()                //!!!
+    private List<int> achievementsToShow = new List<int>();
+
+    void OnEnable()
     {
-        if (GameController.Instance.playerBeh.IdLine == LevelGenerator.Instance.MaxLines && !isVictory)
+        PlayerBehaviour.PlayerChangeLine += CheckWin;
+    }
+
+    void OnDisable()
+    {
+        PlayerBehaviour.PlayerChangeLine -= CheckWin;
+    }
+
+    void CheckWin(int playerIdLine)
+    {
+        if (playerIdLine == LevelGenerator.Instance.MaxLines)
         {
+            GameObject achievementsPrefab = Resources.Load("Achievements", typeof(GameObject)) as GameObject;
+
+
             GameController.Instance.WinGame();
-            isVictory = true;
         }
-	}
+    }
 }

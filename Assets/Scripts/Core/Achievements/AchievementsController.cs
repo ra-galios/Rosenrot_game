@@ -33,8 +33,6 @@ public static class AchievementsController
 		NeverGiveUp = 39,
 		GotHigh = 42,
 		Adept = 45,
-		
-
 	}
 
 	public static void AddToAchievement(Type type, int addValue)
