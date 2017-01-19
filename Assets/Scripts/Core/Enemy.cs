@@ -44,8 +44,11 @@ public class Enemy : MonoBehaviour {
         {
             GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
             bomb.transform.parent = transform;
-            bomb.GetComponent<Bomb>().Action();
-            Destroy(this.gameObject, .35f);
+            bomb.GetComponent<Bomb>().Action();              
+        Animator anim = GetComponent<Animator>();
+        anim.SetBool("boom", true);
+ 
+            Destroy(this.gameObject, 1f);
         }
     }
 

@@ -85,7 +85,10 @@ public class JumpPoint : MonoBehaviour
         {
             isFalling = true;
             rBody.bodyType = RigidbodyType2D.Dynamic;
-            rBody.gravityScale = 1f;
+            Animator anim = GetComponent<Animator>();
+            anim.SetBool("falling 0", true);
+            anim.SetBool("falling", true);
+                 rBody.gravityScale = 1f;
         }
     }
 
