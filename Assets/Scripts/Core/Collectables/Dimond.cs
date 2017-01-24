@@ -9,7 +9,7 @@ public class Dimond : CollectableGO
         Market.Instance.Dimond++;
         GameController.Instance.DiamondsCollectedOnLevel++;
 
-        GameController.Instance.levelsData[GameController.Instance.CurrentLevel].diamondsCollected++;
+        GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].diamondsCollected++;
 
         if (LevelDiamondKeeper.Instance != null)
             LevelDiamondKeeper.Instance.SetCollected(this);

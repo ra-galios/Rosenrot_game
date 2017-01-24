@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Victory : MonoBehaviour
 {
 
-    public static List<int> achievementsToShow = new List<int>();
+    //public static List<int> achievementsToShow = new List<int>();
 
     void OnEnable()
     {
@@ -15,6 +15,19 @@ public class Victory : MonoBehaviour
     void OnDisable()
     {
         PlayerBehaviour.PlayerChangeLine -= CheckWin;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            AchievementsController.AddToAchievement(AchievementsController.Type.RubyRubyRubyRuby, 1);
+            //DataManager.Instance.SetAchievement((int)AchievementsController.Type.RubyRubyRubyRuby, 0);
+            print("showList length: " + GameController.Instance.AchievementsToShow.Count);
+            if (GameController.Instance.AchievementsToShow.Count == 1)
+                print("showList value: " + GameController.Instance.AchievementsToShow[0]);
+            print("ach value: " + AchievementsController.GetAchievement(AchievementsController.Type.RubyRubyRubyRuby));
+        }
     }
 
     void CheckWin(int playerIdLine)

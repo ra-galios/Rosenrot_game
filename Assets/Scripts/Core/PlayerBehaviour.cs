@@ -24,7 +24,7 @@ public class PlayerBehaviour : MonoBehaviour
     void Awake()
     {
         GameInput.Instance.playerBeh = this;
-        GameController.Instance.playerBeh = this;
+        GameController.Instance.PlayerBeh = this;
         animController = GetComponentInChildren<PlayerAnimationController>();
         rig2D = GetComponent<Rigidbody2D>();
     }

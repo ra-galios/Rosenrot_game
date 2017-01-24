@@ -1,28 +1,39 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameController : CreateSingletonGameObject<GameController>
 {
 
     private int currentLevel;
 
-    public LevelData[] levelsData;
-    public int totalGameLevels = 14;
-    public PlayerBehaviour playerBeh = null;
+    [SerializeField]
+    private LevelData[] levelsData;
+    [SerializeField]
+    private int totalGameLevels = 14;
+    [SerializeField]
+    private PlayerBehaviour playerBeh = null;
 
     private Animator victoryPanelAnim;
     private Animator failPanelAnim;
     private Animator failDeadJacobAnim;
 
+    private static List<int> achievementsToShow = new List<int>();
     private int diamondsCollectedOnLevel;
     private int rubiesCollectedOnLevel;
     private int seedsCollectedOnLevel;
     private int bombsCollectedOnLevel;
+    private AchievementRevards achievementRevards;
 
     private bool isBonusLevel = false;
 
-    // Use this for initialization
+    void LoadResources()
+    {
+        GameObject achievementsPrefab = Resources.Load("Achievements", typeof(GameObject)) as GameObject;
+        achievementRevards = achievementsPrefab.GetComponent<AchievementRevards>();
+    }
+
     void OnEnable()
     {
         GetData();
@@ -67,7 +78,7 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void LoadNextLevel()
     {
-        if(levelsData[currentLevel].diamondsCollected == levelsData[currentLevel].isCollected.Length)
+        if (LevelsData[currentLevel].diamondsCollected == LevelsData[currentLevel].isCollected.Length)
         {
             SceneManager.LoadScene("LoadingScene");
             StartCoroutine(LoadLevelAsync(SceneManager.GetSceneAt(SceneManager.GetActiveScene().buildIndex + 1).name));
@@ -172,5 +183,44 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         get { return bombsCollectedOnLevel; }
         set { bombsCollectedOnLevel = value; }
+    }
+
+    public List<int> AchievementsToShow
+    {
+        get { return achievementsToShow; }
+        set { achievementsToShow = value; }
+    }
+
+    public PlayerBehaviour PlayerBeh
+    {
+        get { return playerBeh; }
+        set { playerBeh = value; }
+    }
+
+    public int TotalGameLevels
+    {
+        get { return totalGameLevels; }
+    }
+
+    public LevelData[] LevelsData
+    {
+        get { return levelsData; }
+        set { levelsData = value; }
+    }
+
+    public AchievementRevards AchievementRevards
+    {
+        get
+        {
+            if (achievementRevards)
+            {
+                return achievementRevards;
+            }
+            else
+            {
+                LoadResources();
+                return achievementRevards;
+            }
+        }
     }
 }

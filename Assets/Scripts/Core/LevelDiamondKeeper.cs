@@ -17,14 +17,14 @@ public class LevelDiamondKeeper : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		if(diamonds.Length != GameController.Instance.levelsData[GameController.Instance.CurrentLevel].isCollected.Length)
+		if(diamonds.Length != GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].isCollected.Length)
 		{
-			GameController.Instance.levelsData[GameController.Instance.CurrentLevel] = new LevelData(diamonds.Length);
+			GameController.Instance.LevelsData[GameController.Instance.CurrentLevel] = new LevelData(diamonds.Length);
 		}
 
         for (int i = 0; i < diamonds.Length; i++)
         {
-            if (GameController.Instance.levelsData[GameController.Instance.CurrentLevel].isCollected[i])
+            if (GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].isCollected[i])
             {
                 diamonds[i].gameObject.SetActive(false);
             }
@@ -38,7 +38,7 @@ public class LevelDiamondKeeper : MonoBehaviour
         {
             if (colDiamond == diamonds[i])
             {
-                GameController.Instance.levelsData[GameController.Instance.CurrentLevel].isCollected[i] = true;
+                GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].isCollected[i] = true;
             }
         }
     }

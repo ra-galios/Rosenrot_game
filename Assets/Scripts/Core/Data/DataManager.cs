@@ -34,7 +34,7 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         if (gameData == null)
         {
             gameData = new GameData();
-            gameData.LevelsData = new LevelData[GameController.Instance.totalGameLevels];
+            gameData.LevelsData = new LevelData[GameController.Instance.TotalGameLevels];
             SetData();
         }
     }
@@ -47,14 +47,14 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         Market.Instance.Bomb = gameData.bombs;
         Market.Instance.Dimond = gameData.diamonds;
         Market.Instance.Ruby = gameData.rubies;
-        if(gameData.LevelsData.Length != GameController.Instance.totalGameLevels)
+        if(gameData.LevelsData.Length != GameController.Instance.TotalGameLevels)
         {
-            Array.Resize(ref gameData.LevelsData, GameController.Instance.totalGameLevels);
-            GameController.Instance.levelsData = gameData.LevelsData;
+            Array.Resize(ref gameData.LevelsData, GameController.Instance.TotalGameLevels);
+            GameController.Instance.LevelsData = gameData.LevelsData;
         }
         else
         {
-            GameController.Instance.levelsData = gameData.LevelsData;
+            GameController.Instance.LevelsData = gameData.LevelsData;
         }
     }
 
@@ -66,7 +66,7 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         gameData.bombs = Market.Instance.Bomb;
         gameData.diamonds = Market.Instance.Dimond;
         gameData.rubies = Market.Instance.Ruby;
-        gameData.LevelsData = GameController.Instance.levelsData;
+        gameData.LevelsData = GameController.Instance.LevelsData;
     }
 
     public void SetAchievement(int index, int val)

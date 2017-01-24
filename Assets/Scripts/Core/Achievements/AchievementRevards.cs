@@ -6,12 +6,13 @@ using UnityEngine;
 public struct Achievement
 {
     public AchievementsController.Type m_Achievement;
-    public int m_Revard;
+    public string m_Title;
+    public string m_Description;
+    public Sprite m_LockedSprite;   //только для списка в меню
+    public Sprite[] m_LeveledSprites;
     public int[] m_NeedToAchieve;
+    public AchievementsController.RewardType m_RevardType;   //тип награды
     public int[] m_LeveledRevards;
-    public MarketItem RevardItem;
-    public int RevardCount;
-
 }
 
 public class AchievementRevards : MonoBehaviour
