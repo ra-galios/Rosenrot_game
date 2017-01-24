@@ -6,11 +6,12 @@ using UnityEngine.UI;
 public class AchievementUI_Base : MonoBehaviour
 {
 
-    protected AchievementsController.Type m_Achievement;
+    //protected AchievementsController.Type m_Achievement;
+    [SerializeField]
     protected Image m_Image;
-    protected Text m_NeedToNextLeveledAch;
-    protected Text m_Revards;
+    [SerializeField]
     protected Text m_Title;
+    [SerializeField]
     protected Text m_Description;
 
 
@@ -58,13 +59,8 @@ public class AchievementUI_Base : MonoBehaviour
         m_Description.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Description;
     }
 
-	protected virtual void GetReward(AchievementsController.RewardType rewardType)
-	{
+    public virtual void Show()
+    {
 
-	}
-
-	public virtual void Show()
-	{
-		
-	}
+    }
 }
