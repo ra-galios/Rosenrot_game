@@ -86,4 +86,9 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         }
         return gameData.achievements[index];
     }
+
+    public int GetAchievementsDataLength()
+    {
+        return gameData.achievements.Length;
+    }
 }

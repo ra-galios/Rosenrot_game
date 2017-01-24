@@ -249,7 +249,6 @@ public class LevelGenerator : MonoBehaviour
 
     private int CurrentLinesInScene()
     {
-        print("in idLine");
         int maxIdLine = 0;
         GameObject[] objs = GameObject.FindGameObjectsWithTag("Pusher");
 
