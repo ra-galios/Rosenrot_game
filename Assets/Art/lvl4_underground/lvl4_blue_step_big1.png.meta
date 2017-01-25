@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b1fc3d859982d8b4ab7f1fa7bdf9f049
-timeCreated: 1479590774
+guid: a089605e23ad2844d91a8e0c62e2e8b9
+timeCreated: 1479591249
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -70,7 +70,7 @@ TextureImporter:
     serializedVersion: 2
     sprites: []
     outline: []
-  spritePackingTag: lvl3-falling
+  spritePackingTag: lvl4_underground
   userData: 
   assetBundleName: 
   assetBundleVariant: 
