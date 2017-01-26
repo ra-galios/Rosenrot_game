@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class AchievementUI_Base : MonoBehaviour
 {
 
-    protected AchievementsController.Type m_Achievement;
+    //protected AchievementsController.Type m_Achievement;
+    [SerializeField]
     protected Image m_Image;
-    protected Text m_NeedToNextLeveledAch;
-    protected Text m_Revards;
+    [SerializeField]
     protected Text m_Title;
+    [SerializeField]
     protected Text m_Description;
-
 
     protected void Start()
     {
@@ -34,37 +34,46 @@ public class AchievementUI_Base : MonoBehaviour
 
     protected virtual Sprite GetSprite(int indexInResource)
     {
+        int level = GetAchievementLevel(indexInResource);
+
+        if (level >= 0)
+        {
+            return GameController.Instance.AchievementRevards.Achievements[indexInResource].m_LeveledSprites[level];
+        }
+        else
+        {
+            return GameController.Instance.AchievementRevards.Achievements[indexInResource].m_LockedSprite;
+        }
+    }
+
+    protected virtual int GetAchievementLevel(int indexInResource)
+    {
         int[] needToAchieve = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_NeedToAchieve;
         int currentValue = AchievementsController.GetAchievement(GetType(indexInResource));
 
+        int level = -1;  //locked
+
         for (int i = (needToAchieve.Length - 1); i >= 0; i--)
         {
-            if (currentValue > needToAchieve[i])
+            if (currentValue >= needToAchieve[i])
             {
-                return GameController.Instance.AchievementRevards.Achievements[indexInResource].m_LeveledSprites[i];
+                return i;
             }
         }
 
-        return GameController.Instance.AchievementRevards.Achievements[indexInResource].m_LockedSprite;
+        return level;
     }
 
     protected virtual void SetFields(int indexInResource)
     {
-        //m_Achievement = GetType(indexInResource);
-
         m_Image.sprite = GetSprite(indexInResource);
 
         m_Title.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Title;
         m_Description.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Description;
     }
 
-	protected virtual void GetReward(AchievementsController.RewardType rewardType)
-	{
+    public virtual void Show()
+    {
 
-	}
-
-	public virtual void Show()
-	{
-		
-	}
+    }
 }
