@@ -18,10 +18,18 @@ public struct Achievement
 public class AchievementRevards : MonoBehaviour
 {
     [SerializeField]
+    private Sprite[] m_RewardSprites;
+
+    [SerializeField]
     private Achievement[] m_Achievements;
 
     public Achievement[] Achievements
     {
         get { return m_Achievements; }
+    }
+
+    public Sprite[] RewardSprites
+    {
+        get { return m_RewardSprites; }
     }
 }

@@ -35,7 +35,7 @@ public static class AchievementsController
         Adept = 45,
     }
 
-    public enum RewardType {Diamonds, Rubies, Seeds, Bombs, Health}
+    public enum RewardType { Diamonds, Rubies, Seeds, Bombs, Health }
 
 
     public static void AddToAchievement(Type type, int addValue)
@@ -53,8 +53,10 @@ public static class AchievementsController
 
         for (int j = 0; j < achievementInform.m_NeedToAchieve.Length; j++)
         {
-            if (curVal >= achievementInform.m_NeedToAchieve[j] && prevVal < achievementInform.m_NeedToAchieve[j])
+            if (curVal >= achievementInform.m_NeedToAchieve[j] && prevVal < achievementInform.m_NeedToAchieve[j])      //открыли ачивку
             {
+                GetRevard(achievementInform.m_RevardType, achievementInform.m_LeveledRevards[j]);       //получили награду
+
                 if (!GameController.Instance.AchievementsToShow.Contains(numberInResourcePrefab))
                     GameController.Instance.AchievementsToShow.Add(numberInResourcePrefab);      //добавить номер награды в рeсурсе
                 break;
@@ -114,8 +116,28 @@ public static class AchievementsController
         revard = 0;
     }
 
-    public static void GetRevard(Type type, out int[] revards)  //получить награды (добавить логику)
+    public static void GetRevard(AchievementsController.RewardType rewardType, int reward)  //получить награды
     {
-        revards = new int[3] { 0, 0, 0 };
+        switch (rewardType)
+        {
+            case AchievementsController.RewardType.Bombs:
+                Market.Instance.Bomb += reward;
+                break;
+            case AchievementsController.RewardType.Diamonds:
+                Market.Instance.Dimond += reward;
+                break;
+            case AchievementsController.RewardType.Health:
+                Market.Instance.Health += reward;
+                break;
+            case AchievementsController.RewardType.Rubies:
+                Market.Instance.Ruby += reward;
+                break;
+            case AchievementsController.RewardType.Seeds:
+                Market.Instance.Seeds += reward;
+                break;
+        }
+
+
+
     }
 }
