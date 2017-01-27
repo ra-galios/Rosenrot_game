@@ -9,6 +9,7 @@ public class LevelButton : MonoBehaviour
     private int prevLevelCollectDiamonds;
     private int diamondsOnPrevLevel;
     private Button levelButton;
+    private bool isBonusLevel;
 
     [SerializeField, HeaderAttribute("информация под камнем")]
     private Text diamondsInform;
@@ -21,14 +22,22 @@ public class LevelButton : MonoBehaviour
 
     void Start()
     {
-        levelCollectDiamonds = GameController.Instance.LevelsData[levelNumber].diamondsCollected;       //собрано алмазов на уровнеми
+        levelCollectDiamonds = GameController.Instance.LevelsData[levelNumber].diamondsCollected;       //собрано алмазов на уровне
 
         if (levelNumber > 0)
         {
-            prevLevelCollectDiamonds = GameController.Instance.LevelsData[levelNumber - 1].diamondsCollected;    //собрано алмазов на предыдущем уровнеми
+            prevLevelCollectDiamonds = GameController.Instance.LevelsData[levelNumber - 1].diamondsCollected;    //собрано алмазов на предыдущем уровне
             diamondsOnPrevLevel = GameController.Instance.LevelsData[levelNumber - 1].isCollected.Length;       //всего алмазов на предыдущем уровне
         }
 
+        if (levelCollectDiamonds == diamondsOnLevel)
+        {
+            isBonusLevel = true;
+        }
+        else
+        {
+            isBonusLevel = false;
+        }
 
         levelButton = GetComponent<Button>();
         if ((prevLevelCollectDiamonds >= diamondsOnPrevLevel && diamondsOnPrevLevel != 0) || (levelNumber == 0))       //если уровень открыт или это первый уровень
@@ -47,6 +56,7 @@ public class LevelButton : MonoBehaviour
     void LoadGameLevel(string name)
     {
         GameController.Instance.CurrentLevel = levelNumber;
+        GameController.Instance.OnBonusLevel = isBonusLevel;
 
         GameController.Instance.LoadScene(name);
     }

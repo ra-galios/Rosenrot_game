@@ -6,7 +6,7 @@ public class Victory : MonoBehaviour
 {
 
     //public static List<int> achievementsToShow = new List<int>();
-    public AchievementUI_Base TestAch;
+    public AchievementUI_Base LevelAchievementPanel;
 
     void OnEnable()
     {
@@ -39,7 +39,8 @@ public class Victory : MonoBehaviour
         {
             Debug.Log("WinGame");
 
-            TestAch.Show();
+            if (LevelAchievementPanel)
+                LevelAchievementPanel.Show();
 
             GameController.Instance.WinGame();
         }

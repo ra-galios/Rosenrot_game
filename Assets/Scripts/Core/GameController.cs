@@ -26,7 +26,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     private int bombsCollectedOnLevel;
     private AchievementRevards achievementRevards;
 
-    private bool isBonusLevel = false;
+    private bool onBonusLevel = false;
 
     void LoadResources()
     {
@@ -94,7 +94,7 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void WinGame()
     {
-        //VictoryPanelAnim.SetTrigger("Win");
+        VictoryPanelAnim.SetTrigger("Win");
         PauseGame();
     }
 
@@ -222,5 +222,11 @@ public class GameController : CreateSingletonGameObject<GameController>
                 return achievementRevards;
             }
         }
+    }
+
+    public bool OnBonusLevel
+    {
+        get { return onBonusLevel; }
+        set { onBonusLevel = value; }
     }
 }

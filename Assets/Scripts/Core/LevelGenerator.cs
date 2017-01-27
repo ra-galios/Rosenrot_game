@@ -91,6 +91,7 @@ public class LevelGenerator : MonoBehaviour
 
     void Start()
     {
+        m_MaxLines = CurrentLinesInScene();
         currentLinesCount = CurrentLinesInScene();//колво уже созданных линий на сцене
         idLine = currentLinesCount + 1;
         lastLinePusher = m_LastRock;
@@ -171,6 +172,11 @@ public class LevelGenerator : MonoBehaviour
         JumpPoint newRock;    //пушер
         GameObject parentLine;         //линия для пушеров
         int posNewRock = 0;      //позиция для нового пушера
+
+        if(GameController.Instance.OnBonusLevel)
+        {
+            m_MaxLines = currentLinesCount + Market.Instance.Seeds;
+        }
 
         while (currentLinesCount < m_MaxLines)        //пока не создадим нужное кол-во линий
         {
