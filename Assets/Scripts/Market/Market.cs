@@ -20,9 +20,11 @@ public class Market : CreateSingletonGameObject<Market>
     private const float secondsInMinute = 60f;
     private Coroutine timerCoroutine = null;
     private int curentlyAddHealth = 0;
+    private int m_PrevHealth;
 
     void Start()
     {
+        m_PrevHealth = Health;
         CheckHealth();
     }
 
@@ -118,7 +120,13 @@ public class Market : CreateSingletonGameObject<Market>
         set
         {
             m_Health = value;//добавляем жизней
-            //CheckHealth();
+
+            if(m_PrevHealth != m_Health)
+            {
+                print("SD");
+                CheckHealth();
+            }
+            m_PrevHealth = m_Health;
         }
     }
 

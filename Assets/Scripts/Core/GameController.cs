@@ -38,6 +38,8 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         GetData();
 
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
         SceneManager.sceneLoaded += ClearLocalBonuses;
     }
 
