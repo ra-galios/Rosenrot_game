@@ -28,7 +28,7 @@ public class AchievementsUI_Menu : AchievementUI_Base
         for (int i = 0; i < achievements.Length; i++)
         {
             SetFields(i);
-            GameObject achievement = Instantiate(m_AchievementElementPrefab, this.transform);
+            GameObject achievement = Instantiate(m_AchievementElementPrefab, this.transform, false);
 
         }
     }
