@@ -11,7 +11,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     [SerializeField]
     private LevelData[] levelsData;
     [SerializeField]
-    private int totalGameLevels = 14;
+    private int totalGameLevels = 10;
     [SerializeField]
     private PlayerBehaviour playerBeh = null;
 

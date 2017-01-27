@@ -5,7 +5,7 @@ using System;
 public class DataManager : CreateSingletonGameObject<DataManager>
 {
 
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private GameData gameData;
     private string saveFileName = "gameData.json";
 
@@ -47,7 +47,7 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         Market.Instance.Bomb = gameData.bombs;
         Market.Instance.Dimond = gameData.diamonds;
         Market.Instance.Ruby = gameData.rubies;
-        if(gameData.LevelsData.Length != GameController.Instance.TotalGameLevels)
+        if (gameData.LevelsData.Length != GameController.Instance.TotalGameLevels)
         {
             Array.Resize(ref gameData.LevelsData, GameController.Instance.TotalGameLevels);
             GameController.Instance.LevelsData = gameData.LevelsData;
@@ -71,7 +71,7 @@ public class DataManager : CreateSingletonGameObject<DataManager>
 
     public void SetAchievement(int index, int val)
     {
-        if(index > (gameData.achievements.Length - 1))
+        if (index > (gameData.achievements.Length - 1))
         {
             Array.Resize(ref gameData.achievements, index + 1);
         }
@@ -80,7 +80,7 @@ public class DataManager : CreateSingletonGameObject<DataManager>
 
     public int GetAchievement(int index)
     {
-        if(index > (gameData.achievements.Length - 1))
+        if (index > (gameData.achievements.Length - 1))
         {
             Array.Resize(ref gameData.achievements, index + 1);
         }
@@ -91,4 +91,14 @@ public class DataManager : CreateSingletonGameObject<DataManager>
     {
         return gameData.achievements.Length;
     }
+
+#if UNITY_EDITOR
+    public void ClearData()
+    {
+        gameData = new GameData();
+        gameData.LevelsData = new LevelData[GameController.Instance.TotalGameLevels];
+
+        SetData();
+    }
+#endif
 }

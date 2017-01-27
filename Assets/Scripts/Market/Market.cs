@@ -123,8 +123,7 @@ public class Market : CreateSingletonGameObject<Market>
 
             if(m_PrevHealth != m_Health)
             {
-                print("SD");
-                CheckHealth();
+                //CheckHealth();
             }
             m_PrevHealth = m_Health;
         }

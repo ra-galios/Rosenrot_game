@@ -79,43 +79,11 @@ public static class AchievementsController
         return new Achievement();
     }
 
-    public static void CompleteAchievement(Type type)       //пока лишнее
-    {
-        DataManager.Instance.SetAchievement((int)type, -1);
-    }
-
     public static int GetAchievement(Type type)      //текущее значение ачивки
     {
         return DataManager.Instance.GetAchievement((int)type);
     }
-
-    public static bool CheckAchievement(Type type, int currentValue)    //пока лишнее
-    {
-        //возвращает true только если ачивка была взята в первый раз
-        int val = GetAchievement(type);
-        if (val > 0 && currentValue >= val)
-        {
-            CompleteAchievement(type);
-            return true;
-        }
-        return false;
-    }
-
-
-    public static bool CheckAchievementComplete(Type type, int level = 0)       //пока лишнее
-    {
-        if (GetAchievement(type) < 0)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public static void GetRevard(Type type, out int revard)     //лишнее
-    {
-        revard = 0;
-    }
-
+    
     public static void GetRevard(AchievementsController.RewardType rewardType, int reward)  //получить награды
     {
         switch (rewardType)

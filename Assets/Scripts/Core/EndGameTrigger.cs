@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 
 
-public class EndGameTrigger : MonoBehaviour {
+public class EndGameTrigger : MonoBehaviour
+{
     private bool endGame = false;
 
     void OnTriggerEnter2D(Collider2D other)
@@ -12,7 +13,8 @@ public class EndGameTrigger : MonoBehaviour {
 
         if (player)
         {
-                StartCoroutine("StopGame");
+            Destroy(player);
+            StartCoroutine("StopGame");
         }
     }
 
