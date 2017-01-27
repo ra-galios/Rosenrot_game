@@ -20,17 +20,15 @@ public class Market : CreateSingletonGameObject<Market>
     private const float secondsInMinute = 60f;
     private Coroutine timerCoroutine = null;
     private int curentlyAddHealth = 0;
-    private int m_PrevHealth;
 
     void Start()
     {
-        m_PrevHealth = Health;
         CheckHealth();
     }
 
     private void CheckHealth()
     {
-        if (Health < m_MaxHealth)
+        if (m_Health < m_MaxHealth)
         {
             string timeChangeHealth = m_DateManager.GetPlayerDate("Date");
 
@@ -40,11 +38,11 @@ public class Market : CreateSingletonGameObject<Market>
                 int passedSeconds = m_DateManager.HowTimePassed(timeChangeHealth, DateManager.DateType.seconds);
                 //print(m_Health + " " + ((int)passedMinutes / TimeSetHealth - curentlyAddHealth));
 
-                Health += (int)passedMinutes / TimeSetHealth - curentlyAddHealth;
+                m_Health += (int)passedMinutes / TimeSetHealth - curentlyAddHealth;
                 curentlyAddHealth = (int)passedMinutes / TimeSetHealth;
-                Health = Health > m_MaxHealth ? m_MaxHealth : Health;
+                m_Health = m_Health > m_MaxHealth ? m_MaxHealth : m_Health;
 
-                if (Health < m_MaxHealth)
+                if (m_Health < m_MaxHealth)
                 {
                     m_MinutesUntilHealth = (timeSetHealth - 1) - passedMinutes % timeSetHealth;         //осталось минут до пополнения жизней
                     m_SecondsUntilHealth = secondsInMinute - passedSeconds % secondsInMinute;
@@ -79,7 +77,7 @@ public class Market : CreateSingletonGameObject<Market>
 
     private IEnumerator CountdownTimer()
     {
-        while (Health < m_MaxHealth)
+        while (m_Health < m_MaxHealth)
         {
             if (m_SecondsUntilHealth <= 0)
             {
@@ -88,7 +86,7 @@ public class Market : CreateSingletonGameObject<Market>
                 if (m_MinutesUntilHealth < 0)
                 {
                     m_MinutesUntilHealth = timeSetHealth - 1;
-                    Health++;
+                    m_Health++;
                 }
             }
             m_SecondsUntilHealth -= Time.unscaledDeltaTime;
@@ -96,7 +94,7 @@ public class Market : CreateSingletonGameObject<Market>
             yield return null;
         }
 
-        if (Health >= m_MaxHealth)
+        if (m_Health >= m_MaxHealth)
         {
             ResetTimer();
         }
@@ -120,12 +118,8 @@ public class Market : CreateSingletonGameObject<Market>
         set
         {
             m_Health = value;//добавляем жизней
-
-            if(m_PrevHealth != m_Health)
-            {
-                //CheckHealth();
-            }
-            m_PrevHealth = m_Health;
+            CheckHealth();
+            print("adsads");
         }
     }
 
