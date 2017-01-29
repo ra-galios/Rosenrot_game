@@ -27,7 +27,7 @@ public class LevelButton : MonoBehaviour
         if (levelNumber > 0)
         {
             prevLevelCollectDiamonds = GameController.Instance.LevelsData[levelNumber - 1].diamondsCollected;    //собрано алмазов на предыдущем уровне
-            diamondsOnPrevLevel = GameController.Instance.LevelsData[levelNumber - 1].isCollected.Length;       //всего алмазов на предыдущем уровне
+            diamondsOnPrevLevel = GameController.Instance.LevelsData[levelNumber - 1].IsCollected.Length;       //всего алмазов на предыдущем уровне
         }
 
         if (levelCollectDiamonds == diamondsOnLevel)

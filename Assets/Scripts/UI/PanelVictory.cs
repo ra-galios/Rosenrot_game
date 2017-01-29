@@ -40,7 +40,7 @@ public class PanelVictory : MonoBehaviour
         }
 
 
-        if(GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].diamondsCollected != GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].isCollected.Length)
+        if(GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].diamondsCollected != GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length)
         {
             nextLevelButton.interactable = false;
         }

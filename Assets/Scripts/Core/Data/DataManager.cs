@@ -36,6 +36,7 @@ public class DataManager : CreateSingletonGameObject<DataManager>
             gameData = new GameData();
             gameData.LevelsData = new LevelData[GameController.Instance.TotalGameLevels];
             SetData();
+            Market.Instance.Health = 5;
         }
     }
 
@@ -71,25 +72,25 @@ public class DataManager : CreateSingletonGameObject<DataManager>
 
     public void SetAchievement(int index, int val)
     {
-        if (index > (gameData.achievements.Length - 1))
+        if (index > (gameData.Achievements.Length - 1))
         {
             Array.Resize(ref gameData.achievements, index + 1);
         }
-        gameData.achievements[index] = val;
+        gameData.Achievements[index] = val;
     }
 
     public int GetAchievement(int index)
     {
-        if (index > (gameData.achievements.Length - 1))
+        if (index > (gameData.Achievements.Length - 1))
         {
             Array.Resize(ref gameData.achievements, index + 1);
         }
-        return gameData.achievements[index];
+        return gameData.Achievements[index];
     }
 
     public int GetAchievementsDataLength()
     {
-        return gameData.achievements.Length;
+        return gameData.Achievements.Length;
     }
 
 #if UNITY_EDITOR

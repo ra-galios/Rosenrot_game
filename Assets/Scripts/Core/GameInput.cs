@@ -64,9 +64,12 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 
                 if (hitObject != null && hitObject.GetComponent<Enemy>())
                 {
-                    hitObject.GetComponent<Enemy>().DestroyEnemy();
+                    if (Market.Instance.Bomb > 0)
+                    {
+                        hitObject.GetComponent<Enemy>().DestroyEnemy();
+                    }
                 }
-                else if(!clickOverUI && Time.timeScale > 0f)
+                else if (!clickOverUI && Time.timeScale > 0f)
                 {
                     CheckDoubleClick();
                     CheckClimbAfterFall();
@@ -84,14 +87,14 @@ public class GameInput : CreateSingletonGameObject<GameInput>
 
     private GameObject GetHitObject()
     {
-        
+
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, hitObjectMask);
         if (hit.transform != null)
         {
             return hit.transform.gameObject; //объект на который нажали
         }
         else
-        {        
+        {
             return null;
         }
 

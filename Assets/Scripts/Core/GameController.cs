@@ -50,9 +50,15 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0)
         {
             LoadMainScene();
+            ResumeGame();
+        }
+        else if(Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "menu")
+        {
+            DataManager.Instance.SaveGameData();
+            Application.Quit();
         }
     }
 
@@ -80,7 +86,7 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void LoadNextLevel()
     {
-        if (LevelsData[currentLevel].diamondsCollected == LevelsData[currentLevel].isCollected.Length)
+        if (LevelsData[currentLevel].diamondsCollected == LevelsData[currentLevel].IsCollected.Length)
         {
             SceneManager.LoadScene("LoadingScene");
             StartCoroutine(LoadLevelAsync(SceneManager.GetSceneAt(SceneManager.GetActiveScene().buildIndex + 1).name));
@@ -135,6 +141,11 @@ public class GameController : CreateSingletonGameObject<GameController>
     }
 
     void OnApplicationQuit()
+    {
+        DataManager.Instance.SaveGameData();
+    }
+
+    private void OnApplicationPause(bool isPause)
     {
         DataManager.Instance.SaveGameData();
     }

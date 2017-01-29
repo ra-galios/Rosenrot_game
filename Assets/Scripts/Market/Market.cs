@@ -119,7 +119,6 @@ public class Market : CreateSingletonGameObject<Market>
         {
             m_Health = value;//добавляем жизней
             CheckHealth();
-            print("adsads");
         }
     }
 
