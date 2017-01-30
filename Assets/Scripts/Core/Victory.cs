@@ -38,11 +38,38 @@ public class Victory : MonoBehaviour
         if (playerIdLine == LevelGenerator.Instance.MaxLines)
         {
             Debug.Log("WinGame");
+            AchievementsController.DiscardAchievement(AchievementsController.Type.SelfDestructive);
+            AchievementsController.AddToAchievement(AchievementsController.Type.SurvivorFinished, 1);
+
+            if (GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].diamondsCollected == GameController.Instance.DiamondsOnLevel)
+            {
+                if (GameController.Instance.AchievementRevards.Achievements[(int)AchievementsController.Type.GoodStart].m_NeedToAchieve[0] == GameController.Instance.CurrentLevel)
+                {
+                    AchievementsController.AddToAchievement(AchievementsController.Type.GoodStart, GameController.Instance.CurrentLevel);
+                    AchievementsController.AddToAchievement(AchievementsController.Type.GoodStart, 1);
+                }
+                if (GameController.Instance.AchievementRevards.Achievements[(int)AchievementsController.Type.RockyRoad].m_NeedToAchieve[0] == GameController.Instance.CurrentLevel)
+                {
+                    AchievementsController.AddToAchievement(AchievementsController.Type.RockyRoad, GameController.Instance.CurrentLevel);
+                }
+                if (GameController.Instance.AchievementRevards.Achievements[(int)AchievementsController.Type.DoingGreyt].m_NeedToAchieve[0] == GameController.Instance.CurrentLevel)
+                {
+                    AchievementsController.AddToAchievement(AchievementsController.Type.DoingGreyt, GameController.Instance.CurrentLevel);
+                }
+                if (GameController.Instance.AchievementRevards.Achievements[(int)AchievementsController.Type.LetItBee].m_NeedToAchieve[0] == GameController.Instance.CurrentLevel)
+                {
+                    AchievementsController.AddToAchievement(AchievementsController.Type.LetItBee, GameController.Instance.CurrentLevel);
+                }
+                if (GameController.Instance.AchievementRevards.Achievements[(int)AchievementsController.Type.CameToTheDarkSide].m_NeedToAchieve[0] == GameController.Instance.CurrentLevel)
+                {
+                    AchievementsController.AddToAchievement(AchievementsController.Type.CameToTheDarkSide, GameController.Instance.CurrentLevel);
+                }
+            }
 
             if (LevelAchievementPanel)
                 LevelAchievementPanel.Show();
-
-            GameController.Instance.WinGame();
+            else
+                GameController.Instance.WinGame();
         }
     }
 }

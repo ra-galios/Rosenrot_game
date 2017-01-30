@@ -7,6 +7,7 @@ public class Seed : CollectableGO
     {
         base.EnterBonus();
         Market.Instance.Seeds++;
+        AchievementsController.AddToAchievement(AchievementsController.Type.JacobAndTheBeanstalk, 1);
         GameController.Instance.SeedsCollectedOnLevel++;
     }
 }

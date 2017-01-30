@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour {
         Rock,
         RockCrack,
         Ghost,
-        Bees
+        Bee
     }
 
     [SerializeField]

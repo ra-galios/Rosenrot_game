@@ -8,6 +8,7 @@ public class Bomb : CollectableGO
         base.EnterBonus();
         GameController.Instance.BombsCollectedOnLevel++;
         Market.Instance.Bomb++;
+        AchievementsController.AddToAchievement(AchievementsController.Type.ExplosiveBehavior, 1);
     }
 
     public void Action()

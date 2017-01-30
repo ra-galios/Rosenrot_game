@@ -8,6 +8,7 @@ public class Ruby : CollectableGO
     {
         base.EnterBonus();
         Market.Instance.Ruby++;
+        AchievementsController.AddToAchievement(AchievementsController.Type.RubyRubyRubyRuby, 1);
         GameController.Instance.RubiesCollectedOnLevel++;
     }
 }

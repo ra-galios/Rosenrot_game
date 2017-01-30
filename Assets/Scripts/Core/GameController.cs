@@ -7,6 +7,7 @@ public class GameController : CreateSingletonGameObject<GameController>
 {
 
     private int currentLevel;
+    private int diamondsOnLevel;
 
     [SerializeField]
     private LevelData[] levelsData;
@@ -103,7 +104,6 @@ public class GameController : CreateSingletonGameObject<GameController>
     public void WinGame()
     {
         VictoryPanelAnim.SetTrigger("Win");
-        PauseGame();
     }
 
     public void PauseGame()
@@ -154,6 +154,12 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         get { return currentLevel; }
         set { currentLevel = value; }
+    }
+
+    public int DiamondsOnLevel
+    {
+        get { return diamondsOnLevel; }
+        set { diamondsOnLevel = value; }
     }
 
     public Animator VictoryPanelAnim

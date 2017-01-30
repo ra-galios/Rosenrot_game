@@ -16,23 +16,22 @@ public static class AchievementsController
         RockyRoad = 1,
         DoingGreyt = 2,
         LetItBee = 3,
-        AbyssGazesIntoYou = 4,
+        CameToTheDarkSide = 4,
         BeOurGuest = 5,
-        //ачивки по уровням - на каждую заводится по 3 номера
         AlwaysRight = 6,
-        ExtremeLeft = 9,
-        SelfDestructive = 12,
-        HeartBreaker = 15,
-        SurvivorFinished = 18,
-        EverybodysBestFriend = 21,
-        RubyRubyRubyRuby = 24,
-        JacobAndTheBeanstalk = 27,
-        ExplosiveBehavior = 30,
-        Catchy = 33,
-        BigBang = 36,
-        NeverGiveUp = 39,
-        GotHigh = 42,
-        Adept = 45,
+        ExtremeLeft = 7,
+        SelfDestructive = 8,
+        HeartBreaker = 9,
+        SurvivorFinished = 10,
+        EverybodysBestFriend = 11,
+        RubyRubyRubyRuby = 12,
+        JacobAndTheBeanstalk = 13,
+        ExplosiveBehavior = 14,
+        Catchy = 15,
+        BigBang = 16,
+        NeverGiveUp = 17,
+        GotHigh = 18,
+        Adept = 19,
     }
 
     public enum RewardType { Diamonds, Rubies, Seeds, Bombs, Health }
@@ -44,6 +43,11 @@ public static class AchievementsController
         DataManager.Instance.SetAchievement((int)type, val + addValue);
 
         AddToListAchievement(type, val, val + addValue);
+    }
+
+    public static void DiscardAchievement(Type type)
+    {
+        DataManager.Instance.SetAchievement((int)type, 0);
     }
 
     private static void AddToListAchievement(Type type, int prevVal, int curVal)        //проверить не достигли ли ачивки, добавить в лист на вывод если достигли

@@ -18,9 +18,15 @@ public class AchievementUI_Leveled : AchievementUI_Base
     {
         base.Show();
 
+        GameController.Instance.PauseGame();
+
         if (GameController.Instance.AchievementsToShow.Count > 0)
         {
             StartCoroutine(ShowCoroutine());
+        }
+        else
+        {
+            GameController.Instance.WinGame();
         }
     }
 
@@ -41,6 +47,7 @@ public class AchievementUI_Leveled : AchievementUI_Base
         }
 
         GameController.Instance.AchievementsToShow.Clear();
+        GameController.Instance.WinGame();
     }
 }
 

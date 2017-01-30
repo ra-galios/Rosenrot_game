@@ -56,6 +56,7 @@ public class LevelButton : MonoBehaviour
     void LoadGameLevel(string name)
     {
         GameController.Instance.CurrentLevel = levelNumber;
+        GameController.Instance.DiamondsOnLevel = diamondsOnLevel;
         GameController.Instance.OnBonusLevel = isBonusLevel;
 
         GameController.Instance.LoadScene(name);

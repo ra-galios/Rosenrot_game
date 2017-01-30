@@ -147,6 +147,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         onPlatformAfterFall = true;
         idLine = hitJumpPoint.Line;
+        AchievementsController.AddToAchievement(AchievementsController.Type.GotHigh, 1);
         if(PlayerChangeLine != null)
                 PlayerChangeLine.Invoke(idLine);
         idCollumn = hitJumpPoint.Collumn;

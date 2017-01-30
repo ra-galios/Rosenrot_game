@@ -7,6 +7,7 @@ public class Dimond : CollectableGO
     {
         base.EnterBonus();
         Market.Instance.Dimond++;
+        AchievementsController.AddToAchievement(AchievementsController.Type.EverybodysBestFriend, 1);
         GameController.Instance.DiamondsCollectedOnLevel++;
 
         GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].diamondsCollected++;
