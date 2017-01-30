@@ -7,6 +7,12 @@ public class Victory : MonoBehaviour
 
     //public static List<int> achievementsToShow = new List<int>();
     public AchievementUI_Base LevelAchievementPanel;
+    public static Victory m_VictoryObj;
+
+    void Awake()
+    {
+        m_VictoryObj = this;
+    }
 
     void OnEnable()
     {

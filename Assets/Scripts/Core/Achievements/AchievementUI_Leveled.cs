@@ -14,6 +14,11 @@ public class AchievementUI_Leveled : AchievementUI_Base
     [SerializeField]
     public float m_TimeBetweenShows = 1f;
 
+    private void Start()
+    {
+        Victory.m_VictoryObj.LevelAchievementPanel = this;
+    }
+
     public override void Show()
     {
         base.Show();
