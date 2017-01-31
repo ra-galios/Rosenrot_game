@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour
+{
     private enum TypeEnemy
     {
         Rock,
@@ -23,7 +24,7 @@ public class Enemy : MonoBehaviour {
         if (transform.childCount > 0)
             this.m_TypeEnemy = TypeEnemy.RockCrack;
     }
-    
+
     void Update()
     {
         if (LevelGenerator.Instance.IsRunLevel)
@@ -44,10 +45,10 @@ public class Enemy : MonoBehaviour {
         {
             GameObject bomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
             bomb.transform.parent = transform;
-            bomb.GetComponent<Bomb>().Action();              
-        Animator anim = GetComponent<Animator>();
-        anim.SetBool("boom", true);
- 
+            bomb.GetComponent<Bomb>().Action();
+            Animator anim = GetComponent<Animator>();
+            anim.SetBool("boom", true);
+
             Destroy(this.gameObject, 1f);
         }
     }

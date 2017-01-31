@@ -45,7 +45,7 @@ public class Victory : MonoBehaviour
         {
             Debug.Log("WinGame");
             AchievementsController.DiscardAchievement(AchievementsController.Type.SelfDestructive);
-            AchievementsController.AddToAchievement(AchievementsController.Type.SurvivorFinished, 1);
+            AchievementsController.AddToAchievement(AchievementsController.Type.Survivor, 1);
 
             if (GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].diamondsCollected == GameController.Instance.DiamondsOnLevel)
             {

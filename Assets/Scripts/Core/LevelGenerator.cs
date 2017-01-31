@@ -116,6 +116,10 @@ public class LevelGenerator : MonoBehaviour
         {
             IsRunLevel = true;
             Market.Instance.Health--; //отнимаем одну использованную жизнь, т.к. запустили левел
+            if(Market.Instance.Health == 0)
+            {
+                AchievementsController.AddToAchievement(AchievementsController.Type.HeartBreaker, 1);
+            }
             StartCoroutine("GeneratorLines");
             //StartCoroutine("CreateDecor");
         }

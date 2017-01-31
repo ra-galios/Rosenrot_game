@@ -16,6 +16,9 @@ public class Bomb : CollectableGO
         Animator anim = GetComponent<Animator>();
         anim.SetBool("Use", true);
         Market.Instance.Bomb -= 1;
+
+        AchievementsController.AddToAchievement(AchievementsController.Type.BigBang, 1);
+
         Destroy(this.gameObject, 1f);
     } //действие колетблза
 }

@@ -59,7 +59,7 @@ public class Market : CreateSingletonGameObject<Market>
             else
             {
                 timeChangeHealth = m_DateManager.GetCurrentDateString();    //время начала отсчета таймера
-                m_DateManager.SetPlayerDate(timeChangeHealth);      //сохраняем время
+                m_DateManager.SetDate("Date", timeChangeHealth);      //сохраняем время
                 m_MinutesUntilHealth = timeSetHealth - 1;
                 m_SecondsUntilHealth = secondsInMinute;
                 curentlyAddHealth = 0;
@@ -105,7 +105,7 @@ public class Market : CreateSingletonGameObject<Market>
         curentlyAddHealth = 0;
         m_MinutesUntilHealth = 0;
         m_SecondsUntilHealth = 0;
-        m_DateManager.SetPlayerDate(null);
+        m_DateManager.SetDate("Date", "");
     }
 
     //свойства

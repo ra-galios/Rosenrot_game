@@ -28,14 +28,46 @@ public class GameController : CreateSingletonGameObject<GameController>
     private AchievementRevards achievementRevards;
 
     private bool onBonusLevel = false;
+    private DateManager m_DateManager = new DateManager();
 
-    void LoadResources()
+    private void LoadResources()
     {
         GameObject achievementsPrefab = Resources.Load("Achievements", typeof(GameObject)) as GameObject;
         achievementRevards = achievementsPrefab.GetComponent<AchievementRevards>();
     }
 
-    void OnEnable()
+    private void Start()
+    {
+        AdeptAchievement();
+    }
+
+    private void AdeptAchievement()
+    {
+        string lastEnter = m_DateManager.GetPlayerDate("AdeptAchievement");
+
+        if (lastEnter != "")
+        {
+            int days = m_DateManager.HowTimePassed(lastEnter, DateManager.DateType.day);
+            if (days == 1)
+            {
+                m_DateManager.SetDate("AdeptAchievement", m_DateManager.GetCurrentDateString());
+                AchievementsController.AddToAchievement(AchievementsController.Type.Adept, 1);
+            }
+            else if (days > 1)
+            {
+                m_DateManager.SetDate("AdeptAchievement", m_DateManager.GetCurrentDateString());
+                AchievementsController.DiscardAchievement(AchievementsController.Type.Adept);
+                AchievementsController.AddToAchievement(AchievementsController.Type.Adept, 1);
+            }
+        }
+        else
+        {
+            m_DateManager.SetDate("AdeptAchievement", m_DateManager.GetCurrentDateString());
+            AchievementsController.AddToAchievement(AchievementsController.Type.Adept, 1);
+        }
+    }
+
+    private void OnEnable()
     {
         GetData();
 
@@ -44,19 +76,19 @@ public class GameController : CreateSingletonGameObject<GameController>
         SceneManager.sceneLoaded += ClearLocalBonuses;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         SceneManager.sceneLoaded -= ClearLocalBonuses;
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0)
         {
             LoadMainScene();
             ResumeGame();
         }
-        else if(Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "menu")
+        else if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "menu")
         {
             DataManager.Instance.SaveGameData();
             Application.Quit();
@@ -124,7 +156,7 @@ public class GameController : CreateSingletonGameObject<GameController>
             yield return null;
     }
 
-    void GetData()
+    private void GetData()
     {
         if (Market.Instance != null)     //если маркет загружен
         {
@@ -140,7 +172,7 @@ public class GameController : CreateSingletonGameObject<GameController>
         BombsCollectedOnLevel = 0;
     }
 
-    void OnApplicationQuit()
+    private void OnApplicationQuit()
     {
         DataManager.Instance.SaveGameData();
     }

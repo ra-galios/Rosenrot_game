@@ -22,7 +22,7 @@ public static class AchievementsController
         ExtremeLeft = 7,
         SelfDestructive = 8,
         HeartBreaker = 9,
-        SurvivorFinished = 10,
+        Survivor = 10,
         EverybodysBestFriend = 11,
         RubyRubyRubyRuby = 12,
         JacobAndTheBeanstalk = 13,

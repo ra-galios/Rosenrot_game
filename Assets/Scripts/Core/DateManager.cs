@@ -51,12 +51,12 @@ public class DateManager : MonoBehaviour {
 
 
 	public string GetPlayerDate(string pref){
-		return PlayerPrefs.GetString(pref);
+		return PlayerPrefs.GetString(pref, "");
 	}
 
-    public void SetPlayerDate(string value)
+    public void SetDate(string pref, string value)
     {
-        PlayerPrefs.SetString("Date", value);
+        PlayerPrefs.SetString(pref, value);
     }
 	
 	// Update is called once per frame

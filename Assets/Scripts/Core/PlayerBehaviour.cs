@@ -160,6 +160,7 @@ public class PlayerBehaviour : MonoBehaviour
         isPlayerFall = false;
         rig2D.bodyType = RigidbodyType2D.Static;
         animController.SetFall(isPlayerFall);
+        AchievementsController.AddToAchievement(AchievementsController.Type.Catchy, 1);
         StartCoroutine("Lerp");
     }
 
