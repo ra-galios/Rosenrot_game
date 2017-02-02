@@ -136,6 +136,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     public void WinGame()
     {
         VictoryPanelAnim.SetTrigger("Win");
+        PauseGame();
     }
 
     public void PauseGame()

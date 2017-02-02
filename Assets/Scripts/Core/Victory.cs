@@ -5,13 +5,11 @@ using System.Collections.Generic;
 public class Victory : MonoBehaviour
 {
 
-    //public static List<int> achievementsToShow = new List<int>();
     public AchievementUI_Base LevelAchievementPanel;
-    public static Victory m_VictoryObj;
 
-    void Awake()
+    private void Start()
     {
-        m_VictoryObj = this;
+        LevelAchievementPanel = FindObjectOfType<AchievementUI_Leveled>();
     }
 
     void OnEnable()
