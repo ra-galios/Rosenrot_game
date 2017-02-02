@@ -63,6 +63,7 @@ public class LevelGenerator : MonoBehaviour
     private bool isRunLevel = false;          //запущен ли левел       
     private int idLine;        //id линии родителя скалы
     private GameObject lastLinePusher;     //пушер на последней построеной линии
+    private int m_LastRockId;
     private Decoration lastDecoration;     //последняя созданная декорация
     private GameObject decorParent;
     private GameObject pushersParent;
@@ -92,7 +93,8 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         m_MaxLines = CurrentLinesInScene();
-        currentLinesCount = CurrentLinesInScene();//колво уже созданных линий на сцене
+        currentLinesCount = m_MaxLines;//колво уже созданных линий на сцене
+        m_LastRockId = m_MaxLines;
         idLine = currentLinesCount + 1;
         lastLinePusher = m_LastRock;
 
@@ -336,6 +338,12 @@ public class LevelGenerator : MonoBehaviour
     {
         get { return m_MaxLines; }
         set { m_MaxLines = value; }
+    }
+
+    public int LastRockId
+    {
+        get { return m_LastRockId; }
+        set { m_LastRockId = value; }
     }
 
     public int MaxItemsInLine

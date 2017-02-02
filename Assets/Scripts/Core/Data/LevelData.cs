@@ -2,7 +2,7 @@
 public struct LevelData
 {
     public int diamondsCollected;
-    private bool[] isCollected;
+    public bool[] isCollected;
 
     public LevelData(int diamondsLength)
     {
