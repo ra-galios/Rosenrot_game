@@ -6,6 +6,13 @@ using UnityEngine.SceneManagement;
 public class EndGameTrigger : MonoBehaviour
 {
     private bool endGame = false;
+    private AchievementUI_Leveled LevelAchievementPanel;
+
+
+    private void Start()
+    {
+        LevelAchievementPanel = FindObjectOfType<AchievementUI_Leveled>();
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -23,6 +30,9 @@ public class EndGameTrigger : MonoBehaviour
     private IEnumerator StopGame()
     {
         yield return new WaitForSeconds(0.4f);
-        GameController.Instance.FailGame();
+        if (LevelAchievementPanel)
+            LevelAchievementPanel.ShowBonusPanel(false);
+        else
+            GameController.Instance.FailGame();
     }
 }

@@ -5,7 +5,7 @@ using System.Collections;
 public class Victory : MonoBehaviour
 {
 
-    private AchievementUI_Base LevelAchievementPanel;
+    private AchievementUI_Leveled LevelAchievementPanel;
     private Animator m_BonusPanelAnim;
 
     private void Start()
@@ -46,7 +46,7 @@ public class Victory : MonoBehaviour
             Debug.Log("WinGame");
 
             if (LevelAchievementPanel)
-                LevelAchievementPanel.Show();
+                LevelAchievementPanel.ShowBonusPanel(true);
             else
                 GameController.Instance.WinGame();
         }

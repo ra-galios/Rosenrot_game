@@ -118,6 +118,12 @@ public class LevelGenerator : MonoBehaviour
         {
             IsRunLevel = true;
             Market.Instance.Health--; //отнимаем одну использованную жизнь, т.к. запустили левел
+            int playLevelTimes = ++GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].playLevelTimes;
+            int neverGiveUpVal;
+            if((neverGiveUpVal = AchievementsController.GetAchievement(AchievementsController.Type.NeverGiveUp)) < playLevelTimes)
+            {
+                AchievementsController.AddToAchievement(AchievementsController.Type.NeverGiveUp, playLevelTimes - neverGiveUpVal);
+            }
             if(Market.Instance.Health == 0)
             {
                 AchievementsController.AddToAchievement(AchievementsController.Type.HeartBreaker, 1);

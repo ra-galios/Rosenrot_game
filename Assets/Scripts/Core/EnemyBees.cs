@@ -22,9 +22,11 @@ public class EnemyBees : Enemy
 
 #if UNITY_EDITOR
     private Vector3[] m_GlobalPositions;
+#endif
 
     private void Start()
     {
+#if UNITY_EDITOR
         m_GlobalPositions = new Vector3[m_Waypoints.Length];
         for (int i = 0; i < m_Waypoints.Length; i++)
         {
@@ -73,6 +75,7 @@ public class EnemyBees : Enemy
         return Mathf.Pow(x, m_Smooth) / (Mathf.Pow(x, m_Smooth) + Mathf.Pow(1 - x, m_Smooth));
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (m_GlobalPositions != null)
@@ -92,4 +95,5 @@ public class EnemyBees : Enemy
             }
         }
     }
+#endif
 }

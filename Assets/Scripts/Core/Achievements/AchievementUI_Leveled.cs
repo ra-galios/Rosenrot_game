@@ -14,7 +14,7 @@ public class AchievementUI_Leveled : AchievementUI_Base
     [SerializeField]
     public float m_TimeBetweenShows = 1f;
 
-    public override void Show()
+    public void ShowBonusPanel(bool isWin)
     {
         base.Show();
 
@@ -22,15 +22,22 @@ public class AchievementUI_Leveled : AchievementUI_Base
 
         if (GameController.Instance.AchievementsToShow.Count > 0)
         {
-            StartCoroutine(ShowCoroutine());
+            StartCoroutine(ShowCoroutine(isWin));
         }
         else
         {
-            GameController.Instance.WinGame();
+            if (isWin)
+            {
+                GameController.Instance.WinGame();
+            }
+            else
+            {
+                GameController.Instance.FailGame();
+            }
         }
     }
 
-    private IEnumerator ShowCoroutine()
+    private IEnumerator ShowCoroutine(bool isWin)
     {
         yield return new WaitForSecondsRealtime(m_TimeBeforeFirstShow);
 
@@ -47,7 +54,14 @@ public class AchievementUI_Leveled : AchievementUI_Base
         }
 
         GameController.Instance.AchievementsToShow.Clear();
-        GameController.Instance.WinGame();
+        if (isWin)
+        {
+            GameController.Instance.WinGame();
+        }
+        else
+        {
+            GameController.Instance.FailGame();
+        }
     }
 }
 
