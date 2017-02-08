@@ -10,8 +10,11 @@ public class Victory : MonoBehaviour
 
     private void Start()
     {
+        GameController.Instance.CheckOnBonusLevel();
         LevelAchievementPanel = FindObjectOfType<AchievementUI_Leveled>();
-        //m_BonusPanelAnim = FindObjectOfType<PanelBonus>().GetComponent<Animator>();
+        GameObject bonusObj = GameObject.Find("Image_Bonus_LEVEL");
+        if (bonusObj)
+            m_BonusPanelAnim = bonusObj.GetComponent<Animator>();
     }
 
     void OnEnable()
@@ -26,17 +29,17 @@ public class Victory : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AchievementsController.AddToAchievement(AchievementsController.Type.RubyRubyRubyRuby, 1);
-            AchievementsController.AddToAchievement(AchievementsController.Type.EverybodysBestFriend, 1);
-            //DataManager.Instance.SetAchievement((int)AchievementsController.Type.RubyRubyRubyRuby, 0);
-            //DataManager.Instance.SetAchievement((int)AchievementsController.Type.EverybodysBestFriend, 0);
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     AchievementsController.AddToAchievement(AchievementsController.Type.RubyRubyRubyRuby, 1);
+        //     AchievementsController.AddToAchievement(AchievementsController.Type.EverybodysBestFriend, 1);
+        //     //DataManager.Instance.SetAchievement((int)AchievementsController.Type.RubyRubyRubyRuby, 0);
+        //     //DataManager.Instance.SetAchievement((int)AchievementsController.Type.EverybodysBestFriend, 0);
 
-            print("showList length: " + GameController.Instance.AchievementsToShow.Count);
+        //     print("showList length: " + GameController.Instance.AchievementsToShow.Count);
 
-            print("ach value: " + AchievementsController.GetAchievement(AchievementsController.Type.RubyRubyRubyRuby));
-        }
+        //     print("ach value: " + AchievementsController.GetAchievement(AchievementsController.Type.RubyRubyRubyRuby));
+        // }
     }
 
     void CheckWin(int playerIdLine)
@@ -50,19 +53,19 @@ public class Victory : MonoBehaviour
             else
                 GameController.Instance.WinGame();
         }
-        if (playerIdLine == LevelGenerator.Instance.LastRockId && Market.Instance.Seeds > 0)
+        else if (playerIdLine == LevelGenerator.Instance.LastRockId && Market.Instance.Seeds > 0)
         {
             Debug.Log("BonusLevel");
-            StartCoroutine(BonusLevelCoroutine());
+            if (m_BonusPanelAnim)
+                StartCoroutine(BonusLevelCoroutine());
         }
     }
 
     private IEnumerator BonusLevelCoroutine()
     {
-        //m_BonusPanelAnim.SetTrigger("Show");
+        m_BonusPanelAnim.SetTrigger("bonuslevel");
         //GameController.Instance.PauseGame();
-        yield return new WaitForSeconds(2f);
-        //m_BonusPanelAnim.SetTrigger("Show");
+        yield return new WaitForSecondsRealtime(1f);
         //GameController.Instance.ResumeGame();
     }
 

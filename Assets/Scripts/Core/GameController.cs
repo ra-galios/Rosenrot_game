@@ -27,6 +27,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     private int bombsCollectedOnLevel;
     private AchievementRevards achievementRevards;
 
+    [SerializeField]
     private bool onBonusLevel = false;
     private DateManager m_DateManager = new DateManager();
 
@@ -181,6 +182,14 @@ public class GameController : CreateSingletonGameObject<GameController>
     private void OnApplicationPause(bool isPause)
     {
         DataManager.Instance.SaveGameData();
+    }
+
+    public void CheckOnBonusLevel()
+    {
+        if (LevelsData[GameController.Instance.CurrentLevel].diamondsCollected == LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length)
+        {
+            OnBonusLevel = true;
+        }
     }
 
     public int CurrentLevel

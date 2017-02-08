@@ -17,10 +17,10 @@ public class LevelDiamondKeeper : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		if(diamonds.Length != GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length)
-		{
-			GameController.Instance.LevelsData[GameController.Instance.CurrentLevel] = new LevelData(diamonds.Length);
-		}
+        if (diamonds.Length != GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length)
+        {
+            GameController.Instance.LevelsData[GameController.Instance.CurrentLevel] = new LevelData(diamonds.Length);
+        }
 
         for (int i = 0; i < diamonds.Length; i++)
         {
@@ -41,6 +41,7 @@ public class LevelDiamondKeeper : MonoBehaviour
                 GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].IsCollected[i] = true;
             }
         }
+        GameController.Instance.CheckOnBonusLevel();
     }
 
     public static LevelDiamondKeeper Instance

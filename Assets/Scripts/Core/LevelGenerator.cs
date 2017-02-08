@@ -184,7 +184,7 @@ public class LevelGenerator : MonoBehaviour
         JumpPoint newRock;    //пушер
         GameObject parentLine;         //линия для пушеров
         int posNewRock = 0;      //позиция для нового пушера
-
+        
         if(GameController.Instance.OnBonusLevel)
         {
             m_MaxLines = currentLinesCount + Market.Instance.Seeds;
