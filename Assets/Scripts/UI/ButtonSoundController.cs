@@ -11,6 +11,7 @@ public class ButtonSoundController : MonoBehaviour
     public AudioClip m_DenyClip;
 
     // Use this for initialization
+    public void PlayClipOnButton(Button thisButton)
     {
         if (thisButton.interactable)
         {
