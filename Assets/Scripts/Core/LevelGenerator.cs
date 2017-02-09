@@ -29,13 +29,10 @@ public class LevelGenerator : MonoBehaviour
     [Header("Позиции для генерирования скал: ")]
     [SerializeField]
     private Transform[] m_StartPositions;                             //позиции в которых создавать новые скалы
-    [Header("Максимальное количество линий из скал: ")]
-    [SerializeField]
-    private int m_MaxLines;                 //кол-во генерируемых линий
     [Header("Максимальное кол-во скал на линии: ")]
     [SerializeField]
     private int m_MaxItemsInLine;            //максимальное кол-во скал на линии
-    [Header("Интервал между линиями: ")]
+    [Header("Интервал между линиями по Y: ")]
     [SerializeField]
     private float lineSpacing;
     [Header("Скорость движения скал: ")]
@@ -44,18 +41,25 @@ public class LevelGenerator : MonoBehaviour
     [Header("Ускорение движения скал: ")]
     [SerializeField]
     private float accelerationJumpPoint = 0f;         //ускорение скал
+    [Header("Максимальный сдвиг декораций от центра")]
+    [SerializeField]
+    private float m_DecorMaxPosX;        //Максимальный сдвиг декораций от центра
+
+    [Space(30), Header("Debug")]
+
     [Header("Скала, после которой нужно запустить генератор: ")]
     [SerializeField]
     private GameObject m_LastRock;
-
-    [Space(30)]
-
     [Header("Позиция последней скалы: ")]
     [SerializeField]
     private int posPrevJumpPoint; //позиция предыдущей скалы
     [Header("Кол-во скал на последней линии: ")]
     [SerializeField]
     private int prevCountJumpPoint; //кол-во скал на предыдущей линии
+    [Header("Максимальное количество линий из скал: ")]
+    [SerializeField]
+    private int m_MaxLines;                 //кол-во генерируемых линий
+
 
     //################################################################
 
@@ -147,7 +151,7 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 0; i < tryCreateDecor; i++)        //попытки построить декорации
         {
             bool canCreate = true;
-            Vector3 decorPos = new Vector3(Random.Range(-2.5f, 2.5f) + transform.position.x, Instance.transform.position.y + Random.Range(0f, lineSpacing - 1f), 3f);
+            Vector3 decorPos = new Vector3(Random.Range(-m_DecorMaxPosX, m_DecorMaxPosX) + transform.position.x, Instance.transform.position.y + Random.Range(0f, lineSpacing - 1f), 3f);
 
             for (int j = 0; j < lastlineObjects.Count; j++)
             {

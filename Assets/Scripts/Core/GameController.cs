@@ -126,7 +126,8 @@ public class GameController : CreateSingletonGameObject<GameController>
         if (LevelsData[currentLevel].diamondsCollected == LevelsData[currentLevel].IsCollected.Length)
         {
             SceneManager.LoadScene("LoadingScene");
-            StartCoroutine(LoadLevelAsync(SceneManager.GetSceneAt(SceneManager.GetActiveScene().buildIndex + 1).name));
+            print(SceneManager.GetActiveScene().buildIndex + 1);
+            StartCoroutine(LoadLevelAsync(SceneManager.GetActiveScene().buildIndex + 1));
         }
     }
 
@@ -159,6 +160,14 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         yield return null;
         AsyncOperation load = SceneManager.LoadSceneAsync(name);
+        while (!load.isDone)
+            yield return null;
+    }
+
+    private IEnumerator LoadLevelAsync(int index)
+    {
+        yield return null;
+        AsyncOperation load = SceneManager.LoadSceneAsync(index);
         while (!load.isDone)
             yield return null;
     }
