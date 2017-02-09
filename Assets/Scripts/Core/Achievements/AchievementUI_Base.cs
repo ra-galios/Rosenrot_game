@@ -6,18 +6,10 @@ using UnityEngine.UI;
 public class AchievementUI_Base : MonoBehaviour
 {
 
-    //protected AchievementsController.Type m_Achievement;
-    [SerializeField]
-    protected Image m_Image;
-    [SerializeField]
-    protected Text m_Title;
-    [SerializeField]
-    protected Text m_Description;
-
-    protected void Start()
-    {
-        //SetFields();
-    }
+    // protected void Start()
+    // {
+    //     //SetFields();
+    // }
 
 #if UNITY_EDITOR
     protected void Update()
@@ -66,10 +58,7 @@ public class AchievementUI_Base : MonoBehaviour
 
     protected virtual void SetFields(int indexInResource)
     {
-        m_Image.sprite = GetSprite(indexInResource);
 
-        m_Title.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Title;
-        m_Description.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Description;
     }
 
     public virtual void Show()

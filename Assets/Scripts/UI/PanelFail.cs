@@ -1,7 +1,7 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
 
-public class PanelFail : MonoBehaviour
+public class PanelFail : AchievementUI_Base
 {
 
     [SerializeField]
@@ -14,13 +14,18 @@ public class PanelFail : MonoBehaviour
     [SerializeField]
     private Text health;
 
+    [SerializeField]
+    private Image[] m_AchievementImages;
+    [SerializeField]
+    private GameObject m_AchievementsPanel;
+
     void Start()
     {
         GameController.Instance.FailPanelAnim = GetComponent<Animator>();
         GameController.Instance.FailDeadJacobAnim = deadJacobAnim;
     }
 
-    void Update()
+    void UpdateFailPanel()
     {
         if (Market.Instance.Health < 1)
         {
@@ -32,10 +37,31 @@ public class PanelFail : MonoBehaviour
         }
 
         health.text = Market.Instance.Health.ToString();
+
+        if (GameController.Instance.AchievementsToShow.Count < 1)
+        {
+            m_AchievementsPanel.SetActive(false);
+        }
+        else
+        {
+            for (int i = 0; i < m_AchievementImages.Length; i++)
+            {
+                if (GameController.Instance.AchievementsToShow.Count <= i)
+                {
+                    m_AchievementImages[i].gameObject.SetActive(false);
+                }
+                else
+                {
+                    m_AchievementImages[i].sprite = GetSprite(GameController.Instance.AchievementsToShow[i]);
+                }
+            }
+        }
     }
 
     void OnEnable()
     {
+        GameController.m_FailAction += UpdateFailPanel;
+
         restartButton.onClick.AddListener(GameController.Instance.LoadActiveScene);
         restartButton.onClick.AddListener(GameController.Instance.ResumeGame);
 
@@ -45,6 +71,8 @@ public class PanelFail : MonoBehaviour
 
     void OnDisable()
     {
+        GameController.m_FailAction -= UpdateFailPanel;
+
         restartButton.onClick.RemoveListener(GameController.Instance.LoadActiveScene);
         restartButton.onClick.RemoveListener(GameController.Instance.ResumeGame);
 

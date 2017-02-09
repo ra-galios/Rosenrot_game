@@ -3,6 +3,15 @@ using UnityEngine.UI;
 
 public class AchievementsUI_Menu : AchievementUI_Base
 {
+
+    //protected AchievementsController.Type m_Achievement;
+    [SerializeField]
+    protected Image m_Image;
+    [SerializeField]
+    protected Text m_Title;
+    [SerializeField]
+    protected Text m_Description;
+
     [SerializeField]
     protected Text m_Progress;
     [SerializeField]
@@ -36,6 +45,11 @@ public class AchievementsUI_Menu : AchievementUI_Base
     protected override void SetFields(int indexInResource)
     {
         base.SetFields(indexInResource);
+
+        m_Image.sprite = GetSprite(indexInResource);
+
+        m_Title.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Title;
+        m_Description.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Description;
 
         SetReward(indexInResource);
 

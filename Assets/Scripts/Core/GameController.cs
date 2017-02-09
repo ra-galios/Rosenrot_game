@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class GameController : CreateSingletonGameObject<GameController>
 {
@@ -26,6 +27,8 @@ public class GameController : CreateSingletonGameObject<GameController>
     private int seedsCollectedOnLevel;
     private int bombsCollectedOnLevel;
     private AchievementRevards achievementRevards;
+    public static Action m_VictoryAction;
+    public static Action m_FailAction;
 
     [SerializeField]
     private bool onBonusLevel = false;
@@ -131,12 +134,14 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         FailPanelAnim.SetTrigger("Fail");
         FailDeadJacobAnim.SetTrigger("Dead");
+        m_FailAction.Invoke();
         PauseGame();
     }
 
     public void WinGame()
     {
         VictoryPanelAnim.SetTrigger("Win");
+        m_VictoryAction.Invoke();
         PauseGame();
     }
 

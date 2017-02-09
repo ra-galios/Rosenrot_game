@@ -51,7 +51,9 @@ public class Victory : MonoBehaviour
             if (LevelAchievementPanel)
                 LevelAchievementPanel.ShowBonusPanel(true);
             else
+            {
                 GameController.Instance.WinGame();
+            }
         }
         else if (playerIdLine == LevelGenerator.Instance.LastRockId && Market.Instance.Seeds > 0)
         {

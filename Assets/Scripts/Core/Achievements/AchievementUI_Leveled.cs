@@ -6,6 +6,13 @@ using UnityEngine.EventSystems;
 
 public class AchievementUI_Leveled : AchievementUI_Base
 {
+    //protected AchievementsController.Type m_Achievement;
+    [SerializeField]
+    protected Image m_Image;
+    [SerializeField]
+    protected Text m_Title;
+    [SerializeField]
+    protected Text m_Description;
 
     [SerializeField]
     public Button hidePanelButton;
@@ -37,6 +44,16 @@ public class AchievementUI_Leveled : AchievementUI_Base
         }
     }
 
+    protected override void SetFields(int indexInResource)
+    {
+        base.SetFields(indexInResource);
+
+        m_Image.sprite = GetSprite(indexInResource);
+
+        m_Title.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Title;
+        m_Description.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Description;
+    }
+
     private IEnumerator ShowCoroutine(bool isWin)
     {
         yield return new WaitForSecondsRealtime(m_TimeBeforeFirstShow);
@@ -50,10 +67,10 @@ public class AchievementUI_Leveled : AchievementUI_Base
             anim.SetTrigger("Achievement");
 
             yield return new WaitUntil(() => EventSystem.current.currentSelectedGameObject == hidePanelButton.gameObject);
+            EventSystem.current.SetSelectedGameObject(null);
             yield return new WaitForSecondsRealtime(m_TimeBetweenShows);
         }
 
-        GameController.Instance.AchievementsToShow.Clear();
         if (isWin)
         {
             GameController.Instance.WinGame();
@@ -62,6 +79,7 @@ public class AchievementUI_Leveled : AchievementUI_Base
         {
             GameController.Instance.FailGame();
         }
+        GameController.Instance.AchievementsToShow.Clear();
     }
 }
 
