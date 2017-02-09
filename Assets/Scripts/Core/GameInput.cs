@@ -49,7 +49,16 @@ public class GameInput : CreateSingletonGameObject<GameInput>
         {
             if (Input.GetMouseButtonDown(0))
             {
-                clickOverUI = EventSystem.current.IsPointerOverGameObject();
+                if (EventSystem.current.IsPointerOverGameObject() || (Input.touchCount == 1 &&
+                 EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)))
+                {
+                    clickOverUI = true;
+                }
+                else
+                {
+                    clickOverUI = false;
+                }
+
                 CheckClick();
             }
             if (Input.GetMouseButtonUp(0))
