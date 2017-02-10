@@ -13,6 +13,10 @@ public class AchievementUI_Leveled : AchievementUI_Base
     protected Text m_Title;
     [SerializeField]
     protected Text m_Description;
+    [SerializeField]
+    protected Text m_Reward;
+    [SerializeField]
+    protected Image m_RewardImage;
 
     [SerializeField]
     public Button hidePanelButton;
@@ -48,10 +52,17 @@ public class AchievementUI_Leveled : AchievementUI_Base
     {
         base.SetFields(indexInResource);
 
+        Achievement[] achievements = GameController.Instance.AchievementRevards.Achievements;
+
         m_Image.sprite = GetSprite(indexInResource);
 
         m_Title.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Title;
         m_Description.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Description;
+
+
+        m_Reward.text = "+" + achievements[indexInResource].m_LeveledRevards[GetAchievementLevel(indexInResource)].ToString();
+        m_RewardImage.sprite = GameController.Instance.AchievementRevards.RewardSprites[(int)achievements[indexInResource].m_RevardType];
+
     }
 
     private IEnumerator ShowCoroutine(bool isWin)

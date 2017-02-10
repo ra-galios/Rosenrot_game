@@ -47,6 +47,7 @@ public class Victory : MonoBehaviour
         if (playerIdLine == LevelGenerator.Instance.MaxLines)
         {
             Debug.Log("WinGame");
+            CheckLeveledAchievements();
 
             if (LevelAchievementPanel)
                 LevelAchievementPanel.ShowBonusPanel(true);

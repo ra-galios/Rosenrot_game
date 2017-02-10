@@ -85,20 +85,6 @@ public class GameController : CreateSingletonGameObject<GameController>
         SceneManager.sceneLoaded -= ClearLocalBonuses;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) && Time.timeScale == 0)
-        {
-            LoadMainScene();
-            ResumeGame();
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "menu")
-        {
-            DataManager.Instance.SaveGameData();
-            Application.Quit();
-        }
-    }
-
     public void LoadScene(string name)
     {
         SceneManager.LoadScene("LoadingScene");
