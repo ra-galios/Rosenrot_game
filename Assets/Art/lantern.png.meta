@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 839c92c31542d374d9f27e6b393688a5
-timeCreated: 1486916014
+guid: 849d3139e19fb1140b56664e170bf131
+timeCreated: 1486924455
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -66,19 +66,11 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Android
-    maxTextureSize: 2048
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
     outline: []
-  spritePackingTag: tutorial
+  spritePackingTag: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 
