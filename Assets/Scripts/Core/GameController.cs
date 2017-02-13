@@ -110,8 +110,8 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         if (LevelsData[currentLevel].diamondsCollected == LevelsData[currentLevel].IsCollected.Length)
         {
+            currentLevel++;
             SceneManager.LoadScene("LoadingScene");
-            print(SceneManager.GetActiveScene().buildIndex + 1);
             StartCoroutine(LoadLevelAsync(SceneManager.GetActiveScene().buildIndex + 1));
         }
     }
