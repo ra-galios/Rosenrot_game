@@ -88,7 +88,7 @@ public class JumpPoint : MonoBehaviour
             Animator anim = GetComponent<Animator>();
             anim.SetBool("falling 0", true);
             anim.SetBool("falling", true);
-                 rBody.gravityScale = 1f;
+            rBody.gravityScale = 1f;
         }
     }
 
@@ -116,5 +116,11 @@ public class JumpPoint : MonoBehaviour
     {
         get { return this.m_Action; }
         set { this.m_Action = value; }
+    }
+
+    public CollectableGO PrefBonus
+    {
+        get { return m_PrefBonus; }
+        set { m_PrefBonus = value; }
     }
 }

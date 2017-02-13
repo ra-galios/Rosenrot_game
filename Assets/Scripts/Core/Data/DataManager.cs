@@ -93,6 +93,24 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         return gameData.Achievements.Length;
     }
 
+     public void SetTutorialDisplays(int index)
+    {
+        if (index > (gameData.TutorialsDisplays.Length - 1))
+        {
+            Array.Resize(ref gameData.tutorialsDisplays, index + 1);
+        }
+        gameData.TutorialsDisplays[index]++;
+    }
+
+    public int GetTutorialDisplays(int index)
+    {
+        if (index > (gameData.TutorialsDisplays.Length - 1))
+        {
+            Array.Resize(ref gameData.tutorialsDisplays, index + 1);
+        }
+        return gameData.TutorialsDisplays[index];
+    }
+
 #if UNITY_EDITOR
     public void ClearData()
     {

@@ -23,6 +23,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Awake()
     {
+
+        TutorialController.PlayerBeh = this;
         GameInput.Instance.playerBeh = this;
         GameController.Instance.PlayerBeh = this;
         animController = GetComponentInChildren<PlayerAnimationController>();
@@ -140,7 +142,7 @@ public class PlayerBehaviour : MonoBehaviour
             yield return null;
         }
 
-        if(hitJumpPoint.IsSeed && Market.Instance.Seeds > 0)
+        if (hitJumpPoint.IsSeed && Market.Instance.Seeds > 0)
         {
             Market.Instance.Seeds--;
         }
@@ -148,8 +150,8 @@ public class PlayerBehaviour : MonoBehaviour
         onPlatformAfterFall = true;
         idLine = hitJumpPoint.Line;
         AchievementsController.AddToAchievement(AchievementsController.Type.GotHigh, 1);
-        if(PlayerChangeLine != null)
-                PlayerChangeLine.Invoke(idLine);
+        if (PlayerChangeLine != null)
+            PlayerChangeLine.Invoke(idLine);
         idCollumn = hitJumpPoint.Collumn;
         LerpCoroutine = null;
         boxColl = true;

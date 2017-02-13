@@ -6,7 +6,6 @@ using System;
 
 public class GameController : CreateSingletonGameObject<GameController>
 {
-
     private int currentLevel;
     private int diamondsOnLevel;
 

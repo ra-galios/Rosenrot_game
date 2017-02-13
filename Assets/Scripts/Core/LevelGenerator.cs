@@ -24,6 +24,10 @@ public class LevelGenerator : MonoBehaviour
     [Header("Декорации: ")]
     [SerializeField]
     private Decoration[] m_Decorations;
+    [Header("Возможные бонусы на скалах")]
+    [SerializeField]
+    private CollectableGO[] m_BonusPrefabs;
+
     [Space]
 
     [Header("Позиции для генерирования скал: ")]
@@ -124,11 +128,11 @@ public class LevelGenerator : MonoBehaviour
             Market.Instance.Health--; //отнимаем одну использованную жизнь, т.к. запустили левел
             int playLevelTimes = ++GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].playLevelTimes;
             int neverGiveUpVal;
-            if((neverGiveUpVal = AchievementsController.GetAchievement(AchievementsController.Type.NeverGiveUp)) < playLevelTimes)
+            if ((neverGiveUpVal = AchievementsController.GetAchievement(AchievementsController.Type.NeverGiveUp)) < playLevelTimes)
             {
                 AchievementsController.AddToAchievement(AchievementsController.Type.NeverGiveUp, playLevelTimes - neverGiveUpVal);
             }
-            if(Market.Instance.Health == 0)
+            if (Market.Instance.Health == 0)
             {
                 AchievementsController.AddToAchievement(AchievementsController.Type.HeartBreaker, 1);
             }
@@ -188,8 +192,8 @@ public class LevelGenerator : MonoBehaviour
         JumpPoint newRock;    //пушер
         GameObject parentLine;         //линия для пушеров
         int posNewRock = 0;      //позиция для нового пушера
-        
-        if(GameController.Instance.OnBonusLevel)
+
+        if (GameController.Instance.OnBonusLevel)
         {
             m_MaxLines = currentLinesCount + Market.Instance.Seeds;
         }
@@ -248,6 +252,7 @@ public class LevelGenerator : MonoBehaviour
                 jumpPointRock = objNewRock.GetComponent<JumpPoint>();
                 jumpPointRock.Line = idLine;              //задаём пушеру линию, на которой он находится
                 jumpPointRock.Collumn = posNewRock;         //задаём пушеру колонку в которой он находится
+                jumpPointRock.PrefBonus = GetBonus();       //задаём пушеру бонус
                 posPrevJumpPoint = posNewRock;              //запоминаем где создали
                 jumpPointRock.Speed = m_SpeedJumpPoint;         //задаём скорость пушера
                 objNewRock.transform.parent = parentLine.transform;                      //делаем новый пушер "ребёнком" нового родителя
@@ -277,7 +282,7 @@ public class LevelGenerator : MonoBehaviour
         foreach (GameObject item in objs)
         {
             var line = item.GetComponent<JumpPoint>().Line;
-            if(maxIdLine < line)
+            if (maxIdLine < line)
             {
                 maxIdLine = line;
                 m_LastRock = item;
@@ -340,6 +345,17 @@ public class LevelGenerator : MonoBehaviour
         float y = Random.Range(gapValue, -gapValue);
 
         return new Vector3(x, y, 0f);
+    }
+
+    private CollectableGO GetBonus()
+    {
+        float chance = Random.Range(0f, 1f);
+        if (chance < 0.3f)
+            return m_BonusPrefabs[0];
+        else if (chance < 0.4f)
+            return m_BonusPrefabs[1];
+        else
+            return null;
     }
 
     //Свойства
