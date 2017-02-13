@@ -90,6 +90,7 @@ public class PanelVictory : AchievementUI_Base
         restartButton.onClick.AddListener(GameController.Instance.ResumeGame);
 
         nextLevelButton.onClick.AddListener(GameController.Instance.LoadNextLevel);
+        nextLevelButton.onClick.AddListener(GameController.Instance.ResumeGame);
 
         returnToMainButton.onClick.AddListener(GameController.Instance.LoadMainScene);
         returnToMainButton.onClick.AddListener(GameController.Instance.ResumeGame);
@@ -103,6 +104,7 @@ public class PanelVictory : AchievementUI_Base
         restartButton.onClick.RemoveListener(GameController.Instance.ResumeGame);
 
         nextLevelButton.onClick.RemoveListener(GameController.Instance.LoadNextLevel);
+        nextLevelButton.onClick.RemoveListener(GameController.Instance.ResumeGame);
 
         returnToMainButton.onClick.RemoveListener(GameController.Instance.LoadMainScene);
         returnToMainButton.onClick.RemoveListener(GameController.Instance.ResumeGame);

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections;
 
 public class Victory : MonoBehaviour
@@ -7,6 +6,7 @@ public class Victory : MonoBehaviour
 
     private AchievementUI_Leveled LevelAchievementPanel;
     private Animator m_BonusPanelAnim;
+    private bool m_OnBonusLevel;
 
     private void Start()
     {
@@ -46,19 +46,12 @@ public class Victory : MonoBehaviour
     {
         if (playerIdLine == LevelGenerator.Instance.MaxLines)
         {
-            Debug.Log("WinGame");
-            CheckLeveledAchievements();
-
-            if (LevelAchievementPanel)
-                LevelAchievementPanel.ShowBonusPanel(true);
-            else
-            {
-                GameController.Instance.WinGame();
-            }
+            SetWin();
         }
         else if (playerIdLine == LevelGenerator.Instance.LastRockId && Market.Instance.Seeds > 0)
         {
             Debug.Log("BonusLevel");
+            m_OnBonusLevel = true;
             if (m_BonusPanelAnim)
                 StartCoroutine(BonusLevelCoroutine());
         }
@@ -101,5 +94,24 @@ public class Victory : MonoBehaviour
                 AchievementsController.AddToAchievement(AchievementsController.Type.CameToTheDarkSide, GameController.Instance.CurrentLevel);
             }
         }
+    }
+
+    public void SetWin()
+    {
+        Debug.Log("WinGame");
+        CheckLeveledAchievements();
+
+        if (LevelAchievementPanel)
+            LevelAchievementPanel.ShowBonusPanel(true);
+        else
+        {
+            GameController.Instance.WinGame();
+        }
+    }
+
+    public bool OnBonusLevel
+    {
+        get { return m_OnBonusLevel; }
+        set { m_OnBonusLevel = value; }
     }
 }
