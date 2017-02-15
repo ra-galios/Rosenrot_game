@@ -94,6 +94,8 @@ public class Market : CreateSingletonGameObject<Market>
             yield return null;
         }
 
+        timerCoroutine = null;
+
         if (m_Health >= m_MaxHealth)
         {
             ResetTimer();

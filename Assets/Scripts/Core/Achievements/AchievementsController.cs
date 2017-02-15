@@ -40,14 +40,51 @@ public static class AchievementsController
     public static void AddToAchievement(Type type, int addValue)
     {
         int val = GetAchievement(type);
-        DataManager.Instance.SetAchievement((int)type, val + addValue);
+
+        if (type == Type.Adept)
+        {
+            CheckAchievementDuplicate(type, 20, val, addValue);
+        }
+        else if (type == Type.SelfDestructive)
+        {
+            CheckAchievementDuplicate(type, 21, val, addValue);
+        }
+        else if (type == Type.Survivor)
+        {
+            CheckAchievementDuplicate(type, 22, val, addValue);
+        }
+        else
+        {
+            DataManager.Instance.SetAchievement((int)type, val + addValue);
+        }
 
         AddToListAchievement(type, val, val + addValue);
     }
 
+    private static void CheckAchievementDuplicate(Type type, int dupIndex, int val, int addValue)
+    {
+        int valDup = DataManager.Instance.GetAchievement(dupIndex);
+        DataManager.Instance.SetAchievement(dupIndex, valDup + addValue);
+        if (valDup + addValue > val)
+        {
+            DataManager.Instance.SetAchievement((int)type, valDup + addValue);
+        }
+    }
+
     public static void DiscardAchievement(Type type)
     {
-        DataManager.Instance.SetAchievement((int)type, 0);
+        if (type == Type.Adept)
+        {
+            DataManager.Instance.SetAchievement(20, 0);
+        }
+        else if (type == Type.SelfDestructive)
+        {
+            DataManager.Instance.SetAchievement(21, 0);
+        }
+        else if (type == Type.Survivor)
+        {
+            DataManager.Instance.SetAchievement(22, 0);
+        }
     }
 
     private static void AddToListAchievement(Type type, int prevVal, int curVal)        //проверить не достигли ли ачивки, добавить в лист на вывод если достигли
@@ -87,7 +124,7 @@ public static class AchievementsController
     {
         return DataManager.Instance.GetAchievement((int)type);
     }
-    
+
     public static void GetRevard(AchievementsController.RewardType rewardType, int reward)  //получить награды
     {
         switch (rewardType)
@@ -108,8 +145,5 @@ public static class AchievementsController
                 Market.Instance.Seeds += reward;
                 break;
         }
-
-
-
     }
 }

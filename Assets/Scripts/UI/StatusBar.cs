@@ -26,6 +26,8 @@ public class StatusBar : MonoBehaviour
     void ChangeStatus()
     {
         string secondsUntilHealth = Market.Instance.SecondsUntilHealth.ToString();
+                print(Market.Instance.MinutesUntilHealth.ToString());
+
         if(secondsUntilHealth.Length < 2)
         {
             secondsUntilHealth = "0" + secondsUntilHealth;
