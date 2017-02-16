@@ -1,20 +1,18 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 public class Victory : MonoBehaviour
 {
 
     private AchievementUI_Leveled LevelAchievementPanel;
-    private Animator m_BonusPanelAnim;
     private bool m_OnBonusLevel;
+
+    public static Action m_OnStartBonusLevelAction;
 
     private void Start()
     {
         GameController.Instance.CheckOnBonusLevel();
         LevelAchievementPanel = FindObjectOfType<AchievementUI_Leveled>();
-        GameObject bonusObj = GameObject.Find("Image_Bonus_LEVEL");
-        if (bonusObj)
-            m_BonusPanelAnim = bonusObj.GetComponent<Animator>();
     }
 
     void OnEnable()
@@ -50,19 +48,9 @@ public class Victory : MonoBehaviour
         }
         else if (playerIdLine == LevelGenerator.Instance.LastRockId && Market.Instance.Seeds > 0)
         {
-            Debug.Log("BonusLevel");
+            m_OnStartBonusLevelAction.Invoke();
             m_OnBonusLevel = true;
-            if (m_BonusPanelAnim)
-                StartCoroutine(BonusLevelCoroutine());
         }
-    }
-
-    private IEnumerator BonusLevelCoroutine()
-    {
-        m_BonusPanelAnim.SetTrigger("bonuslevel");
-        //GameController.Instance.PauseGame();
-        yield return new WaitForSecondsRealtime(1f);
-        //GameController.Instance.ResumeGame();
     }
 
     private void CheckLeveledAchievements()

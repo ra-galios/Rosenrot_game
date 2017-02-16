@@ -187,7 +187,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         if (LevelsData[GameController.Instance.CurrentLevel].diamondsCollected == LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length)
         {
-            OnBonusLevel = true;
+            onBonusLevel = true;
         }
     }
 
