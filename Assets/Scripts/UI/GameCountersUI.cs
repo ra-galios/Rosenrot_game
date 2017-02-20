@@ -22,8 +22,9 @@ public class GameCountersUI : MonoBehaviour
         m_SeedsCounterText = m_SeedsCounter.GetComponentInChildren<Text>();
         m_BombsCounterText = m_BombsCounter.GetComponentInChildren<Text>();
 
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        if (currentSceneName == "GameScene5")
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        print(currentSceneIndex);
+        if (currentSceneIndex > 6)
             m_BombsCounter.SetActive(true);
     }
 
