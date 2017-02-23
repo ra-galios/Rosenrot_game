@@ -11,6 +11,8 @@ public class GameData
     public int diamonds;
     public int rubies;
 
+    public string Log;
+
     public int curentlyAddHealth;
 
     public int[] tutorialsDisplays;

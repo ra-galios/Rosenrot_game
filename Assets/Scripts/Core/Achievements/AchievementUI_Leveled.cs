@@ -59,8 +59,12 @@ public class AchievementUI_Leveled : AchievementUI_Base
         m_Title.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Title;
         m_Description.text = GameController.Instance.AchievementRevards.Achievements[indexInResource].m_Description;
 
-
+        // DataManager.Instance.SetLog(indexInResource.ToString() + " ");
+        // DataManager.Instance.SetLog(GetAchievementLevel(indexInResource).ToString() + " ");
+        // DataManager.Instance.SetLog(achievements[indexInResource].ToString() + " ");
+        // DataManager.Instance.SetLog(achievements[indexInResource].m_LeveledRevards[GetAchievementLevel(indexInResource)].ToString() + " ### ");
         m_Reward.text = "+" + achievements[indexInResource].m_LeveledRevards[GetAchievementLevel(indexInResource)].ToString();
+
         m_RewardImage.sprite = GameController.Instance.AchievementRevards.RewardSprites[(int)achievements[indexInResource].m_RevardType];
 
     }

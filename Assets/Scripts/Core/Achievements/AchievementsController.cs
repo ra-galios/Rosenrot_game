@@ -43,15 +43,15 @@ public static class AchievementsController
 
         if (type == Type.Adept)
         {
-            CheckAchievementDuplicate(type, 20, val, addValue);
+            val = CheckAchievementDuplicate(type, 20, val, addValue);
         }
         else if (type == Type.SelfDestructive)
         {
-            CheckAchievementDuplicate(type, 21, val, addValue);
+            val = CheckAchievementDuplicate(type, 21, val, addValue);
         }
         else if (type == Type.Survivor)
         {
-            CheckAchievementDuplicate(type, 22, val, addValue);
+            val = CheckAchievementDuplicate(type, 22, val, addValue);
         }
         else
         {
@@ -61,14 +61,16 @@ public static class AchievementsController
         AddToListAchievement(type, val, val + addValue);
     }
 
-    private static void CheckAchievementDuplicate(Type type, int dupIndex, int val, int addValue)
+    private static int CheckAchievementDuplicate(Type type, int dupIndex, int val, int addValue)
     {
         int valDup = DataManager.Instance.GetAchievement(dupIndex);
         DataManager.Instance.SetAchievement(dupIndex, valDup + addValue);
         if (valDup + addValue > val)
         {
             DataManager.Instance.SetAchievement((int)type, valDup + addValue);
+            return addValue;
         }
+        return 0;
     }
 
     public static void DiscardAchievement(Type type)

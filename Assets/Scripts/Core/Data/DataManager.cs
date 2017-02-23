@@ -111,6 +111,12 @@ public class DataManager : CreateSingletonGameObject<DataManager>
         return gameData.TutorialsDisplays[index];
     }
 
+    public void SetLog(string log)
+    {
+        gameData.Log += log;
+        SaveGameData();
+    }
+
 #if UNITY_EDITOR
     public void ClearData()
     {
