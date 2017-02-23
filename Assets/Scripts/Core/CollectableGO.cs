@@ -4,7 +4,7 @@ using System.Collections;
 public class CollectableGO : MonoBehaviour
 {
 
-    public bool collected = false;
+    private bool collected = false;
 
     virtual public void EnterBonus()
     {

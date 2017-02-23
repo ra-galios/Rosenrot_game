@@ -23,7 +23,7 @@ public class LevelGenerator : MonoBehaviour
     private JumpPoint[] m_Array_JumpPoint_Question;
     [Header("Декорации: ")]
     [SerializeField]
-    private Decoration[] m_Decorations;
+    private GameObject[] m_Decorations;
     [Header("Возможные бонусы на скалах")]
     [SerializeField]
     private CollectableGO[] m_BonusPrefabs;
@@ -72,7 +72,7 @@ public class LevelGenerator : MonoBehaviour
     private int idLine;        //id линии родителя скалы
     private GameObject lastLinePusher;     //пушер на последней построеной линии
     private int m_LastRockId;
-    private Decoration lastDecoration;     //последняя созданная декорация
+    private GameObject lastDecoration;     //последняя созданная декорация
     private GameObject decorParent;
     private GameObject pushersParent;
     private List<GameObject> lastlineObjects = new List<GameObject>();
@@ -100,6 +100,7 @@ public class LevelGenerator : MonoBehaviour
 
     void Start()
     {
+        //isRunLevel = true;
         m_MaxLines = CurrentLinesInScene();
         currentLinesCount = m_MaxLines;//колво уже созданных линий на сцене
         m_LastRockId = m_MaxLines;
@@ -124,7 +125,7 @@ public class LevelGenerator : MonoBehaviour
     {
         if (Market.Instance.Health > 0)//если есть жизни, то можно играть
         {
-            IsRunLevel = true;
+            isRunLevel = true;
             Market.Instance.Health--; //отнимаем одну использованную жизнь, т.к. запустили левел
             int playLevelTimes = ++GameController.Instance.LevelsData[GameController.Instance.CurrentLevel].playLevelTimes;
             int neverGiveUpVal;
@@ -144,7 +145,7 @@ public class LevelGenerator : MonoBehaviour
     public void StopLevel()
     {
         StopCoroutine("GeneratorLines");//останавливаем
-        IsRunLevel = false;
+        isRunLevel = false;
     }
 
     IEnumerator CreateDecorNew()    //создание декораций
@@ -170,7 +171,7 @@ public class LevelGenerator : MonoBehaviour
             {
                 lastDecoration = Instantiate(m_Decorations[Random.Range(0, m_Decorations.Length)], decorPos, Quaternion.identity);
                 lastDecoration.transform.parent = decorParent.transform;
-                lastlineObjects.Add(lastDecoration.gameObject);
+                lastlineObjects.Add(lastDecoration);
                 decorCount++;
             }
             if (decorCount >= 2f) //максимальное количество на линию
@@ -381,7 +382,6 @@ public class LevelGenerator : MonoBehaviour
     public bool IsRunLevel
     {
         get { return isRunLevel; }
-        private set { isRunLevel = value; }
     }
 
     public float SpeedPusher
