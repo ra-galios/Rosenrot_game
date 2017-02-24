@@ -4,16 +4,20 @@ using System.Collections;
 public class BackgoundTransit : MonoBehaviour
 {
     private float FlowsSpeed;
+    private int m_TransitionIndex;
+    private bool m_InTransition = false;
     private float[] offset = new float[3];
+
     [SerializeField]
     private Renderer[] m_BackgroundRenderer = new Renderer[3];
     [SerializeField]
     private Texture[] m_TransitionTex = new Texture[2];
     [SerializeField]
     private Texture[] m_BGTex = new Texture[2];
-    public bool m_Transition;
-    public int m_TransitionIndex;
-    public bool m_InTransition = false;
+    [SerializeField]
+    private bool m_Transition;
+
+
 
     private void Start()
     {
