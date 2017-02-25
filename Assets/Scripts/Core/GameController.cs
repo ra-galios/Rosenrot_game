@@ -187,15 +187,16 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void CheckOnBonusLevel()
     {
-        //print(LevelsData[GameController.Instance.CurrentLevel].diamondsCollected + " == " + LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length);
-        if (LevelsData[GameController.Instance.CurrentLevel].diamondsCollected == LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length)
-        {
-            onBonusLevel = true;
-        }
-        else
-        {
-            onBonusLevel = false;
-        }
+        // print(LevelsData[GameController.Instance.CurrentLevel].diamondsCollected + " == " + LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length);
+        // if (LevelsData[GameController.Instance.CurrentLevel].diamondsCollected == LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length)
+        // {
+        //     onBonusLevel = true;
+        // }
+        // else
+        // {
+        //     onBonusLevel = false;
+        // }
+        onBonusLevel = true; //бонусный уровень доступен вне зависимости от собранных алмазов
     }
 
     public int CurrentLevel
