@@ -42,14 +42,19 @@ public class Victory : MonoBehaviour
 
     void CheckWin(int playerIdLine)
     {
-        if (playerIdLine == LevelGenerator.Instance.MaxLines)
-        {
-            SetWin();
-        }
-        else if (playerIdLine == LevelGenerator.Instance.LastRockId && Market.Instance.Seeds > 0)
+        if (GameController.Instance.OnBonusLevel && playerIdLine == LevelGenerator.Instance.LastRockId && Market.Instance.Seeds > 0)
         {
             m_OnStartBonusLevelAction.Invoke();
             m_OnBonusLevel = true;
+        }
+        else if (playerIdLine == LevelGenerator.Instance.LastRockId)
+        {
+            SetWin();
+        }
+
+        if(m_OnBonusLevel && Market.Instance.Seeds == 0)
+        {
+            SetWin();
         }
     }
 

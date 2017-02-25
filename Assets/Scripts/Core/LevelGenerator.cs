@@ -194,12 +194,17 @@ public class LevelGenerator : MonoBehaviour
         GameObject parentLine;         //линия для пушеров
         int posNewRock = 0;      //позиция для нового пушера
 
-        if (GameController.Instance.OnBonusLevel)
+        while(!GameController.Instance.OnBonusLevel)
         {
-            m_MaxLines = currentLinesCount + Market.Instance.Seeds;
+            yield return null;
         }
 
-        while (currentLinesCount < m_MaxLines)        //пока не создадим нужное кол-во линий
+        // if (GameController.Instance.OnBonusLevel)
+        // {
+        //     m_MaxLines = currentLinesCount + Market.Instance.Seeds;
+        // }
+
+        while (GameController.Instance.OnBonusLevel)        //пока не создадим нужное кол-во линий
         {
             while ((transform.position.y - lastLinePusher.transform.position.y) < lineSpacing)       //ждем пeред тем как построить новую линию
             {

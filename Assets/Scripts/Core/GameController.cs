@@ -144,6 +144,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     private IEnumerator LoadLevelAsync(string name)
     {
         yield return null;
+        //CheckOnBonusLevel();
         AsyncOperation load = SceneManager.LoadSceneAsync(name);
         while (!load.isDone)
             yield return null;
@@ -152,6 +153,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     private IEnumerator LoadLevelAsync(int index)
     {
         yield return null;
+        //CheckOnBonusLevel();
         AsyncOperation load = SceneManager.LoadSceneAsync(index);
         while (!load.isDone)
             yield return null;
@@ -185,9 +187,14 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void CheckOnBonusLevel()
     {
+        //print(LevelsData[GameController.Instance.CurrentLevel].diamondsCollected + " == " + LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length);
         if (LevelsData[GameController.Instance.CurrentLevel].diamondsCollected == LevelsData[GameController.Instance.CurrentLevel].IsCollected.Length)
         {
             onBonusLevel = true;
+        }
+        else
+        {
+            onBonusLevel = false;
         }
     }
 
