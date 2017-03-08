@@ -6,7 +6,7 @@ using System.Collections;
 public class BackButton : MonoBehaviour
 {
 
-    public enum MenuLocation { Map, Market, Achievements, MainMenu }
+    public enum MenuLocation { Map, Market, Achievements, MainMenu, Info }
 
     private MenuLocation currentLocation = MenuLocation.MainMenu;
 
@@ -19,6 +19,9 @@ public class BackButton : MonoBehaviour
     [HeaderAttribute("From Achievements To Menu Button")]
     [SerializeField]
     private Button m_AchievementsButton;
+    [HeaderAttribute("From Info To Menu Button")]
+    [SerializeField]
+    private Button m_InfoButton;
 
 
     private int nesting = 0;
@@ -50,16 +53,20 @@ public class BackButton : MonoBehaviour
                     StartCoroutine(BackToMainMenu(m_AchievementsButton));
                     currentLocation = MenuLocation.MainMenu;
                     break;
+                case MenuLocation.Info:
+                    StartCoroutine(BackToMainMenu(m_InfoButton));
+                    currentLocation = MenuLocation.MainMenu;
+                    break;
             }
 
         }
     }
 
-	private IEnumerator BackToMainMenu(Button button)
-	{
-		yield return new WaitForSeconds(0.1f);
-		button.onClick.Invoke();
-	}
+    private IEnumerator BackToMainMenu(Button button)
+    {
+        yield return new WaitForSeconds(0.1f);
+        button.onClick.Invoke();
+    }
 
     public void SetMenuStanding(int location)
     {
