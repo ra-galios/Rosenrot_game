@@ -45,9 +45,9 @@ public class LevelGenerator : MonoBehaviour
     [Header("Ускорение движения скал: ")]
     [SerializeField]
     private float accelerationJumpPoint = 0f;         //ускорение скал
-    [Header("Максимальный сдвиг декораций от центра")]
-    [SerializeField]
-    private float m_DecorMaxPosX;        //Максимальный сдвиг декораций от центра
+    //[Header("Максимальный сдвиг декораций от центра")]
+    //[SerializeField]
+    //private float m_DecorMaxPosX;        //Максимальный сдвиг декораций от центра
 
     [Space(30), Header("Debug")]
 
@@ -72,10 +72,10 @@ public class LevelGenerator : MonoBehaviour
     private int idLine;        //id линии родителя скалы
     private GameObject lastLinePusher;     //пушер на последней построеной линии
     private int m_LastRockId;
-    private GameObject lastDecoration;     //последняя созданная декорация
+    //private GameObject lastDecoration;     //последняя созданная декорация
     private GameObject decorParent;
     private GameObject pushersParent;
-    private List<GameObject> lastlineObjects = new List<GameObject>();
+    //private List<GameObject> lastlineObjects = new List<GameObject>();
 
     void Reset()
     {
@@ -148,41 +148,63 @@ public class LevelGenerator : MonoBehaviour
         isRunLevel = false;
     }
 
-    IEnumerator CreateDecorNew()    //создание декораций
+    //IEnumerator CreateDecorNew()    //создание декораций
+    //{
+    //    int tryCreateDecor = 8;
+    //    int decorCount = 0;     //количество уже построенных
+
+    //    for (int i = 0; i < tryCreateDecor; i++)        //попытки построить декорации
+    //    {
+    //        bool canCreate = true;
+    //        Vector3 decorPos = new Vector3(Random.Range(-m_DecorMaxPosX, m_DecorMaxPosX) + transform.position.x, Instance.transform.position.y + Random.Range(0f, lineSpacing - 1f), 3f);
+
+    //        for (int j = 0; j < lastlineObjects.Count; j++)
+    //        {
+    //            if (Vector2.Distance(decorPos, lastlineObjects[j].transform.position) < 1.7f)       //выходим если расстояние между объектами < 1.7 
+    //            {
+    //                canCreate = false;
+    //                break;
+    //            }
+    //        }
+
+    //        if (canCreate)  //построить декорацию
+    //        {
+    //            lastDecoration = Instantiate(m_Decorations[Random.Range(0, m_Decorations.Length)], decorPos, Quaternion.identity);
+    //            lastDecoration.transform.parent = decorParent.transform;
+    //            lastlineObjects.Add(lastDecoration);
+    //            decorCount++;
+    //        }
+    //        if (decorCount >= 2f) //максимальное количество на линию
+    //        {
+    //            break;
+    //        }
+
+    //        yield return null;
+    //    }
+
+    //    lastlineObjects.Clear();
+    //}
+
+    private void CreateDecorations(bool[] SetCol)
     {
-        int tryCreateDecor = 8;
-        int decorCount = 0;     //количество уже построенных
+        int decorationsCount = 0;
 
-        for (int i = 0; i < tryCreateDecor; i++)        //попытки построить декорации
+        for (int i = 0; i < SetCol.Length; i++)
         {
-            bool canCreate = true;
-            Vector3 decorPos = new Vector3(Random.Range(-m_DecorMaxPosX, m_DecorMaxPosX) + transform.position.x, Instance.transform.position.y + Random.Range(0f, lineSpacing - 1f), 3f);
-
-            for (int j = 0; j < lastlineObjects.Count; j++)
+            if (!SetCol[i])
             {
-                if (Vector2.Distance(decorPos, lastlineObjects[j].transform.position) < 1.7f)       //выходим если расстояние между объектами < 1.7 
-                {
-                    canCreate = false;
-                    break;
-                }
+                GameObject decoration = Instantiate(m_Decorations[Random.Range(0, m_Decorations.Length)]);
+                decoration.transform.position = m_StartPositions[i].position + RandomizePos(0.3f, 0.7f) ;
+                decoration.transform.rotation = Quaternion.identity;
+                decoration.transform.parent = decorParent.transform;
+                decorationsCount++;
             }
 
-            if (canCreate)  //построить декорацию
-            {
-                lastDecoration = Instantiate(m_Decorations[Random.Range(0, m_Decorations.Length)], decorPos, Quaternion.identity);
-                lastDecoration.transform.parent = decorParent.transform;
-                lastlineObjects.Add(lastDecoration);
-                decorCount++;
-            }
-            if (decorCount >= 2f) //максимальное количество на линию
+            if(decorationsCount > 0 && Random.Range(0f, 1f) > 0.3f)
             {
                 break;
             }
-
-            yield return null;
         }
-
-        lastlineObjects.Clear();
     }
 
     IEnumerator GeneratorLines()
@@ -194,7 +216,7 @@ public class LevelGenerator : MonoBehaviour
         GameObject parentLine;         //линия для пушеров
         int posNewRock = 0;      //позиция для нового пушера
 
-        while(!GameController.Instance.OnBonusLevel)
+        while (!GameController.Instance.OnBonusLevel)
         {
             yield return null;
         }
@@ -247,7 +269,7 @@ public class LevelGenerator : MonoBehaviour
 
                 pusherPos = m_StartPositions[posNewRock].position;      //выбираем позицию
 
-                pusherPos += RandomizePos(0.25f);       //немного изменяем позицию
+                pusherPos += RandomizePos(0.25f, 0.25f);       //немного изменяем позицию
 
                 objNewRock = Instantiate(newRock.gameObject, pusherPos, newRock.transform.rotation) as GameObject; //рандомный
                 lastLinePusher = objNewRock;
@@ -266,12 +288,13 @@ public class LevelGenerator : MonoBehaviour
                 newRock = null;
                 jumpPointRock = null;
                 tempArray = null;
-                lastlineObjects.Add(lastLinePusher);
+                //lastlineObjects.Add(lastLinePusher);
 
                 yield return null;
             }
 
-            StartCoroutine("CreateDecorNew");       //построить декорации
+            CreateDecorations(SetCol);
+            //StartCoroutine("CreateDecorNew");       //построить декорации
 
             parentLine = null;
             currentLinesCount++;
@@ -345,10 +368,10 @@ public class LevelGenerator : MonoBehaviour
         return tempArray;
     }
 
-    private Vector3 RandomizePos(float gapValue)
+    private Vector3 RandomizePos(float xGap, float yGap)
     {
-        float x = Random.Range(gapValue, -gapValue);
-        float y = Random.Range(gapValue, -gapValue);
+        float x = Random.Range(xGap, -xGap);
+        float y = Random.Range(yGap, -yGap);
 
         return new Vector3(x, y, 0f);
     }
