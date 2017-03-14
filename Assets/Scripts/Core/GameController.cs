@@ -28,6 +28,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     private AchievementRevards achievementRevards;
     public static Action m_VictoryAction;
     public static Action m_FailAction;
+    public int m_DiesInARow;
 
     [SerializeField]
     private bool onBonusLevel = false;
@@ -41,6 +42,7 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     private void Start()
     {
+        m_DiesInARow = 0;
         AdeptAchievement();
     }
 
@@ -86,6 +88,7 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void LoadScene(string name)
     {
+        m_DiesInARow = 0;
         SceneManager.LoadScene("LoadingScene");
         StartCoroutine(LoadLevelAsync(name));
     }
@@ -101,6 +104,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         if (SceneManager.GetActiveScene().buildIndex != 0)
         {
+            m_DiesInARow = 0;
             SceneManager.LoadScene("LoadingScene");
             StartCoroutine(LoadLevelAsync("menu"));
         }
@@ -110,6 +114,7 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         if (LevelsData[currentLevel].diamondsCollected == LevelsData[currentLevel].IsCollected.Length)
         {
+            m_DiesInARow = 0;
             currentLevel++;
             SceneManager.LoadScene("LoadingScene");
             StartCoroutine(LoadLevelAsync(SceneManager.GetActiveScene().buildIndex + 1));

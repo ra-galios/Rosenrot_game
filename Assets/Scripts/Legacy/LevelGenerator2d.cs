@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class LevelGenerator2d : MonoBehaviour {
+public class LevelGenerator2d : MonoBehaviour
+{
     public int MaxPushersInLevel = 25;
     int GeneratedPushers;
 
@@ -14,22 +15,23 @@ public class LevelGenerator2d : MonoBehaviour {
     public static List<GameObject> PushersInScene = new List<GameObject>();
     public static float FarDistance;
     public static List<PushgenBlock> PushgenBlocks;
-    public static List<GameObject> AlternativePushers;   
+    public static List<GameObject> AlternativePushers;
 
     public float startSpeed = 0.75f;
 
     public int Seed;
     float StartTime;
 
-    Coroutine generatorCoroutine = null;
+    //Coroutine generatorCoroutine = null;
 
-	// Use this for initialization
-	void Awake () {
+    // Use this for initialization
+    void Awake()
+    {
         PushgenBlocks = new List<PushgenBlock>();
         StartTime = Time.time;
         speed = startSpeed;
         PushersInScene = new List<GameObject>();
-        
+
         FarDistance = Position[0].position.x - Position[1].position.x;
         foreach (Transform a in Position)
         {
@@ -39,24 +41,25 @@ public class LevelGenerator2d : MonoBehaviour {
                     FarDistance = a.position.x - b.position.x;
             }
         }
-        
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
 
         // if(generatorCoroutine == null && GameController.Instance.inGame)
         // {
         //     generatorCoroutine = StartCoroutine(Generator());
         // }
-            
+
 
 
         if (GeneratedPushers >= MaxPushersInLevel)
         {
             this.gameObject.SetActive(false);
-        } 
-	}
+        }
+    }
 
 
     GameObject getBlockPusgen()
@@ -65,7 +68,7 @@ public class LevelGenerator2d : MonoBehaviour {
         foreach (PushgenBlock block in PushgenBlocks)
         {
             if (block && Time.time - StartTime >= block.PushgenStartTime)//какой конкретно блок проверяем
-            {                
+            {
                 if (block.transform.childCount > 0)
                 {
                     //пушер, следующий в иерархии блока
@@ -73,8 +76,8 @@ public class LevelGenerator2d : MonoBehaviour {
 
                     //проверяем следующего пушера на предмет вилки - по позиции
                     AlternativePushersSorting.AddToAlternativePushersList(GetAlternativePushers(block));
-                    SetPusherStartPosition(obj);         
-                    
+                    SetPusherStartPosition(obj);
+
                 }
                 else
                 {
@@ -84,7 +87,7 @@ public class LevelGenerator2d : MonoBehaviour {
                 break;
             }
         }
-        return obj; 
+        return obj;
     }
 
     IEnumerator Generator()
@@ -92,10 +95,10 @@ public class LevelGenerator2d : MonoBehaviour {
         GameObject obj = getBlockPusgen();
         if (!obj)
         {
-            Random.seed = Seed + (int)(Time.time - StartTime);
+            //Random.seed = Seed + (int)(Time.time - StartTime);
             GameObject newObject = Pushers[Random.Range(0, Pushers.Length)];
             Transform newTransform = Position[Random.Range(0, Position.Length)];
-            Random.seed = 0;
+            //Random.seed = 0;
             obj = Instantiate(newObject, newTransform.position, newTransform.rotation) as GameObject;
         }
 
@@ -147,18 +150,18 @@ public class LevelGenerator2d : MonoBehaviour {
                 pushers.Add(secondPusher);
 
             if (thirdPusher)
-                pushers.Add(thirdPusher);        
+                pushers.Add(thirdPusher);
         }
 
         if (pushers.Count > 0)
         {
-            foreach(GameObject push in pushers)
+            foreach (GameObject push in pushers)
             {
                 SetPusherStartPosition(push);
             }
             return pushers;
         }
-            
+
         else
             return null;
 

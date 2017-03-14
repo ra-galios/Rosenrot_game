@@ -55,6 +55,8 @@ public class LevelButton : MonoBehaviour
 
     public void LoadGameLevel(string name)
     {
+        if (Market.Instance.Health < 1) return;
+
         GameController.Instance.CurrentLevel = levelNumber;
         GameController.Instance.DiamondsOnLevel = diamondsOnLevel;
         GameController.Instance.OnBonusLevel = isBonusLevel;

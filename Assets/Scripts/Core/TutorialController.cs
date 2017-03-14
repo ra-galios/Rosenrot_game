@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class TutorialController : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject m_Button;
 
     [SerializeField]
     private Sprite m_BombSprite;
@@ -21,20 +23,19 @@ public class TutorialController : MonoBehaviour
     private Sprite m_SwipeSprite;
     [SerializeField]
     private Sprite m_ToTheTopSprite;
+    [SerializeField]
+    private Sprite m_OneByOneSprite;
 
-    private Button m_TutorialButton;
     private Image m_TutorialImage;
     private Animator m_TutorialAnimator;
-    private Coroutine m_ShowCoroutine;
     private static PlayerBehaviour m_PlayerBeh;
-    private bool[] m_CanShow = new bool[] { true, true, true, true, true };
+    private bool[] m_CanShow = new bool[] { true, true, true, true, true, true };
 
     private string m_SceneName;
 
     // Use this for initialization
     void Start()
     {
-        m_TutorialButton = GetComponent<Button>();
         m_TutorialImage = GetComponent<Image>();
         m_TutorialAnimator = GetComponent<Animator>();
         m_SceneName = SceneManager.GetActiveScene().name.ToString();
@@ -69,6 +70,13 @@ public class TutorialController : MonoBehaviour
                 DataManager.Instance.SetTutorialDisplays(3);
                 StartCoroutine(ShowButton(new Sprite[] { m_GuessSprite }));
             }
+            else if (DataManager.Instance.GetTutorialDisplays(5) < 2 && m_CanShow[5] && m_PlayerBeh.IdLine > 0 && m_SceneName == "GameScene1" 
+                && GameController.Instance.m_DiesInARow > 2)        //указать idLine
+            {
+                m_CanShow[5] = false;
+                DataManager.Instance.SetTutorialDisplays(5);
+                StartCoroutine(ShowButton(new Sprite[] { m_OneByOneSprite }));
+            }
 
             if (DataManager.Instance.GetTutorialDisplays(4) < 2 && m_CanShow[4] && m_PlayerBeh.IsPlayerFall)
             {
@@ -91,7 +99,7 @@ public class TutorialController : MonoBehaviour
             m_TutorialImage.sprite = buttonSprite[i];
             m_TutorialAnimator.SetTrigger("tutorial");
 
-            yield return new WaitUntil(() => EventSystem.current.currentSelectedGameObject == this.gameObject);
+            yield return new WaitUntil(() => EventSystem.current.currentSelectedGameObject == m_Button);
             EventSystem.current.SetSelectedGameObject(null);
             yield return new WaitForSecondsRealtime(0.4f);
             i++;
@@ -99,7 +107,6 @@ public class TutorialController : MonoBehaviour
 
         EventSystem.current.SetSelectedGameObject(null);
         GameController.Instance.ResumeGame();
-        m_ShowCoroutine = null;
     }
 
     public static PlayerBehaviour PlayerBeh

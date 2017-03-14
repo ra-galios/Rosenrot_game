@@ -4,14 +4,15 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public  class PlayerBehavior2d : MonoBehaviour {
+public class PlayerBehavior2d : MonoBehaviour
+{
     Transform TargetTransform;
-        int nextPusher;
+    int nextPusher;
     float startPress;
     Vector2 StartMousePosition;
-    enum ControlType {climb, jump, doubleJump};
+    enum ControlType { climb, jump, doubleJump };
     GameObject hitObject;
-    float firstClickTime = 0;
+    //float firstClickTime = 0;
     float secondClickTime = 0;
     bool isJump;
     public Text text;
@@ -20,29 +21,31 @@ public  class PlayerBehavior2d : MonoBehaviour {
     bool isWaitInput;
 
     public static int PlayerLifes;
-   // Animator anim;
-   
+    // Animator anim;
+
 
     // Use this for initialization
-    void Start () {
-       //PlayerPrefs.SetInt("PlayerLifes", 0);
+    void Start()
+    {
+        //PlayerPrefs.SetInt("PlayerLifes", 0);
         PlayerLifes = Calculator.GetPlayerLifes();
         TargetTransform = transform;
         nextPusher = 0;
         hitObject = null;
         isFalling = false;
-       // anim = GetComponent<Animator>();
-     //   anim.SetBool("start", false);
+        // anim = GetComponent<Animator>();
+        //   anim.SetBool("start", false);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         //text.text = PlayerLifes.ToString();
         if (Input.GetMouseButtonDown(0) && PlayerLifes > 0)
         {
             //if (!GameController.inGame)
-                //GameController.Instance.inGame = true;
-         //   anim.SetBool("start", true);
+            //GameController.Instance.inGame = true;
+            //   anim.SetBool("start", true);
             if (!isFalling)
             {
                 hitObject = null;
@@ -65,7 +68,7 @@ public  class PlayerBehavior2d : MonoBehaviour {
 
             if (!isWaitInput)
             {
-                firstClickTime = Time.time;
+                //firstClickTime = Time.time;
                 StartMousePosition = Input.mousePosition;
                 StartCoroutine(WaitInput());
 
@@ -108,7 +111,7 @@ public  class PlayerBehavior2d : MonoBehaviour {
         isWaitInput = true;
         yield return new WaitForSeconds(0.35f);
         ControlType type = ControlType.climb;
-        if(secondClickTime > 0)
+        if (secondClickTime > 0)
         {
             type = ControlType.jump;
         }
@@ -130,7 +133,7 @@ public  class PlayerBehavior2d : MonoBehaviour {
         if (hitObject)
         {
             //print(hitObject.GetComponent<LevelObjectsMover2d>().getType());
-            if ( hitObject.tag == "Respawn" && CheckNextPushgen())
+            if (hitObject.tag == "Respawn" && CheckNextPushgen())
             {
                 bool inAction = false;
                 float dist = Mathf.Abs(transform.position.x - hitObject.transform.position.x);
@@ -140,20 +143,20 @@ public  class PlayerBehavior2d : MonoBehaviour {
                         if (dist < 1f)
                             inAction = true;
                         break;
-                    case ControlType.jump:                        
+                    case ControlType.jump:
                         if (dist <= LevelGenerator2d.FarDistance * 0.6f && dist >= 1f)
                             inAction = true;
                         break;
 
                     case ControlType.doubleJump:
-                        if(dist > LevelGenerator2d.FarDistance * 0.6f)
+                        if (dist > LevelGenerator2d.FarDistance * 0.6f)
                             inAction = true;
                         break;
                     default:
                         break;
-                        
+
                 }
-                
+
                 if (inAction)
                 {
                     TargetTransform = hitObject.transform;
@@ -165,7 +168,7 @@ public  class PlayerBehavior2d : MonoBehaviour {
                 }
 
             }
-            else if(hitObject.tag == "Respawn")
+            else if (hitObject.tag == "Respawn")
             {
                 SetFalling();
             }
@@ -174,7 +177,7 @@ public  class PlayerBehavior2d : MonoBehaviour {
 
     GameObject SetHitObject()
     {
-       
+
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
         if (hit.transform != null)
@@ -191,11 +194,11 @@ public  class PlayerBehavior2d : MonoBehaviour {
 
     void SetFalling()
     {
-        
+
         isFalling = true;
-        
+
         GetComponent<Rigidbody2D>().isKinematic = false;
-       
+
         transform.parent = null;
     }
 
@@ -207,20 +210,20 @@ public  class PlayerBehavior2d : MonoBehaviour {
         TargetTransform = parent;
         print(parent);
         //нужно проюежать по всем пушерам и найти номер parent.gameobject
-        
-        GameObject obj =  parent.gameObject;
-        int i=0;
+
+        GameObject obj = parent.gameObject;
+        int i = 0;
         if (obj)
         {
             i = LevelGenerator2d.PushersInScene.IndexOf(obj);
             i++;
-         }
-        return i;       
+        }
+        return i;
     }
 
     bool CheckNextPushgen()
     {
-        if(hitObject == LevelGenerator2d.PushersInScene[nextPusher])
+        if (hitObject == LevelGenerator2d.PushersInScene[nextPusher])
         {
             return true;
         }
@@ -241,12 +244,12 @@ public  class PlayerBehavior2d : MonoBehaviour {
                     }
                 }
 
- 
+
             }
 
             return false;
         }
-        
+
     }
 
 }

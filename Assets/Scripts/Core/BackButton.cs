@@ -24,7 +24,7 @@ public class BackButton : MonoBehaviour
     private Button m_InfoButton;
 
 
-    private int nesting = 0;
+    //private int nesting = 0;
 
     private void Update()
     {

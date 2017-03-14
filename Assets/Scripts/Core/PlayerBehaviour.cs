@@ -113,6 +113,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             StopCoroutine("Lerp");
             LerpCoroutine = null;
+            GameController.Instance.m_DiesInARow++;
             isPlayerFall = true;
             onPlatformAfterFall = false;
             rig2D.bodyType = RigidbodyType2D.Dynamic;

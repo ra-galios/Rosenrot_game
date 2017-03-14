@@ -3,7 +3,7 @@ using System.Collections;
 
 public class EndGameTrigger : MonoBehaviour
 {
-    private bool endGame = false;
+    //private bool endGame = false;
     private AchievementUI_Leveled LevelAchievementPanel;
     private Victory m_VictoryObj;
 
