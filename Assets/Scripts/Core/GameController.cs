@@ -42,6 +42,7 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     private void Start()
     {
+        ExceptionLogger.Instance.Create();
         m_DiesInARow = 0;
         AdeptAchievement();
     }

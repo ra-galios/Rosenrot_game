@@ -70,8 +70,8 @@ public class TutorialController : MonoBehaviour
                 DataManager.Instance.SetTutorialDisplays(3);
                 StartCoroutine(ShowButton(new Sprite[] { m_GuessSprite }));
             }
-            else if (DataManager.Instance.GetTutorialDisplays(5) < 2 && m_CanShow[5] && m_PlayerBeh.IdLine > 0 && m_SceneName == "GameScene1" 
-                && GameController.Instance.m_DiesInARow > 2)        //указать idLine
+            else if (DataManager.Instance.GetTutorialDisplays(5) < 2 && m_CanShow[5] && m_PlayerBeh.IdLine > 21 && m_SceneName == "GameScene1" 
+                && GameController.Instance.m_DiesInARow > 2)
             {
                 m_CanShow[5] = false;
                 DataManager.Instance.SetTutorialDisplays(5);
