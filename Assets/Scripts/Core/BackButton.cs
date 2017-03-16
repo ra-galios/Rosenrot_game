@@ -8,7 +8,7 @@ public class BackButton : MonoBehaviour
 
     public enum MenuLocation { Map, Market, Achievements, MainMenu, Info }
 
-    private MenuLocation currentLocation = MenuLocation.MainMenu;
+    public static MenuLocation currentLocation { get; private set; }
 
     [HeaderAttribute("From Map To Menu Button")]
     [SerializeField]
@@ -23,6 +23,10 @@ public class BackButton : MonoBehaviour
     [SerializeField]
     private Button m_InfoButton;
 
+    private void Start()
+    {
+        currentLocation = MenuLocation.MainMenu;
+    }
 
     //private int nesting = 0;
 

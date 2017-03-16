@@ -18,7 +18,7 @@ public class LevelButton : MonoBehaviour
     [SerializeField, HeaderAttribute("количество алмазов на уровне")]
     private int diamondsOnLevel;
 
-
+    public bool m_IsOpen { get; private set; }
 
     void Start()
     {
@@ -42,10 +42,12 @@ public class LevelButton : MonoBehaviour
         levelButton = GetComponent<Button>();
         if ((prevLevelCollectDiamonds >= diamondsOnPrevLevel && diamondsOnPrevLevel != 0) || (levelNumber == 0))       //если уровень открыт или это первый уровень
         {
+            m_IsOpen = true;
             levelButton.interactable = true;
         }
         else        //если уровень не доступен
         {
+            m_IsOpen = false;
             levelButton.interactable = false;
         }
 

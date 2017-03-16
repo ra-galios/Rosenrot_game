@@ -10,22 +10,36 @@ public class MenuSwipe : MonoBehaviour
     private bool movePanel = false;
     enum PanelState { Up, Down }
     private PanelState currentState = PanelState.Up;
+    private BackButton.MenuLocation m_PrevLocation;
 
     public float defaultPositionY;
     public float bottomPositionY;
 
+    [SerializeField]
+    private LevelButton m_PrevLevel;
     public bool darkLevelIsOpen;
 
     void Start()
     {
+        darkLevelIsOpen = m_PrevLevel.m_IsOpen;
+        if (darkLevelIsOpen)
+            transform.position += Vector3.up * posY;
+
         defaultPositionY = transform.position.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (darkLevelIsOpen)
+        if (currentState == PanelState.Down && m_PrevLocation == BackButton.MenuLocation.Map
+            && BackButton.currentLocation == BackButton.MenuLocation.MainMenu)
+            StartCoroutine(UpRoutine());
+
+        if (darkLevelIsOpen && BackButton.currentLocation == BackButton.MenuLocation.Map)
         {
+            if (m_PrevLocation == BackButton.MenuLocation.MainMenu)
+                StartCoroutine(DownRoutine());
+
             if (Input.GetMouseButtonDown(0))
             {
                 movePanel = false;
@@ -74,6 +88,8 @@ public class MenuSwipe : MonoBehaviour
                 }
             }
         }
+
+        m_PrevLocation = BackButton.currentLocation;
     }
 
     private void MoveUp()
@@ -97,6 +113,24 @@ public class MenuSwipe : MonoBehaviour
             transform.position = new Vector3(transform.position.x, bottomPositionY, transform.position.z);
             currentState = PanelState.Down;
             movePanel = false;
+        }
+    }
+
+    private IEnumerator DownRoutine()
+    {
+        while (currentState != PanelState.Down)
+        {
+            MoveDown();
+            yield return null;
+        }
+    }
+
+    private IEnumerator UpRoutine()
+    {
+        while (currentState != PanelState.Up)
+        {
+            MoveUp();
+            yield return null;
         }
     }
 }
