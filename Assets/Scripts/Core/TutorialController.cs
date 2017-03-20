@@ -29,7 +29,7 @@ public class TutorialController : MonoBehaviour
     private Image m_TutorialImage;
     private Animator m_TutorialAnimator;
     private static PlayerBehaviour m_PlayerBeh;
-    private bool[] m_CanShow = new bool[] { true, true, true, true, true, true };
+    private bool[] m_CanShow = new bool[] { true, true, true, true, true, true, true };
 
     private string m_SceneName;
 
@@ -77,6 +77,13 @@ public class TutorialController : MonoBehaviour
                 DataManager.Instance.SetTutorialDisplays(5);
                 StartCoroutine(ShowButton(new Sprite[] { m_OneByOneSprite }));
             }
+            else if (DataManager.Instance.GetTutorialDisplays(6) < 2 && m_CanShow[6] && m_PlayerBeh.IdLine == 3 && m_SceneName == "GameScene5")
+            {
+                m_CanShow[6] = false;
+                DataManager.Instance.SetTutorialDisplays(6);
+                StartCoroutine(ShowButton(new Sprite[] { m_BombSprite }));
+            }
+
 
             if (DataManager.Instance.GetTutorialDisplays(4) < 2 && m_CanShow[4] && m_PlayerBeh.IsPlayerFall)
             {
