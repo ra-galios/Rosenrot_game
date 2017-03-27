@@ -103,6 +103,27 @@
  <Reference Include="UnityEngine.VR">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
  </Reference>
+ <Reference Include="Common">
+ <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Common.dll</HintPath>
+ </Reference>
+ <Reference Include="Editor">
+ <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Editor.dll</HintPath>
+ </Reference>
+ <Reference Include="Security">
+ <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Security.dll</HintPath>
+ </Reference>
+ <Reference Include="Stores">
+ <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Stores.dll</HintPath>
+ </Reference>
+ <Reference Include="Apple">
+ <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Apple/Apple.dll</HintPath>
+ </Reference>
+ <Reference Include="Tizen">
+ <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Tizen/Tizen.dll</HintPath>
+ </Reference>
+ <Reference Include="winrt">
+ <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/winrt/winrt.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>/Applications/Unity/Unity.app/Contents/Managed/UnityEditor.Graphs.dll</HintPath>
  </Reference>
@@ -114,27 +135,6 @@
  </Reference>
  <Reference Include="UnityEditor.OSXStandalone.Extensions">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/macstandalonesupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
- </Reference>
- <Reference Include="Security">
- <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Security.dll</HintPath>
- </Reference>
- <Reference Include="Apple">
- <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Apple/Apple.dll</HintPath>
- </Reference>
- <Reference Include="Common">
- <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Common.dll</HintPath>
- </Reference>
- <Reference Include="Stores">
- <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Stores.dll</HintPath>
- </Reference>
- <Reference Include="Tizen">
- <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Tizen/Tizen.dll</HintPath>
- </Reference>
- <Reference Include="winrt">
- <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/winrt/winrt.dll</HintPath>
- </Reference>
- <Reference Include="Editor">
- <HintPath>/Users/user/Work/Rosenrote/Assets/Plugins/UnityPurchasing/Bin/Editor.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
