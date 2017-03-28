@@ -10,13 +10,13 @@ namespace IAP
         private static IStoreController m_StoreController;
         private static IExtensionProvider m_StoreExtensionProvider;
 
-        public const string pGetFiveLifes = "Get_5_Lifes";
+        public const string pGetFiveLifes = "get_5_lifes";
         public const string pNoAds = "no_ads";
 
-        public const string ppGetFiveLifesAppStore = "app_Get_5_Lifes";
+        public const string ppGetFiveLifesAppStore = "app_get_5_lifes";
         public const string pNoAdsAppStore = "app_no_ads";
 
-        public const string ppGetFiveLifesGooglePlay = "gp_Get_5_Lifes";
+        public const string ppGetFiveLifesGooglePlay = "gp_get_5_lifes";
         public const string pNoAdsGooglePlay = "gp_no_ads";
 
         void Start()
