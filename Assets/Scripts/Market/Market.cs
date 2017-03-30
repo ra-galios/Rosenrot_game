@@ -188,4 +188,9 @@ public class Market : CreateSingletonGameObject<Market>
     {
         get { return (int)this.m_SecondsUntilHealth; }
     }
+
+    public void AddHealthIAP(int plusValue)
+    {
+        Market.Instance.Health += plusValue;
+    }
 }

@@ -118,6 +118,7 @@ namespace IAP
             if (String.Equals(args.purchasedProduct.definition.id, pGetFiveLifes, StringComparison.Ordinal))
             {
                 //Action for money
+                Market.Instance.AddHealthIAP(5);
             }
             else if (String.Equals(args.purchasedProduct.definition.id, pNoAds, StringComparison.Ordinal))
             {
