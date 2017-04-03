@@ -193,4 +193,9 @@ public class Market : CreateSingletonGameObject<Market>
     {
         Market.Instance.Health += plusValue;
     }
+
+    public void AddHealthAds(int plusValue)
+    {
+        Market.Instance.Health += plusValue;
+    }
 }
