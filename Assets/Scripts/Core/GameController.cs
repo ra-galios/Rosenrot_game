@@ -124,17 +124,21 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void FailGame()
     {
+        LevelAnalitics.LevelDefeate(SceneManager.GetActiveScene().buildIndex);
         FailPanelAnim.SetTrigger("Fail");
         FailDeadJacobAnim.SetTrigger("Dead");
         m_FailAction.Invoke();
         PauseGame();
+        
     }
 
     public void WinGame()
     {
+         LevelAnalitics.LevelVictory(SceneManager.GetActiveScene().buildIndex);
         VictoryPanelAnim.SetTrigger("Win");
         m_VictoryAction.Invoke();
         PauseGame();
+       
     }
 
     public void PauseGame()
