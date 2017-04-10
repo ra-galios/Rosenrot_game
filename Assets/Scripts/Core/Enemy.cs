@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
             Animator anim = GetComponent<Animator>();
             anim.SetBool("boom", true);
 
-            Destroy(this.gameObject, 1f);
+            Destroy(this.gameObject, 0.3f);
         }
     }
 
