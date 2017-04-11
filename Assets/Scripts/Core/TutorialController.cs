@@ -46,38 +46,38 @@ public class TutorialController : MonoBehaviour
     {
         if (m_PlayerBeh)
         {
-            if (DataManager.Instance.GetTutorialDisplays(0) < 2 && m_CanShow[0] && m_PlayerBeh.IdLine == 0 && m_SceneName == "GameScene0")
+            if (m_CanShow[0] && m_PlayerBeh.IdLine == 0 && m_SceneName == "GameScene0")
             {
                 m_CanShow[0] = false;
                 DataManager.Instance.SetTutorialDisplays(0);
                 StartCoroutine(ShowButton(new Sprite[] { m_OnlyUpSprite, m_ToTheTopSprite }));
             }
-            else if (DataManager.Instance.GetTutorialDisplays(1) < 2 && m_CanShow[1] && m_PlayerBeh.IdLine == 1 && m_SceneName == "GameScene1")
+            else if (m_CanShow[1] && m_PlayerBeh.IdLine == 1 && m_SceneName == "GameScene1")
             {
                 m_CanShow[1] = false;
                 DataManager.Instance.SetTutorialDisplays(1);
                 StartCoroutine(ShowButton(new Sprite[] { m_SwipeSprite }));
             }
-            else if (DataManager.Instance.GetTutorialDisplays(2) < 2 && m_CanShow[2] && m_PlayerBeh.IdLine == 0 && m_SceneName == "GameScene2")
+            else if (m_CanShow[2] && m_PlayerBeh.IdLine == 0 && m_SceneName == "GameScene2")
             {
                 m_CanShow[2] = false;
                 DataManager.Instance.SetTutorialDisplays(2);
                 StartCoroutine(ShowButton(new Sprite[] { m_ChooseSprite }));
             }
-            else if (DataManager.Instance.GetTutorialDisplays(3) < 2 && m_CanShow[3] && m_PlayerBeh.IdLine == 11 && m_SceneName == "GameScene2")
+            else if (m_CanShow[3] && m_PlayerBeh.IdLine == 11 && m_SceneName == "GameScene2")
             {
                 m_CanShow[3] = false;
                 DataManager.Instance.SetTutorialDisplays(3);
                 StartCoroutine(ShowButton(new Sprite[] { m_GuessSprite }));
             }
-            else if (DataManager.Instance.GetTutorialDisplays(5) < 2 && m_CanShow[5] && m_PlayerBeh.IdLine > 21 && m_SceneName == "GameScene1" 
+            else if (m_CanShow[5] && m_PlayerBeh.IdLine > 21 && m_SceneName == "GameScene1" 
                 && GameController.Instance.m_DiesInARow > 2)
             {
                 m_CanShow[5] = false;
                 DataManager.Instance.SetTutorialDisplays(5);
                 StartCoroutine(ShowButton(new Sprite[] { m_OneByOneSprite }));
             }
-            else if (DataManager.Instance.GetTutorialDisplays(6) < 2 && m_CanShow[6] && m_PlayerBeh.IdLine == 3 && m_SceneName == "GameScene5")
+            else if (m_CanShow[6] && m_PlayerBeh.IdLine == 3 && m_SceneName == "GameScene5")
             {
                 m_CanShow[6] = false;
                 DataManager.Instance.SetTutorialDisplays(6);
@@ -85,7 +85,7 @@ public class TutorialController : MonoBehaviour
             }
 
 
-            if (DataManager.Instance.GetTutorialDisplays(4) < 2 && m_CanShow[4] && m_PlayerBeh.IsPlayerFall)
+            if (m_CanShow[4] && m_PlayerBeh.IsPlayerFall && (m_SceneName == "GameScene0" || m_SceneName == "GameScene1"))
             {
                 m_CanShow[4] = false;
                 DataManager.Instance.SetTutorialDisplays(4);

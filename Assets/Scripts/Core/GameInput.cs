@@ -146,10 +146,8 @@ public class GameInput : CreateSingletonGameObject<GameInput>
     {
         if (playerBeh.IsPlayerFall && clickedPusher) //если игрок падает и нажал на пушер
         {
-            if (clickedPusher.Line < playerBeh.IdLine)
-            {
+            if (clickedPusher.Line <= playerBeh.IdLine)
                 action = PlayerAction.climbAfterFall;
-            }
         }
     }
 

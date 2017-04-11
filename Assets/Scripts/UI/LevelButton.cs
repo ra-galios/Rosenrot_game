@@ -11,6 +11,9 @@ public class LevelButton : MonoBehaviour
     private Button levelButton;
     private bool isBonusLevel;
 
+    public static Action checkLevelOpen;
+
+
     [SerializeField, HeaderAttribute("информация под камнем")]
     private Text diamondsInform;
     [SerializeField, HeaderAttribute("индекс уровня начиная с 0")]
@@ -50,6 +53,7 @@ public class LevelButton : MonoBehaviour
             m_IsOpen = false;
             levelButton.interactable = false;
         }
+        checkLevelOpen.Invoke();
 
         diamondsInform.text = levelCollectDiamonds.ToString() + "/" + diamondsOnLevel.ToString();
 

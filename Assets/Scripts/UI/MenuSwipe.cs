@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class MenuSwipe : MonoBehaviour
 {
@@ -19,7 +20,17 @@ public class MenuSwipe : MonoBehaviour
     private LevelButton m_PrevLevel;
     public bool darkLevelIsOpen;
 
-    void Start()
+    private void OnEnable()
+    {
+        LevelButton.checkLevelOpen += CheckLevel;
+    }
+
+    private void OnDisable()
+    {
+        LevelButton.checkLevelOpen -= CheckLevel;
+    }
+
+    private void CheckLevel()
     {
         darkLevelIsOpen = m_PrevLevel.m_IsOpen;
         if (darkLevelIsOpen)
