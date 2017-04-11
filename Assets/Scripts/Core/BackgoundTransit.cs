@@ -14,9 +14,13 @@ public class BackgoundTransit : MonoBehaviour
     private Texture[] m_TransitionTex = new Texture[2];
     [SerializeField]
     private Texture[] m_BGTex = new Texture[2];
-    [SerializeField]
     private bool m_Transition;
+    private Coroutine m_ChangeBackgroundCoroutine;
 
+    [SerializeField]
+    private float m_FirstTransitionTime;
+    [SerializeField]
+    private float m_SecondTransitionTime;
 
 
     private void Start()
@@ -34,6 +38,10 @@ public class BackgoundTransit : MonoBehaviour
         FlowsSpeed = LevelGenerator.Instance.SpeedPusher / 10;
         if (LevelGenerator.Instance.IsRunLevel)
         {
+            if (m_ChangeBackgroundCoroutine == null)
+                m_ChangeBackgroundCoroutine = StartCoroutine(ChangeBackgroundTime());
+
+
             for (int i = 0; i < 3; i++)
             {
                 offset[i] += Time.deltaTime * FlowsSpeed;
@@ -91,5 +99,13 @@ public class BackgoundTransit : MonoBehaviour
         m_BackgroundRenderer[0].material.SetTexture("_MainTex", m_BGTex[m_TransitionIndex]);
         m_InTransition = false;
         m_TransitionIndex++;
+    }
+
+    private IEnumerator ChangeBackgroundTime()
+    {
+        yield return new WaitForSeconds(m_FirstTransitionTime);
+        m_Transition = true;
+        yield return new WaitForSeconds(m_SecondTransitionTime);
+        m_Transition = true;
     }
 }
