@@ -21,6 +21,8 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField]
     private float m_SpeedMultiplayer = 2f;
 
+    private GameObject lastPusher;
+
     void Awake()
     {
 
@@ -34,7 +36,9 @@ public class PlayerBehaviour : MonoBehaviour
     void OnEnable()
     {
         GameInput.Instance.PlayerInputAction += JumpToNext; //подписываемся на эфир PlayerInputAction и ждём когда он скажет чё нам делать
-    }
+        if(lastPusher)
+            hitObject = lastPusher;
+   }
 
     void OnDisable()
     {
@@ -65,6 +69,7 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 if (hitObject && hitJumpPoint)// && LevelGenerator.Instance.IsRunLevel)//если есть объект на который нажали мышкой
                 {
+                    lastPusher = hitObject;
                     if (hitJumpPoint.Line - 1 == idLine)
                     {
                         if (action == hitJumpPoint.Action)
@@ -125,12 +130,15 @@ public class PlayerBehaviour : MonoBehaviour
 
     IEnumerator Lerp()
     {
+
         if (onPlatformAfterFall)
             yield return new WaitForSeconds(.3f);
 
         transform.parent = hitObject.transform;
         if (LevelGenerator.Instance.IsRunLevel == false)
             LevelGenerator.Instance.StartLevel();
+
+
         var boxColl = GetComponent<BoxCollider2D>().enabled;
         boxColl = false;
         Vector2 _from = transform.localPosition;
@@ -142,29 +150,34 @@ public class PlayerBehaviour : MonoBehaviour
             transform.localPosition = Vector2.Lerp(_from, _to, _t); //перемещаем тело в позицию объекта, на который нажали
             yield return null;
         }
-
-        if (hitJumpPoint.IsSeed && Market.Instance.Seeds > 0)
+        
+        if (hitJumpPoint && hitJumpPoint.IsSeed && Market.Instance.Seeds > 0)
         {
             Market.Instance.Seeds--;
         }
 
         onPlatformAfterFall = true;
-        idLine = hitJumpPoint.Line;
+        if(hitJumpPoint)
+            idLine = hitJumpPoint.Line;
+
         AchievementsController.AddToAchievement(AchievementsController.Type.GotHigh, 1);
         if (PlayerChangeLine != null)
             PlayerChangeLine.Invoke(idLine);
-        idCollumn = hitJumpPoint.Collumn;
+        
+        if(hitJumpPoint)
+            idCollumn = hitJumpPoint.Collumn;
+
         LerpCoroutine = null;
         boxColl = true;
     }
 
-    private void GrabAfterFall()
+    public void GrabAfterFall()
     {
         isPlayerFall = false;
         rig2D.bodyType = RigidbodyType2D.Static;
         animController.SetFall(isPlayerFall);
         AchievementsController.AddToAchievement(AchievementsController.Type.Catchy, 1);
-        StartCoroutine("Lerp");
+        LerpCoroutine = StartCoroutine("Lerp");
     }
 
     public GameInput.PlayerAction GetQuestionPusherType(JumpPoint pusher)

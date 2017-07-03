@@ -22,7 +22,7 @@ public class LevelAnalitics : MonoBehaviour
 		{
     		{"level_num", nm - 1}
     	});
-		print("Fail");
+		//print("Fail");
     }
 
 }

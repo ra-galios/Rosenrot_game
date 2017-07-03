@@ -28,7 +28,8 @@ public class EndGameTrigger : MonoBehaviour
             {
                 AchievementsController.AddToAchievement(AchievementsController.Type.SelfDestructive, 1);
                 AchievementsController.DiscardAchievement(AchievementsController.Type.Survivor);
-                Destroy(player);
+                //Destroy(player);
+                player.enabled = false;
                 StartCoroutine("StopGame");
             }
         }
