@@ -37,7 +37,7 @@ public class EndGameTrigger : MonoBehaviour
 
     private IEnumerator StopGame()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.1f);
         if (LevelAchievementPanel)
             LevelAchievementPanel.ShowBonusPanel(false);
         else

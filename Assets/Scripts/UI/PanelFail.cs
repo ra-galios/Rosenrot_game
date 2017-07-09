@@ -40,7 +40,7 @@ public class PanelFail : AchievementUI_Base
     public void UpdateFailPanel()
     {
         //вызов панельки просмотра рекламы - здесь нужно сделать проверку на первую смерть на уровне
-        //AdsFailAnimator.SetTrigger("Fail");
+        AdsFailAnimator.SetTrigger("Fail");
 
         if (Market.Instance.Health < 1)
         {
