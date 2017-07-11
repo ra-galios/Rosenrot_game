@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 [RequireComponent(typeof(PageTransition))]
 public class ComicsPage : MonoBehaviour
@@ -11,6 +13,9 @@ public class ComicsPage : MonoBehaviour
 
     [SerializeField]
     private float NextPageTimer = 3f;
+
+    [SerializeField]
+    private PageMovings[] m_PageMovings;
 
     private PageTransition transition;
 
@@ -37,6 +42,7 @@ public class ComicsPage : MonoBehaviour
     public void Show()
     {
         transition.ChangeAcrossAlfa(1f, true);
+        StartCoroutine(MovePage());
         Invoke("Wait", PageTimer);
     }
 
@@ -61,4 +67,24 @@ public class ComicsPage : MonoBehaviour
     {
         ComicsController.Instance.ShowNextPage();
     }
+
+    private IEnumerator MovePage()
+    {
+        foreach (var pageMoving in m_PageMovings)
+        {
+            float time = Time.time;
+            while (Time.time - time < pageMoving.Time)
+            {
+                transform.Translate(pageMoving.Direction);
+                yield return null;
+            }
+        }
+    }
+}
+
+[System.Serializable]
+public class PageMovings
+{
+    public Vector3 Direction;
+    public float Time;
 }

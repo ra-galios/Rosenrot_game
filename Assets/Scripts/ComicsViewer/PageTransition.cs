@@ -5,6 +5,8 @@ using UnityEngine;
 public class PageTransition : MonoBehaviour
 {
     public Sprite SpriteTransition;
+    [SerializeField]
+    private float m_TransitionSpeed = 0.01f;
 
     private SpriteRenderer spriteRend;
     private Color color;
@@ -42,7 +44,7 @@ public class PageTransition : MonoBehaviour
         {
             while (color.a > 0)
             {
-                color.a -= timeStep * Time.deltaTime;
+                color.a -= timeStep * m_TransitionSpeed;
                 spriteRend.color = color;
                 yield return null;
             }
@@ -54,7 +56,7 @@ public class PageTransition : MonoBehaviour
         {
             while (color.a <= 1f)
             {
-                color.a += timeStep * Time.deltaTime;
+                color.a += timeStep * m_TransitionSpeed;
                 spriteRend.color = color;
                 yield return null;
             }
