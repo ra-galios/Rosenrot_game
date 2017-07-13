@@ -7,6 +7,9 @@ public class EndGameTrigger : MonoBehaviour
     private AchievementUI_Leveled LevelAchievementPanel;
     private Victory m_VictoryObj;
 
+    [SerializeField]
+    private Animator m_AdsFailAnimator;
+    private bool needRunAdsPanel = true;
 
     private void Start()
     {
@@ -26,18 +29,33 @@ public class EndGameTrigger : MonoBehaviour
             }
             else
             {
-                AchievementsController.AddToAchievement(AchievementsController.Type.SelfDestructive, 1);
-                AchievementsController.DiscardAchievement(AchievementsController.Type.Survivor);
-                //Destroy(player);
                 player.enabled = false;
-                StartCoroutine("StopGame");
+                if (needRunAdsPanel)
+                {
+                    StartCoroutine("RunAdsPanel");
+                }
+                else
+                {
+                    AchievementsController.AddToAchievement(AchievementsController.Type.SelfDestructive, 1);
+                    AchievementsController.DiscardAchievement(AchievementsController.Type.Survivor);
+                    StartCoroutine("StopGame");
+                }
             }
         }
+    }
+
+    private IEnumerator RunAdsPanel()
+    {
+        yield return new WaitForSeconds(0.1f);
+        m_AdsFailAnimator.SetTrigger("Fail");
+        needRunAdsPanel = false;
+        GameController.Instance.PauseGame();
     }
 
     private IEnumerator StopGame()
     {
         yield return new WaitForSeconds(0.1f);
+
         if (LevelAchievementPanel)
             LevelAchievementPanel.ShowBonusPanel(false);
         else

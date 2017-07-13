@@ -19,29 +19,15 @@ public class PanelFail : AchievementUI_Base
     [SerializeField]
     private GameObject m_AchievementsPanel;
 
-    [SerializeField]
-    private Animator AdsFailAnimator;
-
     void Start()
     {
         GameController.Instance.FailPanelAnim = GetComponent<Animator>();
         GameController.Instance.FailDeadJacobAnim = deadJacobAnim;
     }
 
-    public void RestartAfterFall()
-    {
-        PlayerBehaviour player = GameObject.FindObjectOfType<PlayerBehaviour>();
-        player.enabled = true;
-        GameController.Instance.ResumeGame();
-        player.GrabAfterFall();
-        GetComponent<Animator>().SetTrigger("Fail");
-    }
 
     public void UpdateFailPanel()
     {
-        //вызов панельки просмотра рекламы - здесь нужно сделать проверку на первую смерть на уровне
-        AdsFailAnimator.SetTrigger("Fail");
-
         if (Market.Instance.Health < 1)
         {
             restartButton.interactable = false;
