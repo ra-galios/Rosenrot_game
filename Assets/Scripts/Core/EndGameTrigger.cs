@@ -30,7 +30,7 @@ public class EndGameTrigger : MonoBehaviour
             else
             {
                 player.enabled = false;
-                if (needRunAdsPanel)
+                if (needRunAdsPanel && player.IsPlayerFall)
                 {
                     StartCoroutine("RunAdsPanel");
                 }
