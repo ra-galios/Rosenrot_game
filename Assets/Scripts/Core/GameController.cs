@@ -155,7 +155,37 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         yield return null;
         //CheckOnBonusLevel();
-        AsyncOperation load = SceneManager.LoadSceneAsync(name);
+        AsyncOperation load;
+        string comicsScene = "";
+        switch (name)
+        {
+            case "GameScene0":
+                comicsScene = "IntroComicsMoving";
+                break;
+            case "GameScene5":
+                comicsScene = "01-02transition";
+                break;
+            case "GameScene10":
+                comicsScene = "02-03transition";
+                break;
+            case "GameScene15":
+                comicsScene = "03-04transition";
+                break;
+            case "GameScene18":
+                comicsScene = "04-final_transition";
+                break;
+        }
+        if (!string.IsNullOrEmpty(comicsScene))
+            if (PlayerPrefs.GetString("ComicsFor" + name) != "NotFirstStart")
+            {
+                load = SceneManager.LoadSceneAsync(comicsScene);
+                PlayerPrefs.SetString("ComicsFor" + name, "NotFirstStart");
+            }
+            else
+                load = SceneManager.LoadSceneAsync(name);
+        else
+            load = SceneManager.LoadSceneAsync(name);
+
         while (!load.isDone)
             yield return null;
     }
@@ -164,7 +194,36 @@ public class GameController : CreateSingletonGameObject<GameController>
     {
         yield return null;
         //CheckOnBonusLevel();
-        AsyncOperation load = SceneManager.LoadSceneAsync(index);
+        AsyncOperation load;
+        string comicsScene = "";
+        switch (index)
+        {
+            case 1:
+                comicsScene = "IntroComicsMoving";
+                break;
+            case 6:
+                comicsScene = "01-02transition";
+                break;
+            case 11:
+                comicsScene = "02-03transition";
+                break;
+            case 16:
+                comicsScene = "03-04transition";
+                break;
+            case 19:
+                comicsScene = "04-final_transition";
+                break;
+        }
+        if (!string.IsNullOrEmpty(comicsScene))
+            if (PlayerPrefs.GetString("ComicsForGameScene" + (index - 1).ToString()) != "NotFirstStart")
+            {
+                load = SceneManager.LoadSceneAsync(comicsScene);
+                PlayerPrefs.SetString("ComicsForGameScene" + (index - 1).ToString(), "NotFirstStart");
+            }
+            else
+                load = SceneManager.LoadSceneAsync(index);
+        else
+            load = SceneManager.LoadSceneAsync(index);
         while (!load.isDone)
             yield return null;
     }
