@@ -133,8 +133,8 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (onPlatformAfterFall)
             yield return new WaitForSeconds(.3f);
-
         transform.parent = hitObject.transform;
+
         if (LevelGenerator.Instance.IsRunLevel == false)
             LevelGenerator.Instance.StartLevel();
 
@@ -173,6 +173,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void GrabAfterFall()
     {
+		hitObject = lastPusher;
         isPlayerFall = false;
         rig2D.bodyType = RigidbodyType2D.Static;
         animController.SetFall(isPlayerFall);
