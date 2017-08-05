@@ -5,6 +5,9 @@ using System;
 public class PlayerBehaviour : MonoBehaviour
 {
     private GameObject hitObject;
+    private GameObject grabObject;
+    private float speedPusher;
+
     private JumpPoint hitJumpPoint;
     private Rigidbody2D rig2D;
     [SerializeField]
@@ -74,6 +77,7 @@ public class PlayerBehaviour : MonoBehaviour
                     {
                         if (action == hitJumpPoint.Action)
                         {
+                            speedPusher = LevelGenerator.Instance.SpeedPusher;
                             LerpCoroutine = StartCoroutine("Lerp");
                             animController.SetJump(action);
                         }
@@ -82,6 +86,7 @@ public class PlayerBehaviour : MonoBehaviour
                             GameInput.PlayerAction questionPusherAction = GetQuestionPusherType(hitJumpPoint);
                             if (questionPusherAction == action)
                             {
+                                speedPusher = LevelGenerator.Instance.SpeedPusher;
                                 LerpCoroutine = StartCoroutine("Lerp");
                                 animController.SetJump(action);
                             }
@@ -116,6 +121,8 @@ public class PlayerBehaviour : MonoBehaviour
     {//падение игрока
         if (LevelGenerator.Instance.IsRunLevel)
         {
+            speedPusher = LevelGenerator.Instance.SpeedPusher;
+            LevelGenerator.Instance.SpeedPusher = 0;
             StopCoroutine("Lerp");
             LerpCoroutine = null;
             GameController.Instance.m_DiesInARow++;
@@ -169,11 +176,14 @@ public class PlayerBehaviour : MonoBehaviour
 
         LerpCoroutine = null;
         boxColl = true;
+        grabObject = transform.parent.gameObject;
+
+        LevelGenerator.Instance.SpeedPusher = speedPusher;
     }
 
     public void GrabAfterFall()
     {
-		hitObject = lastPusher;
+		hitObject = grabObject;
         isPlayerFall = false;
         rig2D.bodyType = RigidbodyType2D.Static;
         animController.SetFall(isPlayerFall);

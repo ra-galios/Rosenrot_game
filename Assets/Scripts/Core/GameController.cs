@@ -198,19 +198,19 @@ public class GameController : CreateSingletonGameObject<GameController>
         string comicsScene = "";
         switch (index)
         {
-            case 1:
+            case 2:
                 comicsScene = "IntroComicsMoving";
                 break;
-            case 6:
+            case 7:
                 comicsScene = "01-02transition";
                 break;
-            case 11:
+            case 12:
                 comicsScene = "02-03transition";
                 break;
-            case 16:
+            case 17:
                 comicsScene = "03-04transition";
                 break;
-            case 19:
+            case 20:
                 comicsScene = "04-final_transition";
                 break;
         }
