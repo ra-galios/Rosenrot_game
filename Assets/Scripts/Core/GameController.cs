@@ -134,7 +134,7 @@ public class GameController : CreateSingletonGameObject<GameController>
 
     public void WinGame()
     {
-         LevelAnalitics.LevelVictory(SceneManager.GetActiveScene().buildIndex);
+        LevelAnalitics.LevelVictory(SceneManager.GetActiveScene().buildIndex);
         VictoryPanelAnim.SetTrigger("Win");
         m_VictoryAction.Invoke();
         PauseGame();

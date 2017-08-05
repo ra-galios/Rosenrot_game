@@ -3,7 +3,6 @@ using System;
 
 public class Victory : MonoBehaviour
 {
-
     private AchievementUI_Leveled LevelAchievementPanel;
     private bool m_OnBonusLevel;
 
@@ -106,5 +105,12 @@ public class Victory : MonoBehaviour
     {
         get { return m_OnBonusLevel; }
         set { m_OnBonusLevel = value; }
+    }
+
+    public void endGame()
+    {
+        Debug.Log("WinGame");
+        CheckLeveledAchievements();
+        GameController.Instance.WinGame();
     }
 }
